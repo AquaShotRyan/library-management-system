@@ -3,6 +3,7 @@ package org.example;
 public class InitializeLibrary {
 
     Catalogue catalogue = new Catalogue();
+    Borrowers borrowers = new Borrowers();
 
     public Catalogue initializeLibrary(){
         catalogue.addBook(new Book("Great Gatsby", "F. Scott FitzGerald"));
@@ -26,5 +27,9 @@ public class InitializeLibrary {
         catalogue.addBook(new Book("Crime and Punishment", "Fyodor Dostoevsky"));
         catalogue.addBook(new Book("2001: A Space Odyssey", "Arthur C. Clarke"));
         return catalogue;
+    }
+
+    public Borrowers initializeBorrowers(){
+        return borrowers;
     }
 }
