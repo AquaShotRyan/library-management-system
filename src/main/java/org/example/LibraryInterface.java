@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 
 public class LibraryInterface {
     public String promptStringInput(Scanner input, PrintWriter output, String prompt){
-        return "";
+        output.println(prompt); output.flush();
+        String inputStr = input.nextLine();
+
+        return inputStr;
     }
 }
