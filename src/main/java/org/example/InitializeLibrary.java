@@ -38,7 +38,9 @@ public class InitializeLibrary {
     }
 
     public Credentials initializeCredentials(){
-
+        credentials.addCredential(new Credential("ryan", "password123"));
+        credentials.addCredential(new Credential("glorp", "alien"));
+        credentials.addCredential(new Credential("squeex", "iambald"));
         return credentials;
     }
 }

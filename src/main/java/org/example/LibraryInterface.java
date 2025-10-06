@@ -12,6 +12,12 @@ public class LibraryInterface {
     }
 
     public void displayAuthError(AuthEnum error, PrintWriter output){
-        return;
+        if (error == AuthEnum.INVALID_CREDENTIALS){
+            output.println("ERROR: credentials not found");
+            output.flush();
+        }else if(error == AuthEnum.INVALID_INPUT){
+            output.println("ERROR: invalid input");
+            output.flush();
+        }
     }
 }
