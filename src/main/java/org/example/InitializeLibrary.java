@@ -30,6 +30,9 @@ public class InitializeLibrary {
     }
 
     public Borrowers initializeBorrowers(){
+        borrowers.addBorrower(new Borrower("ryan"));
+        borrowers.addBorrower(new Borrower("glorp"));
+        borrowers.addBorrower(new Borrower("squeex"));
         return borrowers;
     }
 }

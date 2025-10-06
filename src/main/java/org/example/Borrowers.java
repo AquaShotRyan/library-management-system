@@ -10,11 +10,11 @@ public class Borrowers {
     }
 
     public void addBorrower(Borrower b){
-        return;
+        borrowers.add(b);
     }
 
     public Borrower getBorrower(int index) {
-        return new Borrower("nullUsername");
+        return borrowers.get(index);
     }
 
     public int getBorrowersSize() {return borrowers.size();}
