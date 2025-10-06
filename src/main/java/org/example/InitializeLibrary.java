@@ -4,6 +4,7 @@ public class InitializeLibrary {
 
     Catalogue catalogue = new Catalogue();
     Borrowers borrowers = new Borrowers();
+    Credentials credentials = new Credentials();
 
     public Catalogue initializeLibrary(){
         catalogue.addBook(new Book("Great Gatsby", "F. Scott FitzGerald"));
@@ -34,5 +35,10 @@ public class InitializeLibrary {
         borrowers.addBorrower(new Borrower("glorp"));
         borrowers.addBorrower(new Borrower("squeex"));
         return borrowers;
+    }
+
+    public Credentials initializeCredentials(){
+
+        return credentials;
     }
 }

@@ -10,4 +10,8 @@ public class LibraryInterface {
 
         return inputStr;
     }
+
+    public void displayAuthError(AuthEnum error, PrintWriter output){
+        return;
+    }
 }
