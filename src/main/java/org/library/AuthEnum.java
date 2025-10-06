@@ -1,4 +1,4 @@
-package org.example;
+package org.library;
 
 public enum AuthEnum {
     SUCCESS,
