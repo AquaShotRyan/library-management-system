@@ -61,5 +61,112 @@ public class InterfaceTest {
         }
     }
 
+    @Nested
+    @DisplayName("RESP-07: prompt menu")
+    public class PromptMenu{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @Test
+        @DisplayName("Menu displays '1) Borrow a book'")
+        void RESP_07_test_1(){
+            Scanner input = new Scanner("some_input");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains(MenuEnum.BORROW.getFullOptionDesc()));
+        }
+
+        @Test
+        @DisplayName("Menu displays '2) Return a book'")
+        void RESP_07_test_2(){
+            Scanner input = new Scanner("some_input");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains(MenuEnum.RETURN.getFullOptionDesc()));
+        }
+
+        @Test
+        @DisplayName("Menu displays '3) Logout'")
+        void RESP_07_test_3(){
+            Scanner input = new Scanner("some_input");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains(MenuEnum.LOGOUT.getFullOptionDesc()));
+        }
+
+        @Test
+        @DisplayName("After entering '1', returns MenuEnum.BORROW")
+        void RESP_07_test_4(){
+            Scanner input = new Scanner("1");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertEquals(MenuEnum.BORROW, selected);
+        }
+
+        @Test
+        @DisplayName("After entering '2', returns MenuEnum.RETURN")
+        void RESP_07_test_5(){
+            Scanner input = new Scanner("2");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertEquals(MenuEnum.RETURN, selected);
+        }
+
+        @Test
+        @DisplayName("After entering '3', returns MenuEnum.LOGOUT")
+        void RESP_07_test_6(){
+            Scanner input = new Scanner("3");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertEquals(MenuEnum.LOGOUT, selected);
+        }
+
+        @Test
+        @DisplayName("After entering 'not a number', displays 'ERROR: invalid input'")
+        void RESP_07_test_7(){
+            Scanner input = new Scanner("not a number");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains("ERROR: invalid input"));
+        }
+
+        @Test
+        @DisplayName("After entering 'not a number', returns MenuEnum.INVALID_INPUT")
+        void RESP_07_test_8(){
+            Scanner input = new Scanner("not a number");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertEquals(MenuEnum.INVALID_INPUT, selected);
+        }
+
+        @Test
+        @DisplayName("Menu doesn't display '-1)'")
+        void RESP_07_test_9(){
+            Scanner input = new Scanner("not a number");
+
+            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
+
+            assertFalse(output.toString().contains(MenuEnum.INVALID_INPUT.getFullOptionDesc()));
+        }
+    }
+
 }
 
