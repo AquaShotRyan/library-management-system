@@ -14,6 +14,19 @@ public enum MenuEnum {
         this.optionDesc = optionDesc;
     }
 
+    public static MenuEnum getOption(int optionNum) {
+        if (optionNum == BORROW.optionNum)
+            return BORROW;
+
+        else if (optionNum == RETURN.optionNum)
+            return RETURN;
+
+        else if (optionNum == LOGOUT.optionNum)
+            return LOGOUT;
+
+        return INVALID_INPUT;
+    }
+
     public String getFullOptionDesc(){
         return String.format("%d) %s", optionNum, optionDesc);
     }

@@ -12,7 +12,26 @@ public class LibraryInterface {
     }
 
     public MenuEnum promptMenu(Scanner input, PrintWriter output){
-        return null;
+        // display menu options
+        for (MenuEnum o: MenuEnum.values()){
+            if (o != MenuEnum.INVALID_INPUT){
+                output.println(o.getFullOptionDesc());
+                output.flush();
+            }
+        }
+        // get and return user input
+        String inputStr = input.nextLine();
+        int inputNum = -1;
+
+        try {
+            inputNum = Integer.parseInt(inputStr);
+        } catch (NumberFormatException e){
+            output.println("ERROR: invalid input"); output.flush();
+        }
+        if (inputNum < 1 || inputNum > 3)
+            output.println("ERROR: invalid input"); output.flush();
+
+        return MenuEnum.getOption(inputNum);
     }
 
     public void displayAuthError(AuthEnum error, PrintWriter output){
