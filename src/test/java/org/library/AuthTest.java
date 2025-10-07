@@ -100,5 +100,39 @@ public class AuthTest {
             assertTrue(output.toString().contains("ERROR: invalid input"));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-05: create and maintain session for authenticated user")
+    public class CreateSessionTest {
+        Library library;
+
+        @BeforeEach
+        void initLibrary(){
+
+            library = new Library();
+        }
+
+        @Test
+        @DisplayName("Retrieve username (session) 'ryan' from library after login")
+        void RESP_05_test_1(){
+            String username = "ryan";
+            String password = "password123";
+
+            AuthEnum authResult = library.login(username, password);
+
+            assertEquals(username, library.getSessionUsername());
+        }
+
+        @Test
+        @DisplayName("Retrieve null (session) from library after unsuccessful login")
+        void RESP_05_test_2(){
+            String username = "ryan";
+            String password = "wrong_password";
+
+            AuthEnum authResult = library.login(username, password);
+
+            assertNull(library.getSessionUsername());
+        }
+    }
 }
 
