@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -166,7 +168,15 @@ public class InterfaceTest {
 
             assertFalse(output.toString().contains(MenuEnum.INVALID_INPUT.getFullOptionDesc()));
         }
-    }
 
+        @ParameterizedTest
+        @ValueSource(strings = {"0", "4"})
+        @DisplayName("After entering numbers not 1,2, or 3, displays 'ERROR: invalid input'")
+        void RESP_07_test_10(String input){
+            MenuEnum selected = libraryInterface.promptMenu(new Scanner(input), new PrintWriter(output));
+
+            assertTrue(output.toString().contains("ERROR: invalid input"));
+        }
+    }
 }
 
