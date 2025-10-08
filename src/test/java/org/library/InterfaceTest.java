@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.PrintWriter;
@@ -79,39 +80,20 @@ public class InterfaceTest {
             output = new StringWriter();
         }
 
-        @Test
-        @DisplayName("Menu displays '1) Borrow a book'")
-        void RESP_07_test_1(){
+        @ParameterizedTest
+        @EnumSource(names = { "BORROW", "RETURN", "LOGOUT" })
+        @DisplayName("Menu displays '1) Borrow a book', '2) Return a book', and '3) Logout'")
+        void RESP_07_test_1(MenuEnum option){
             Scanner input = new Scanner("some_input");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
 
-            assertTrue(output.toString().contains(MenuEnum.BORROW.getFullOptionDesc()));
+            assertTrue(output.toString().contains(option.getFullOptionDesc()));
         }
 
         @Test
-        @DisplayName("Menu displays '2) Return a book'")
+        @DisplayName("Entering '1', returns MenuEnum.BORROW")
         void RESP_07_test_2(){
-            Scanner input = new Scanner("some_input");
-
-            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
-
-            assertTrue(output.toString().contains(MenuEnum.RETURN.getFullOptionDesc()));
-        }
-
-        @Test
-        @DisplayName("Menu displays '3) Logout'")
-        void RESP_07_test_3(){
-            Scanner input = new Scanner("some_input");
-
-            MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
-
-            assertTrue(output.toString().contains(MenuEnum.LOGOUT.getFullOptionDesc()));
-        }
-
-        @Test
-        @DisplayName("After entering '1', returns MenuEnum.BORROW")
-        void RESP_07_test_4(){
             Scanner input = new Scanner("1");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -120,8 +102,8 @@ public class InterfaceTest {
         }
 
         @Test
-        @DisplayName("After entering '2', returns MenuEnum.RETURN")
-        void RESP_07_test_5(){
+        @DisplayName("Entering '2', returns MenuEnum.RETURN")
+        void RESP_07_test_3(){
             Scanner input = new Scanner("2");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -130,8 +112,8 @@ public class InterfaceTest {
         }
 
         @Test
-        @DisplayName("After entering '3', returns MenuEnum.LOGOUT")
-        void RESP_07_test_6(){
+        @DisplayName("Entering '3', returns MenuEnum.LOGOUT")
+        void RESP_07_test_4(){
             Scanner input = new Scanner("3");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -140,8 +122,8 @@ public class InterfaceTest {
         }
 
         @Test
-        @DisplayName("After entering 'not a number', displays 'ERROR: invalid input'")
-        void RESP_07_test_7(){
+        @DisplayName("Entering 'not a number', displays 'ERROR: invalid input'")
+        void RESP_07_test_5(){
             Scanner input = new Scanner("not a number");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -150,8 +132,8 @@ public class InterfaceTest {
         }
 
         @Test
-        @DisplayName("After entering 'not a number', returns MenuEnum.INVALID_INPUT")
-        void RESP_07_test_8(){
+        @DisplayName("Enter words, returns MenuEnum.INVALID_INPUT")
+        void RESP_07_test_6(){
             Scanner input = new Scanner("not a number");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -161,7 +143,7 @@ public class InterfaceTest {
 
         @Test
         @DisplayName("Menu doesn't display '-1)'")
-        void RESP_07_test_9(){
+        void RESP_07_test_7(){
             Scanner input = new Scanner("not a number");
 
             MenuEnum selected = libraryInterface.promptMenu(input, new PrintWriter(output));
@@ -172,7 +154,7 @@ public class InterfaceTest {
         @ParameterizedTest
         @ValueSource(strings = {"0", "4"})
         @DisplayName("After entering numbers not 1,2, or 3, displays 'ERROR: invalid input'")
-        void RESP_07_test_10(String input){
+        void RESP_07_test_8(String input){
             MenuEnum selected = libraryInterface.promptMenu(new Scanner(input), new PrintWriter(output));
 
             assertTrue(output.toString().contains("ERROR: invalid input"));

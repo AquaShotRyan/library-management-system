@@ -31,7 +31,7 @@ public class BorrowerTest {
         @Test
         @DisplayName("Check borrowers for valid borrower 'ryan'")
         void RESP_02_test_2(){
-            Borrower ryan = borrowers.getBorrower(0);
+            Borrower ryan = borrowers.getBorrower("ryan");
 
             assertEquals("ryan", ryan.getUsername());
         }

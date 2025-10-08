@@ -1,20 +1,20 @@
 package org.library;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Catalogue {
-    ArrayList<Book> catalogue;
+    HashMap<String, Book> catalogue;
 
     public Catalogue(){
-        catalogue = new ArrayList<Book>();
+        catalogue = new HashMap<>();
     }
 
     public void addBook(Book book){
-        catalogue.add(book);
+        catalogue.put(book.getTitle(), book);
     }
 
-    Book getBook(int index){
-        return catalogue.get(index);
+    Book getBook(String title){
+        return catalogue.get(title);
     }
 
     public int getCatalogueSize(){

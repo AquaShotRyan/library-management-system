@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -40,49 +42,33 @@ public class AuthTest {
             assertEquals(AuthEnum.SUCCESS, result);
         }
 
-        @Test
-        @DisplayName("Existing username but wrong password, returns AuthEnum.INVALID_CREDENTIALS")
-        void RESP_04_test_2(){
-            String username = "squeex";
-            String password = "wrong_password";
-
+        @ParameterizedTest
+        @CsvSource({
+                "squeex,wrong_password",
+                "non-existent_user,some_password"
+        })
+        @DisplayName("Non-existent username or password, returns AuthEnum.INVALID_CREDENTIALS")
+        void RESP_04_test_2(String username, String password){
             AuthEnum result = libraryAuth.authUser(username, password);
+
             assertEquals(AuthEnum.INVALID_CREDENTIALS, result);
         }
 
-        @Test
-        @DisplayName("Username and password are valid, but don't exist, returns AuthEnum.INVALID_CREDENTIALS")
-        void RESP_04_test_3(){
-            String username = "non-existent_user";
-            String password = "some_password";
-
+        @ParameterizedTest
+        @CsvSource({
+                "'',iambald",
+                "squeex,''"
+        })
+        @DisplayName("Username or password is valid and exists, but one is blank, returns AuthEnum.INVALID_INPUT")
+        void RESP_04_test_3(String username, String password){
             AuthEnum result = libraryAuth.authUser(username, password);
-            assertEquals(AuthEnum.INVALID_CREDENTIALS, result);
-        }
 
-        @Test
-        @DisplayName("Password is valid and exists, but username is blank, returns AuthEnum.INVALID_INPUT")
-        void RESP_04_test_4(){
-            String username = "";
-            String password = "iambald";
-
-            AuthEnum result = libraryAuth.authUser(username, password);
-            assertEquals(AuthEnum.INVALID_INPUT, result);
-        }
-
-        @Test
-        @DisplayName("Username is valid and exists, but password is blank, returns AuthEnum.INVALID_INPUT'")
-        void RESP_04_test_5(){
-            String username = "squeex";
-            String password = "";
-
-            AuthEnum result = libraryAuth.authUser(username, password);
             assertEquals(AuthEnum.INVALID_INPUT, result);
         }
 
         @Test
         @DisplayName("If validator returns AuthError.INVALID_CREDENTIALS, display 'ERROR: credentials not found'")
-        void RESP_04_test_6(){
+        void RESP_04_test_4(){
             AuthEnum error = AuthEnum.INVALID_CREDENTIALS;
             StringWriter output = new StringWriter();
 
@@ -92,7 +78,7 @@ public class AuthTest {
 
         @Test
         @DisplayName("If validator returns AuthError.INVALID_INPUT, display 'ERROR: invalid input'")
-        void RESP_04_test_7(){
+        void RESP_04_test_5(){
             AuthEnum error = AuthEnum.INVALID_INPUT;
             StringWriter output = new StringWriter();
 

@@ -12,7 +12,7 @@ public class LibraryTest {
     public class CatalogueInitializationTest{
         @Test
         @DisplayName("Check library catalogue size is 20")
-        void RESP_01_test_01(){
+        void RESP_01_test_1(){
             InitializeLibrary library = new InitializeLibrary();
             Catalogue catalogue = library.initializeLibrary();
 
@@ -23,12 +23,13 @@ public class LibraryTest {
         }
         @Test
         @DisplayName("Check library catalogue for valid book - Great Gatsby.")
-        void RESP_01_test_02(){
+        void RESP_01_test_2(){
 
             InitializeLibrary library = new InitializeLibrary();
             Catalogue catalogue = library.initializeLibrary();
 
-            Book book = catalogue.getBook(0);
+            Book book = catalogue.getBook("Great Gatsby");
+
             String title = book.getTitle();
             assertEquals("Great Gatsby",title);
         }
