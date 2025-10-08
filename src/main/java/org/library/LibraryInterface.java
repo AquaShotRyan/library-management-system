@@ -43,5 +43,8 @@ public class LibraryInterface {
             output.flush();
         }
     }
+    public void displayAvailableBookNotification(PrintWriter output, Book b){
+        return;
+    }
 
 }

@@ -25,4 +25,8 @@ public class Library {
     public String getSessionUsername(){
         return sessionUsername;
     }
+
+    public Book getBook(String title){
+        return new Book("some_title", "some_author");
+    }
 }

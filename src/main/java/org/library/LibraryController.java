@@ -26,6 +26,4 @@ public class LibraryController {
     public MenuEnum promptMenu(Scanner input, PrintWriter output){
         return ui.promptMenu(input, output);
     }
-
-
 }

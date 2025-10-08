@@ -1,9 +1,6 @@
 package org.library;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -160,5 +157,31 @@ public class InterfaceTest {
             assertTrue(output.toString().contains("ERROR: invalid input"));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-06: display available on-hold book")
+    public class OnHoldBookNotification{
+        private StringWriter output;
+        private LibraryInterface libraryInterface;
+        private Library library;
+
+        @BeforeEach
+        void initLibrary(){
+            libraryInterface = new LibraryInterface();
+            library = new Library();
+        }
+
+        @Test
+        @DisplayName("Displays 'NOTIFICATION: No Longer Human by Osamu Dazai is available!'")
+        void RESP_06_test_1(){
+            output = new StringWriter();
+
+            Book b = library.getBook("No Longer Human");
+            libraryInterface.displayAvailableBookNotification(new PrintWriter(output), b);
+
+            assertTrue(output.toString().contains("NOTIFICATION: No Longer Human by Osamu Dazai is available!"));
+        }
+    }
+
 }
 
