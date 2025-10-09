@@ -119,5 +119,19 @@ public class AuthTest {
             assertNull(library.getSessionUsername());
         }
     }
+
+    @Nested
+    @DisplayName("RESP-10: delete session on logout")
+    public class DeleteSessionTest{
+        @Test
+        @DisplayName("After logging in and logging out, session should be null")
+        void RESP_10_test_1(){
+            Library library = new Library();
+            library.login("squeex", "iambald");
+            library.logout();
+
+            assertNull(library.getSessionUsername());
+        }
+    }
 }
 

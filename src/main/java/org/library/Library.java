@@ -27,6 +27,10 @@ public class Library {
         return authResult;
     }
 
+    public void logout(){
+        return;
+    }
+
     public String getSessionUsername(){
         if (sessionBorrower == null) return null;
         return sessionBorrower.getUsername();
