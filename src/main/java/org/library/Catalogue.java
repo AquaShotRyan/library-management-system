@@ -1,6 +1,9 @@
 package org.library;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class Catalogue {
     HashMap<String, Book> catalogue;
@@ -19,5 +22,13 @@ public class Catalogue {
 
     public int getCatalogueSize(){
         return catalogue.size();
+    }
+
+    public List<Book> getAllBooks(){
+        List<Book> books = new ArrayList<>();
+        catalogue.forEach((k, v) -> {
+            books.add(v);
+        });
+        return books;
     }
 }

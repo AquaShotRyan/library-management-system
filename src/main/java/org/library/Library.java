@@ -1,6 +1,5 @@
 package org.library;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
@@ -38,7 +37,8 @@ public class Library {
     }
 
     public List<Book> getAllBooks(){
-        List<Book> books = new ArrayList<>();
+        List<Book> books = catalogue.getAllBooks();
+        books.sort(new BookAuthorComparator());
         return books;
     }
 }
