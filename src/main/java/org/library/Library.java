@@ -1,5 +1,8 @@
 package org.library;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Library {
     private Catalogue catalogue;
     private Borrowers borrowers;
@@ -32,5 +35,10 @@ public class Library {
 
     public Book getBook(String title){
         return catalogue.getBook(title);
+    }
+
+    public List<Book> getAllBooks(){
+        List<Book> books = new ArrayList<>();
+        return books;
     }
 }
