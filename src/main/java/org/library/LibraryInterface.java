@@ -44,7 +44,9 @@ public class LibraryInterface {
         }
     }
     public void displayAvailableBookNotification(PrintWriter output, Book b){
-        return;
+        String msg = String.format("NOTIFICATION: %s is available!", b.toString());
+        output.println(msg);
+        output.flush();
     }
 
 }

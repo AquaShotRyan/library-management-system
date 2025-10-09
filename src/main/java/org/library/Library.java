@@ -2,11 +2,13 @@ package org.library;
 
 public class Library {
     private LibraryAuth auth;
+    private Catalogue catalogue;
 
     private String sessionUsername;
 
     public Library(){
         InitializeLibrary initLibrary = new InitializeLibrary();
+        catalogue = initLibrary.initializeLibrary();
         Credentials c = initLibrary.initializeCredentials();
         sessionUsername = null;
 
@@ -27,6 +29,6 @@ public class Library {
     }
 
     public Book getBook(String title){
-        return new Book("some_title", "some_author");
+        return catalogue.getBook(title);
     }
 }
