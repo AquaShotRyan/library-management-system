@@ -1,10 +1,10 @@
 package org.library;
 
-public class Credential {
+public class User {
     private String username;
     private String password;
 
-    public Credential(String username, String password){
+    public User(String username, String password){
         this.username = username;
         this.password = password;
     }
@@ -13,7 +13,7 @@ public class Credential {
         return username;
     }
 
-    public String getPassword() {
-        return password;
+    public boolean matchPassword(String p){
+        return password.equals(p);
     }
 }

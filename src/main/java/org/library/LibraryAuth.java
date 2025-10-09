@@ -1,10 +1,10 @@
 package org.library;
 
 public class LibraryAuth {
-    private Credentials credentials;
+    private Borrowers users;
 
-    public LibraryAuth(Credentials credentials){
-        this.credentials = credentials;
+    public LibraryAuth(Borrowers borrowers){
+        users = borrowers;
     }
 
     public AuthEnum authUser(String username, String password){
@@ -12,11 +12,11 @@ public class LibraryAuth {
             return AuthEnum.INVALID_INPUT;
         }
 
-        Credential c;
+        User user;
         try {
-            c = credentials.getCredential(username);
+            user = users.getBorrower(username);
 
-            if (!c.getPassword().equals(password))
+            if (!user.matchPassword(password))
                 return AuthEnum.INVALID_CREDENTIALS;
 
         } catch (RuntimeException e) {

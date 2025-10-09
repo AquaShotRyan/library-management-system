@@ -1,19 +1,17 @@
 package org.library;
 
 public class Book {
-    String title;
-    String author;
+    private BookDetails bookDetails;
 
     Book(String title, String author){
-        this.title = title;
-        this.author = author;
+        bookDetails = new BookDetails(title, author);
     }
-    public String getTitle(){
-        return title;
-    }
+
+    public String getTitle(){ return bookDetails.getTitle(); }
+    public String getAuthor() { return bookDetails.getAuthor(); }
 
     @Override
     public String toString() {
-        return String.format("%s by %s", title, author);
+        return String.format("%s by %s", getTitle(), getAuthor());
     }
 }

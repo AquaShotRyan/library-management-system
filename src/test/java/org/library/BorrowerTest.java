@@ -17,7 +17,7 @@ public class BorrowerTest {
         @BeforeEach
         void initializeBorrowers(){
             InitializeLibrary library = new InitializeLibrary();
-            borrowers = library.initializeBorrowers();
+            borrowers = library.initBorrowers();
         }
 
         @Test

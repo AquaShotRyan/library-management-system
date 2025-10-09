@@ -14,7 +14,7 @@ public class LibraryTest {
         @DisplayName("Check library catalogue size is 20")
         void RESP_01_test_1(){
             InitializeLibrary library = new InitializeLibrary();
-            Catalogue catalogue = library.initializeLibrary();
+            Catalogue catalogue = library.initCatalogue();
 
             int size = catalogue.getCatalogueSize();
 
@@ -26,7 +26,7 @@ public class LibraryTest {
         void RESP_01_test_2(){
 
             InitializeLibrary library = new InitializeLibrary();
-            Catalogue catalogue = library.initializeLibrary();
+            Catalogue catalogue = library.initCatalogue();
 
             Book book = catalogue.getBook("Great Gatsby");
 

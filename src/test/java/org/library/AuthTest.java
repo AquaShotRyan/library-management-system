@@ -23,8 +23,8 @@ public class AuthTest {
         @BeforeEach
         void initLibraryAuth(){
             InitializeLibrary library = new InitializeLibrary();
-            Credentials c = library.initializeCredentials();
-            libraryAuth = new LibraryAuth(c);
+            Borrowers borrowers = library.initBorrowers();
+            libraryAuth = new LibraryAuth(borrowers);
         }
 
         @BeforeEach
@@ -94,7 +94,6 @@ public class AuthTest {
 
         @BeforeEach
         void initLibrary(){
-
             library = new Library();
         }
 

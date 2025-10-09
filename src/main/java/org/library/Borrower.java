@@ -1,11 +1,8 @@
 package org.library;
 
-public class Borrower {
-    private String username;
+public class Borrower extends User{
 
-    public Borrower(String username){
-        this.username = username;
+    public Borrower(String username, String password){
+        super(username, password);
     }
-
-    public String getUsername() {return username;}
 }

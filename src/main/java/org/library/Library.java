@@ -1,31 +1,33 @@
 package org.library;
 
 public class Library {
-    private LibraryAuth auth;
     private Catalogue catalogue;
+    private Borrowers borrowers;
 
-    private String sessionUsername;
+    private LibraryAuth auth;
+    private Borrower sessionBorrower;
 
     public Library(){
         InitializeLibrary initLibrary = new InitializeLibrary();
-        catalogue = initLibrary.initializeLibrary();
-        Credentials c = initLibrary.initializeCredentials();
-        sessionUsername = null;
+        catalogue = initLibrary.initCatalogue();
+        borrowers = initLibrary.initBorrowers();
 
-        auth = new LibraryAuth(c);
+        auth = new LibraryAuth(borrowers);
+        sessionBorrower = null;
     }
 
     public AuthEnum login(String username, String password){
         AuthEnum authResult = auth.authUser(username, password);
 
         if (authResult == AuthEnum.SUCCESS)
-            sessionUsername = username;
+            sessionBorrower = borrowers.getBorrower(username);
 
         return authResult;
     }
 
     public String getSessionUsername(){
-        return sessionUsername;
+        if (sessionBorrower == null) return null;
+        return sessionBorrower.getUsername();
     }
 
     public Book getBook(String title){
