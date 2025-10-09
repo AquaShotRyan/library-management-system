@@ -15,7 +15,7 @@ public class InterfaceTest {
 
     @Nested
     @DisplayName("RESP-03: prompting username and password")
-    public class PromptCredentialsTest{
+    public class PromptCredentials{
         private LibraryInterface libraryInterface;
         private StringWriter output;
 
@@ -182,6 +182,5 @@ public class InterfaceTest {
             assertTrue(output.toString().contains("NOTIFICATION: No Longer Human by Osamu Dazai is available!"));
         }
     }
-
 }
 

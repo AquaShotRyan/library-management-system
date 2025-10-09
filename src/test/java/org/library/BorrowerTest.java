@@ -11,7 +11,7 @@ public class BorrowerTest {
 
     @Nested
     @DisplayName("RESP-02: initializing 3 borrowers")
-    public class BorrowerInitializationTest {
+    public class BorrowerInitialization {
         private Borrowers borrowers;
 
         @BeforeEach

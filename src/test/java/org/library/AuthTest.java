@@ -16,7 +16,7 @@ public class AuthTest {
 
     @Nested
     @DisplayName("RESP-04: verifying and validating credentials")
-    public class CredentialsTest {
+    public class CredentialsValidation {
         private LibraryAuth libraryAuth;
         private LibraryInterface libraryInterface;
 
@@ -89,7 +89,7 @@ public class AuthTest {
 
     @Nested
     @DisplayName("RESP-05: create and maintain session for authenticated user")
-    public class CreateSessionTest {
+    public class CreateSession {
         Library library;
 
         @BeforeEach
@@ -122,7 +122,7 @@ public class AuthTest {
 
     @Nested
     @DisplayName("RESP-10: delete session on logout")
-    public class DeleteSessionTest{
+    public class DeleteSession {
         @Test
         @DisplayName("After logging in and logging out, session should be null")
         void RESP_10_test_1(){
