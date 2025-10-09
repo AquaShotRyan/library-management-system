@@ -19,6 +19,10 @@ public class LibraryController {
         ui.displayAuthError(authResult, output);
     }
 
+    public void logout(){
+        library.logout();
+    }
+
     public boolean isLoggedIn(){
         return library.getSessionUsername() != null;
     }

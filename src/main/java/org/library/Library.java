@@ -28,7 +28,7 @@ public class Library {
     }
 
     public void logout(){
-        return;
+        sessionBorrower = null;
     }
 
     public String getSessionUsername(){

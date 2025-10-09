@@ -20,6 +20,10 @@ public class Main {
                 controller.promptLogin(input, output);
             }
             MenuEnum menuInput = controller.promptMenu(input, output);
+
+            if (menuInput == MenuEnum.LOGOUT){
+                controller.logout();
+            }
         }
     }
 }
