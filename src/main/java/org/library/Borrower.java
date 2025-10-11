@@ -16,4 +16,14 @@ public class Borrower extends User{
     public boolean hasBook(String bookTitle){
         return borrowedBooks.getBookByTitle(bookTitle) != null;
     }
+
+    public void addBorrowedBook(Book b){
+        borrowedBooks.addBook(b);
+    }
+
+    public void removeBorrowedBook(String bookTitle){
+        borrowedBooks.removeBook(bookTitle);
+    }
+
+    public int getBorrowedBooksNum(){ return borrowedBooks.size(); }
 }

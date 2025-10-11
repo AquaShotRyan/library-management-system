@@ -51,8 +51,7 @@ public class Library {
 
     public void addBookToBorrower(Book book, String username){
         Borrower borrower = borrowers.getBorrower(username);
-        BorrowedBooks borrowedBooks = borrower.getBorrowedBooks();
-        borrowedBooks.addBook(book);
+        borrower.addBorrowedBook(book);
     }
 
     public BorrowedBooks getBorrowedBooks(String username){
@@ -61,8 +60,8 @@ public class Library {
     }
 
     public int getBorrowedBooksNum(String username){
-        BorrowedBooks borrowedBooks = getBorrowedBooks(username);
-        return borrowedBooks.size();
+        Borrower borrower = borrowers.getBorrower(username);
+        return borrower.getBorrowedBooksNum();
     }
 
     public int getSessionBorrowedBooksNum(){
@@ -83,6 +82,6 @@ public class Library {
             throw new UnsupportedOperationException(String.format("Book '%s' is not checked out by %s", bookTitle, username));
         }
 
-        borrower.getBorrowedBooks().removeBook(bookTitle);
+        borrower.removeBorrowedBook(bookTitle);
     }
 }
