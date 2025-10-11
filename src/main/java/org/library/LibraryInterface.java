@@ -49,4 +49,8 @@ public class LibraryInterface {
         output.flush();
     }
 
+    public boolean promptConfirmation(Scanner input, PrintWriter output, String msg){
+        return false;
+    }
+
 }

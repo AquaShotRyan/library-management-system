@@ -182,5 +182,58 @@ public class InterfaceTest {
             assertTrue(output.toString().contains("NOTIFICATION: No Longer Human by Osamu Dazai is available!"));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-09: prompt user confirmation")
+    public class PromptUserConfirmation{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @Test
+        @DisplayName("Returns true if user types 'y'")
+        void RESP_09_test_1(){
+            Scanner input = new Scanner("y");
+            boolean response = libraryInterface.promptConfirmation(input, new PrintWriter(output), "");
+
+            assertTrue(response);
+        }
+
+        @Test
+        @DisplayName("Returns false if user types 'any other response")
+        void RESP_09_test_2(){
+            Scanner input = new Scanner("any other response");
+            boolean response = libraryInterface.promptConfirmation(input, new PrintWriter(output), "");
+
+            assertFalse(response);
+        }
+
+        @Test
+        @DisplayName("Displays 'Confirm this transaction? (y/n): '")
+        void RESP_09_test_3(){
+            Scanner input = new Scanner("y");
+            boolean response = libraryInterface.promptConfirmation(input, new PrintWriter(output), "Confirm this transaction?");
+
+            assertTrue(output.toString().contains("Confirm this transaction? (y/n): "));
+        }
+
+        @Test
+        @DisplayName("Displays '(y/n): ' if no confirmation message is passed in")
+        void RESP_09_test_4(){
+            Scanner input = new Scanner("y");
+            boolean response = libraryInterface.promptConfirmation(input, new PrintWriter(output), "");
+
+            assertTrue(output.toString().contains("(y/n): "));
+        }
+    }
 }
 
