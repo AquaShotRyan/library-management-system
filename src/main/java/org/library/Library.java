@@ -51,6 +51,8 @@ public class Library {
 
     public void addBookToBorrower(Book book, String username){
         Borrower borrower = borrowers.getBorrower(username);
+        if (borrower.hasBook(book.getTitle()))
+            throw new IllegalStateException(String.format("%s already has %s checked out", username, book.getTitle()));
         borrower.addBorrowedBook(book);
     }
 
