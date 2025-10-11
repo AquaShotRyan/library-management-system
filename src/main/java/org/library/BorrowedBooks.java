@@ -23,5 +23,15 @@ public class BorrowedBooks {
         books.add(b);
     }
 
+    public void removeBook(String bookTitle){
+        for (int i=0; i<size(); ++i){
+            Book b = books.get(i);
+            if (b.getTitle().equals(bookTitle)){
+                books.remove(i);
+                return;
+            }
+        }
+    }
+
     public int size(){ return books.size(); }
 }

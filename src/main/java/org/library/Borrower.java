@@ -12,4 +12,8 @@ public class Borrower extends User{
     public BorrowedBooks getBorrowedBooks() {
         return borrowedBooks;
     }
+
+    public boolean hasBook(String bookTitle){
+        return borrowedBooks.getBookByTitle(bookTitle) != null;
+    }
 }

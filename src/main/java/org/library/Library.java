@@ -77,6 +77,12 @@ public class Library {
     }
 
     public void removeBookFromBorrower(String bookTitle, String username){
-        return;
+        Borrower borrower = borrowers.getBorrower(username);
+
+        if (!borrower.hasBook(bookTitle)){
+            throw new UnsupportedOperationException(String.format("Book '%s' is not checked out by %s", bookTitle, username));
+        }
+
+        borrower.getBorrowedBooks().removeBook(bookTitle);
     }
 }
