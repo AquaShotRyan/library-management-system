@@ -37,4 +37,10 @@ public class LibraryController {
     public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
         ui.displayNumberOfBorrowedBooks(output, n);
     }
+
+    public void notifyNoBorrowedBooks(PrintWriter output){
+        int borrowedBooksNum = library.getSessionBorrowedBooksNum();
+        if (borrowedBooksNum == 0)
+            ui.notifyNoBorrowedBooks(output);
+    }
 }

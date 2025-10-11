@@ -196,4 +196,47 @@ public class LibraryTest {
 
 
     }
+
+    @Nested
+    @DisplayName("RESP-24: remove a book from a borrower's checked-out books")
+    public class RemoveCheckedOutBook {
+        Library library;
+        private final String TEST_USERNAME = "ryan";
+        private final String SUPER_GIRL_BOOK = "Supergirl: Woman of Tomorrow #1";
+        private final String ARCANE_BOOK = "The Art and Making of Arcane";
+
+        @BeforeEach
+        void addBorrowedBooks() {
+            library = new Library();
+            Book book1 = library.getBook(SUPER_GIRL_BOOK);
+            Book book2 = library.getBook(ARCANE_BOOK);
+            library.addBookToBorrower(book1, TEST_USERNAME);
+            library.addBookToBorrower(book2, TEST_USERNAME);
+        }
+
+        @Test
+        @DisplayName("Remove 1 book from collection of 2, size should be 1")
+        void RESP_24_test_1(){
+            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
+            int result = library.getBorrowedBooksNum(TEST_USERNAME);
+
+            assertEquals(1, result);
+        }
+
+        @Test
+        @DisplayName("Remove book 'Supergirl: Woman of Tomorrow #1', finding it should return null")
+        void RESP_24_test_2(){
+            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
+            Book result = library.getBorrowedBooks(TEST_USERNAME).getBookByTitle(SUPER_GIRL_BOOK);
+
+            assertNull(result);
+        }
+
+        @Test
+        @DisplayName("Remove book 'Supergirl: Woman of Tomorrow #1', removing it again should throw UnsupportedOperationException")
+        void RESP_24_test_3(){
+            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
+            assertThrows(UnsupportedOperationException.class, () -> library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME));
+        }
+    }
 }

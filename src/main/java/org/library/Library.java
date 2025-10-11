@@ -75,4 +75,8 @@ public class Library {
         Book book = getBook(bookTitle);
         book.setDueDate(date);
     }
+
+    public void removeBookFromBorrower(String bookTitle, String username){
+        return;
+    }
 }
