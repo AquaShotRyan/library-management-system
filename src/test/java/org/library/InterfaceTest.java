@@ -263,5 +263,22 @@ public class InterfaceTest {
             assertTrue(result.contains(expected), result);
         }
     }
+
+    @Nested
+    @DisplayName("RESP-23: display no borrowed books notification")
+    public class DisplayNoBorrowedBooks{
+
+        @Test
+        @DisplayName("Displays 'You have no borrowed books to return'")
+        void RESP_23_test_1(){
+            LibraryInterface libraryInterface = new LibraryInterface();
+            StringWriter output = new StringWriter();
+
+            libraryInterface.notifyNoBorrowedBooks(new PrintWriter(output));
+            String result = output.toString();
+
+            assertTrue(result.contains("You have no borrowed books to return"), result);
+        }
+    }
 }
 
