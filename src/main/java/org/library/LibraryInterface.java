@@ -50,7 +50,15 @@ public class LibraryInterface {
     }
 
     public boolean promptConfirmation(Scanner input, PrintWriter output, String msg){
-        return false;
+        if (msg.isBlank()){
+            output.println("(y/n): "); output.flush();
+        }else{
+            output.println(String.format("%s (y/n): ", msg)); output.flush();
+        }
+
+        String inputStr = input.nextLine();
+
+        return inputStr.equals("y");
     }
 
 }
