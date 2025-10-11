@@ -61,4 +61,8 @@ public class LibraryInterface {
         return inputStr.equals("y");
     }
 
+    public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
+        return;
+    }
+
 }

@@ -235,5 +235,33 @@ public class InterfaceTest {
             assertTrue(output.toString().contains("(y/n): "));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-12: display current checked-out book count")
+    public class DisplayBookCount{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {0,1,2,3})
+        @DisplayName("Displays 'Current number of borrowed books: 0'")
+        void RESP_12_test_1(int numBooks){
+            libraryInterface.displayNumberOfBorrowedBooks(new PrintWriter(output), numBooks);
+            String result = output.toString();
+            String expected = String.format("Current number of borrowed books: %d", numBooks);
+
+            assertTrue(result.contains(expected), result);
+        }
+    }
 }
 
