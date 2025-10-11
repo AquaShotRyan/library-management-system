@@ -22,6 +22,10 @@ public class Main {
             if (menuInput == MenuEnum.BORROW){
                 int borrowedBooksNum = library.getSessionBorrowedBooksNum();
                 controller.displayNumberOfBorrowedBooks(output, borrowedBooksNum);
+
+            }else if(menuInput == MenuEnum.RETURN){
+                controller.notifyNoBorrowedBooks(output);
+
             }else if (menuInput == MenuEnum.LOGOUT){
                 controller.logout(input, output);
             }

@@ -67,7 +67,8 @@ public class LibraryInterface {
     }
 
     public void notifyNoBorrowedBooks(PrintWriter output){
-        return;
+        output.println("You have no borrowed books to return");
+        output.flush();
     }
 
 }
