@@ -135,6 +135,15 @@ public class LibraryTest {
 
             assertEquals(3, borrowedBooks.size());
         }
+
+        @Test
+        @DisplayName("Adding a duplicate book throws IllegalStateException")
+        void RESP_20_test_4(){
+            Book book1 = library.getBook("Blood Meridian");
+            library.addBookToBorrower(book1, "squeex");
+
+            assertThrows(IllegalStateException.class, () -> library.addBookToBorrower(book1, "squeex"));
+        }
     }
 
 
