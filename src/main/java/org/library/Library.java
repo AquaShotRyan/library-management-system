@@ -45,4 +45,12 @@ public class Library {
         books.sort(new BookAuthorComparator());
         return books;
     }
+
+    public void addBookToBorrower(Book book, String username){
+        return;
+    }
+
+    public BorrowedBooks getBorrowedBooks(String username){
+        return new BorrowedBooks();
+    }
 }

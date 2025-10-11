@@ -84,4 +84,57 @@ public class LibraryTest {
         }
     }
 
+    @Nested
+    @DisplayName("RESP-20: add book to a borrower's checked-out books")
+    public class displayCheckedOutBooks {
+        Library library;
+
+        @BeforeEach
+        void initLibrary() {
+            library = new Library();
+        }
+
+        @Test
+        @DisplayName("Check added book 'Berserk Deluxe Volume 1' is in Borrower's borrowed books")
+        void RESP_20_test_1(){
+            Book book = library.getBook("Berserk Deluxe Volume 1");
+            library.addBookToBorrower(book, "squeex");
+
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+            Book borrowedBook = borrowedBooks.getBookByTitle(book.getTitle());
+
+            assertEquals(book.getTitle(), borrowedBook.getTitle());
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check the 2nd book, 'Moby-Dick,' is in Borrower's borrowed books")
+        void RESP_20_test_2(){
+            Book book1 = library.getBook("Blood Meridian");
+            Book book2 = library.getBook("Moby-Dick");
+            Book book3 = library.getBook("Berserk Deluxe Volume 1");
+            library.addBookToBorrower(book1, "squeex");
+            library.addBookToBorrower(book2, "squeex");
+            library.addBookToBorrower(book3, "squeex");
+
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+            Book borrowedBook = borrowedBooks.getBookByTitle(book2.getTitle());
+
+            assertEquals(book2.getTitle(), borrowedBook.getTitle());
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check size is 3")
+        void RESP_20_test_3(){
+            Book book1 = library.getBook("Blood Meridian");
+            Book book2 = library.getBook("Moby-Dick");
+            Book book3 = library.getBook("Berserk Deluxe Volume 1");
+            library.addBookToBorrower(book1, "squeex");
+            library.addBookToBorrower(book2, "squeex");
+            library.addBookToBorrower(book3, "squeex");
+
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+
+            assertEquals(3, borrowedBooks.size());
+        }
+    }
 }
