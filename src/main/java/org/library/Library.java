@@ -10,6 +10,8 @@ public class Library {
     private LibraryAuth auth;
     private Borrower sessionBorrower;
 
+    public static final int BORROWING_DAY_LENGTH = 14;
+
     public Library(){
         InitializeLibrary initLibrary = new InitializeLibrary();
         catalogue = initLibrary.initCatalogue();
@@ -68,6 +70,9 @@ public class Library {
     }
 
     public void updateDueDateFromDate(String bookTitle, Calendar date){
-        return;
+        date.add(Calendar.DATE, BORROWING_DAY_LENGTH);
+
+        Book book = getBook(bookTitle);
+        book.setDueDate(date);
     }
 }

@@ -15,8 +15,11 @@ public class Book {
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
-        return new GregorianCalendar(1900, 1, 1);
+        Calendar copy = (Calendar)dueDate.clone();
+        return copy;
     }
+
+    public void setDueDate(Calendar date){ dueDate = date; }
 
     @Override
     public String toString() {
