@@ -1,5 +1,6 @@
 package org.library;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class Library {
@@ -64,5 +65,9 @@ public class Library {
 
     public int getSessionBorrowedBooksNum(){
         return getBorrowedBooksNum(getSessionUsername());
+    }
+
+    public void updateDueDateFromDate(String bookTitle, Calendar date){
+        return;
     }
 }

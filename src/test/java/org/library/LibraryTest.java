@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -136,5 +138,62 @@ public class LibraryTest {
 
             assertEquals(3, borrowedBooks.size());
         }
+    }
+
+
+    @Nested
+    @DisplayName("RESP-18: update a book's due date to 14 days from today")
+    public class BookDueDate{
+        private Library library;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+        }
+
+        @Test
+        @DisplayName("If today is 2025-09-05, then due date is 2025-09-19")
+        void RESP_18_test_1(){
+
+            Calendar today = new GregorianCalendar(2025, Calendar.SEPTEMBER, 5);
+            Calendar expectedDate = new GregorianCalendar(2025, Calendar.SEPTEMBER, 19);
+
+            Book book = library.getBook("Red Rising");
+            library.updateDueDateFromDate(book.getTitle(), today);
+
+            Calendar dueDate = book.getDueDate();
+
+            assertEquals(expectedDate, dueDate);
+        }
+
+        @Test
+        @DisplayName("If today is 2025-10-24, then due date is 2025-11-07")
+        void RESP_18_test_2(){
+            Calendar today = new GregorianCalendar(2025, Calendar.OCTOBER, 24);
+            Calendar expectedDate = new GregorianCalendar(2025, Calendar.NOVEMBER, 7);
+
+            Book book = library.getBook("Red Rising");
+            library.updateDueDateFromDate(book.getTitle(), today);
+
+            Calendar dueDate = book.getDueDate();
+
+            assertEquals(expectedDate, dueDate);
+        }
+
+        @Test
+        @DisplayName("If today is 2025-12-29, then due date is 2026-01-12")
+        void RESP_18_test_3(){
+            Calendar today = new GregorianCalendar(2025, Calendar.DECEMBER, 29);
+            Calendar expectedDate = new GregorianCalendar(2026, Calendar.JANUARY, 12);
+
+            Book book = library.getBook("Red Rising");
+            library.updateDueDateFromDate(book.getTitle(), today);
+
+            Calendar dueDate = book.getDueDate();
+
+            assertEquals(expectedDate, dueDate);
+        }
+
+
     }
 }
