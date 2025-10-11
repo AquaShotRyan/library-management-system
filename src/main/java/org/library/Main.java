@@ -1,6 +1,5 @@
 package org.library;
 
-
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -24,7 +23,7 @@ public class Main {
                 int borrowedBooksNum = library.getSessionBorrowedBooksNum();
                 controller.displayNumberOfBorrowedBooks(output, borrowedBooksNum);
             }else if (menuInput == MenuEnum.LOGOUT){
-                controller.logout();
+                controller.logout(input, output);
             }
         }
     }

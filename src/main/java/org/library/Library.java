@@ -58,8 +58,7 @@ public class Library {
     }
 
     public int getBorrowedBooksNum(String username){
-        Borrower borrower = borrowers.getBorrower(username);
-        BorrowedBooks borrowedBooks = borrower.getBorrowedBooks();
+        BorrowedBooks borrowedBooks = getBorrowedBooks(username);
         return borrowedBooks.size();
     }
 

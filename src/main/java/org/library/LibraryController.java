@@ -19,8 +19,11 @@ public class LibraryController {
         ui.displayAuthError(authResult, output);
     }
 
-    public void logout(){
-        library.logout();
+    public void logout(Scanner input, PrintWriter output){
+        boolean typedYes = ui.promptConfirmation(input, output, "Are you sure you want to log out?");
+
+        if (typedYes)
+            library.logout();
     }
 
     public boolean isLoggedIn(){

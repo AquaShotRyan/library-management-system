@@ -86,7 +86,7 @@ public class LibraryTest {
 
     @Nested
     @DisplayName("RESP-20: add book to a borrower's checked-out books")
-    public class displayCheckedOutBooks {
+    public class AddCheckedOutBook {
         Library library;
 
         @BeforeEach
