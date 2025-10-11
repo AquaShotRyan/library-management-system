@@ -30,4 +30,8 @@ public class LibraryController {
     public MenuEnum promptMenu(Scanner input, PrintWriter output){
         return ui.promptMenu(input, output);
     }
+
+    public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
+        ui.displayNumberOfBorrowedBooks(output, n);
+    }
 }

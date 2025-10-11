@@ -20,8 +20,10 @@ public class Main {
                 controller.promptLogin(input, output);
             }
             MenuEnum menuInput = controller.promptMenu(input, output);
-
-            if (menuInput == MenuEnum.LOGOUT){
+            if (menuInput == MenuEnum.BORROW){
+                int borrowedBooksNum = library.getSessionBorrowedBooksNum();
+                controller.displayNumberOfBorrowedBooks(output, borrowedBooksNum);
+            }else if (menuInput == MenuEnum.LOGOUT){
                 controller.logout();
             }
         }

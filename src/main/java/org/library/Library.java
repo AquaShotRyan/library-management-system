@@ -56,4 +56,14 @@ public class Library {
         Borrower borrower = borrowers.getBorrower(username);
         return borrower.getBorrowedBooks();
     }
+
+    public int getBorrowedBooksNum(String username){
+        Borrower borrower = borrowers.getBorrower(username);
+        BorrowedBooks borrowedBooks = borrower.getBorrowedBooks();
+        return borrowedBooks.size();
+    }
+
+    public int getSessionBorrowedBooksNum(){
+        return getBorrowedBooksNum(getSessionUsername());
+    }
 }

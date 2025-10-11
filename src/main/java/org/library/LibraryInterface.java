@@ -62,7 +62,8 @@ public class LibraryInterface {
     }
 
     public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
-        return;
+        output.println(String.format("Current number of borrowed books: %d", n));
+        output.flush();
     }
 
 }
