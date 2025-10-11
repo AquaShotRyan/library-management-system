@@ -11,7 +11,16 @@ public class BorrowedBooks {
     }
 
     public Book getBookByTitle(String bookTitle){
-        return new Book("null-title", "null-author");
+        for (int i=0; i<size(); ++i){
+            Book b = books.get(i);
+            if (b.getTitle().equals(bookTitle))
+                return b;
+        }
+        return null;
+    }
+
+    public void addBook(Book b){
+        books.add(b);
     }
 
     public int size(){ return books.size(); }

@@ -47,10 +47,13 @@ public class Library {
     }
 
     public void addBookToBorrower(Book book, String username){
-        return;
+        Borrower borrower = borrowers.getBorrower(username);
+        BorrowedBooks borrowedBooks = borrower.getBorrowedBooks();
+        borrowedBooks.addBook(book);
     }
 
     public BorrowedBooks getBorrowedBooks(String username){
-        return new BorrowedBooks();
+        Borrower borrower = borrowers.getBorrower(username);
+        return borrower.getBorrowedBooks();
     }
 }
