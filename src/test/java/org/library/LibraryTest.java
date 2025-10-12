@@ -312,4 +312,56 @@ public class LibraryTest {
             assertEquals("glorp", book.getFirstHolder().getUsername());
         }
     }
+
+    @Nested
+    @DisplayName("RESP-21: update a book's current holder")
+    public class NestedTestClass{
+        private final String BOOK_TITLE = "The Handmaid's Tale";
+        private final String BORROWER = "ryan";
+
+        private Library library;
+        private Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+        }
+
+        @Test
+        @DisplayName("'ryan' is the current holder after placing a hold with no holder nor borrowers in queue")
+        void RESP_21_test_1(){
+            library.setHolder(BOOK_TITLE, BORROWER);
+
+            assertEquals(BORROWER, book.getCurHolder().getUsername());
+        }
+
+        @Test
+        @DisplayName("'ryan' is removed from the queue after placing a hold and was first in queue")
+        void RESP_21_test_2(){
+            library.placeHold(BOOK_TITLE, BORROWER);
+            library.placeHold(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, BORROWER);
+
+            assertNotEquals(BORROWER, book.getFirstHolder().getUsername());
+        }
+
+        @Test
+        @DisplayName("'ryan' is the current holder after placing a hold and was first in queue")
+        void RESP_21_test_3(){
+            library.placeHold(BOOK_TITLE, BORROWER);
+            library.placeHold(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, BORROWER);
+
+            assertEquals(BORROWER, book.getCurHolder().getUsername());
+        }
+
+        @Test
+        @DisplayName("'The Handmaid's Tale' is stored in 'ryan' after placing hold")
+        void RESP_21_test_4(){
+            library.setHolder(BOOK_TITLE, BORROWER);
+
+            assertEquals(BOOK_TITLE, library.getHeldBook(BORROWER).getTitle());
+        }
+    }
 }

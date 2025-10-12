@@ -95,4 +95,12 @@ public class Library {
         }
         book.addHolder(user);
     }
+
+    public void setHolder(String bookTitle, String username){
+        return;
+    }
+
+    public Book getHeldBook(String username){
+        return new Book("null-title", "null-author");
+    }
 }

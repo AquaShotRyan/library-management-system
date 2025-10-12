@@ -38,6 +38,7 @@ public class Book {
     public User getFirstHolder(){
         return holdQueue.peek();
     }
+    public User getCurHolder(){ return new User("null-username", "null-password");}
 
     public void setDueDate(Calendar date){ dueDate = date; }
 
