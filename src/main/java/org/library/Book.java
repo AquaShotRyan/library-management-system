@@ -10,12 +10,14 @@ public class Book {
     private Calendar dueDate;
     private Queue<User> holdQueue;
     private User curHolder;
+    private User curBorrower;
 
     Book(String title, String author){
         bookDetails = new BookDetails(title, author);
         dueDate = null;
         holdQueue = new LinkedList<>();
         curHolder = null;
+        curBorrower = null;
     }
 
     public void addHolder(User user){
@@ -31,7 +33,16 @@ public class Book {
     }
 
     public boolean hasBorrower(){
-        return true;
+        return curBorrower != null;
+    }
+    public boolean hasHolder(){
+        return curHolder != null;
+    }
+
+    public User removeCurHolder(){
+        User holder = curHolder;
+        curHolder = null;
+        return holder;
     }
 
     public String getTitle(){ return bookDetails.getTitle(); }
@@ -46,10 +57,11 @@ public class Book {
     }
     public User getCurHolder(){ return curHolder; }
     public BookDetails getBookDetails(){ return bookDetails; }
-    public User getCurBorrower(){ return new User("null-username", "null-password"); }
+    public User getCurBorrower(){ return curBorrower; }
 
     public void setDueDate(Calendar date){ dueDate = date; }
     public void setCurHolder(User holder){ curHolder = holder; }
+    public void setCurBorrower(User borrower){ curBorrower = borrower; }
 
     @Override
     public String toString() {

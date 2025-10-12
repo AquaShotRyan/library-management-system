@@ -115,6 +115,20 @@ public class Library {
     }
 
     public void setBorrower(String bookTitle, String username){
-        return;
+        Book book = getBook(bookTitle);
+        Borrower borrower = borrowers.getBorrower(username);
+
+        // set user as borrower
+        book.setCurBorrower(borrower);
+        if (book.hasHolder() && book.getCurHolder().equals(borrower)){
+            book.removeCurHolder();
+        }
+        // update curHolder
+        User nextHolder = book.getFirstHolder();
+        if (nextHolder != null){
+            book.setCurHolder(nextHolder);
+        }
+        // add book to Borrower's checked-out books
+        borrower.addBorrowedBook(book);
     }
 }
