@@ -455,4 +455,55 @@ public class LibraryTest {
             assertThrows(NullPointerException.class, () -> library.removeBorrower(BOOK_TITLE, "ryan"));
         }
     }
+
+
+    @Nested
+    @DisplayName("RESP-11: retrieve appropriate availability status")
+    public class RetrieveAvailabilityStatus{
+        private final String BOOK_TITLE = "Nineteen Eighty-Four";
+        private final String BORROWER = "glorp";
+
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+        }
+
+        @Test
+        @DisplayName("Returns AvailabilityEnum.AVAILABLE if there's no holders nor borrower")
+        void RESP_11_test_1(){
+            AvailabilityEnum result = book.getAvailabilityStatus(BORROWER);
+            assertEquals(AvailabilityEnum.AVAILABLE, result);
+        }
+
+        @Test
+        @DisplayName("Returns AvailabilityEnum.CHECKED_OUT if there a current borrower")
+        void RESP_11_test_2(){
+            library.setBorrower(BOOK_TITLE, "ryan");
+
+            AvailabilityEnum result = book.getAvailabilityStatus(BORROWER);
+            assertEquals(AvailabilityEnum.CHECKED_OUT, result);
+        }
+
+        @Test
+        @DisplayName("Returns AvailabilityEnum.ON_HOLD if there's a current holder (not current user) but no current borrower")
+        void RESP_11_test_3(){
+            library.setHolder(BOOK_TITLE, "ryan");
+
+            AvailabilityEnum result = book.getAvailabilityStatus(BORROWER);
+            assertEquals(AvailabilityEnum.ON_HOLD, result);
+        }
+
+        @Test
+        @DisplayName("Returns AvailabilityEnum.AVAILABLE if there's no current borrower but current holder is current user")
+        void RESP_11_test_4(){
+            library.setHolder(BOOK_TITLE, "glorp");
+
+            AvailabilityEnum result = book.getAvailabilityStatus(BORROWER);
+            assertEquals(AvailabilityEnum.AVAILABLE, result);
+        }
+    }
 }

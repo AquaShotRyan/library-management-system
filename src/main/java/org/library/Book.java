@@ -51,6 +51,10 @@ public class Book {
         return borrower;
     }
 
+    public AvailabilityEnum getAvailabilityStatus(String username){
+        return AvailabilityEnum.NULL;
+    }
+
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
