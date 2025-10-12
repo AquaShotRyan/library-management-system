@@ -48,6 +48,7 @@ public class Book {
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
+        if (dueDate == null) return null;
         Calendar copy = (Calendar)dueDate.clone();
         return copy;
     }

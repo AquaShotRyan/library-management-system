@@ -406,4 +406,53 @@ public class LibraryTest {
             assertEquals(book, borrowedBooks.getBookByTitle(BOOK_TITLE));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-26: remove current borrower from a book")
+    public class RemoveBorrower{
+        private final String BOOK_TITLE = "To Kill a Mockingbird";
+
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+        }
+
+        @Test
+        @DisplayName("Check book's curBorrower is null")
+        void RESP_26_test_1(){
+            library.setBorrower(BOOK_TITLE, "ryan");
+            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, 10, 10));
+            library.removeBorrower(BOOK_TITLE, "ryan");
+
+            assertNull(book.getCurBorrower());
+        }
+
+        @Test
+        @DisplayName("Check book's dueDate is null")
+        void RESP_26_test_2(){
+            library.setBorrower(BOOK_TITLE, "ryan");
+            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, 10, 10));
+            library.removeBorrower(BOOK_TITLE, "ryan");
+
+            assertNull(book.getDueDate());
+        }
+
+        @Test
+        @DisplayName("Throw IllegalArgumentException if username doesn't match current borrower")
+        void RESP_26_test_3(){
+            library.setBorrower(BOOK_TITLE, "ryan");
+
+            assertThrows(IllegalArgumentException.class, () -> library.removeBorrower(BOOK_TITLE, "squeex"));
+        }
+
+        @Test
+        @DisplayName("Removing a book with no borrower throws NullPointerException")
+        void RESP_26_test_4(){
+            assertThrows(NullPointerException.class, () -> library.removeBorrower(BOOK_TITLE, "ryan"));
+        }
+    }
 }

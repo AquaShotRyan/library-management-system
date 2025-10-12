@@ -131,4 +131,8 @@ public class Library {
         // add book to Borrower's checked-out books
         borrower.addBorrowedBook(book);
     }
+
+    public void removeBorrower(String bookTitle, String username){
+        return;
+    }
 }
