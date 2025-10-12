@@ -21,7 +21,7 @@ public class Book {
     }
 
     public User popHolder(){
-        return new User("null-user", "null-password");
+        return holdQueue.poll();
     }
 
     public boolean containsHolder(User user){
