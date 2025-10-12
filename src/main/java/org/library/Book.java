@@ -52,7 +52,13 @@ public class Book {
     }
 
     public AvailabilityEnum getAvailabilityStatus(String username){
-        return AvailabilityEnum.NULL;
+        if (hasHolder() && !hasBorrower() && curHolder.getUsername().equals(username))
+            return AvailabilityEnum.AVAILABLE;
+        if (hasBorrower())
+            return AvailabilityEnum.CHECKED_OUT;
+        if (hasHolder())
+            return AvailabilityEnum.ON_HOLD;
+        return AvailabilityEnum.AVAILABLE;
     }
 
     public String getTitle(){ return bookDetails.getTitle(); }
