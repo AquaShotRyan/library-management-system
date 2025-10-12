@@ -97,10 +97,20 @@ public class Library {
     }
 
     public void setHolder(String bookTitle, String username){
-        return;
+        Book book = getBook(bookTitle);
+        Borrower borrower = borrowers.getBorrower(username);
+
+        book.setCurHolder(borrower);
+        User firstInQueue = book.getFirstHolder();
+        if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
+            book.popHolder();
+        }
+        borrower.setCurHold(book.getBookDetails());
     }
 
     public Book getHeldBook(String username){
-        return new Book("null-title", "null-author");
+        Borrower borrower = borrowers.getBorrower(username);
+
+        return getBook(borrower.getCurHold().getTitle());
     }
 }

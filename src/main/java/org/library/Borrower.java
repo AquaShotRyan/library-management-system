@@ -3,6 +3,7 @@ package org.library;
 public class Borrower extends User{
 
     BorrowedBooks borrowedBooks;
+    BookDetails curHold;
 
     public Borrower(String username, String password){
         super(username, password);
@@ -26,4 +27,8 @@ public class Borrower extends User{
     }
 
     public int getBorrowedBooksNum(){ return borrowedBooks.size(); }
+
+    public void setCurHold(BookDetails book){ curHold = book; }
+
+    public BookDetails getCurHold(){ return curHold; }
 }

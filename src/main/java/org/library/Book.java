@@ -9,11 +9,13 @@ public class Book {
     private BookDetails bookDetails;
     private Calendar dueDate;
     private Queue<User> holdQueue;
+    private User curHolder;
 
     Book(String title, String author){
         bookDetails = new BookDetails(title, author);
         dueDate = null;
         holdQueue = new LinkedList<>();
+        curHolder = null;
     }
 
     public void addHolder(User user){
@@ -38,9 +40,11 @@ public class Book {
     public User getFirstHolder(){
         return holdQueue.peek();
     }
-    public User getCurHolder(){ return new User("null-username", "null-password");}
+    public User getCurHolder(){ return curHolder; }
+    public BookDetails getBookDetails(){ return bookDetails; }
 
     public void setDueDate(Calendar date){ dueDate = date; }
+    public void setCurHolder(User holder){ curHolder = holder; }
 
     @Override
     public String toString() {
