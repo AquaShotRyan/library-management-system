@@ -86,4 +86,8 @@ public class Library {
 
         borrower.removeBorrowedBook(bookTitle);
     }
+
+    public void placeHold(String bookTitle, String username){
+        return;
+    }
 }

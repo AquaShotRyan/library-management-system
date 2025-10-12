@@ -146,7 +146,6 @@ public class LibraryTest {
         }
     }
 
-
     @Nested
     @DisplayName("RESP-18: update a book's due date to 14 days from today")
     public class BookDueDate{
@@ -243,6 +242,43 @@ public class LibraryTest {
         void RESP_24_test_3(){
             library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
             assertThrows(UnsupportedOperationException.class, () -> library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("RESP-17: add borrower to book's queue")
+    public class AddBorrowerToQueue{
+        private final String BOOK_TITLE = "Crime and Punishment";
+        private final String RYAN = "ryan";
+        private final String GLORP = "glorp";
+
+        private Library library;
+        private Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+            library.placeHold(BOOK_TITLE, RYAN);
+            library.placeHold(BOOK_TITLE, GLORP);
+        }
+
+        @Test
+        @DisplayName("Add 2 borrowers to queue and check size is 2")
+        void RESP_17_test_1(){
+            assertEquals(2, book.getHoldersNum());
+        }
+
+        @Test
+        @DisplayName("Add 'ryan' first and then 'glorp', check user 'ryan' is at the head")
+        void RESP_17_test_2(){
+            assertEquals(RYAN, book.getFirstHolder().getUsername());
+        }
+
+        @Test
+        @DisplayName("Add 2 borrowers and adding a duplicate borrower throws IllegalStateException")
+        void RESP_17_test_3(){
+            assertThrows(IllegalStateException.class, () -> library.placeHold(BOOK_TITLE, RYAN));
         }
     }
 }

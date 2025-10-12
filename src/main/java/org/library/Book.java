@@ -18,6 +18,10 @@ public class Book {
         Calendar copy = (Calendar)dueDate.clone();
         return copy;
     }
+    public int getHoldersNum(){ return 0; }
+    public User getFirstHolder(){
+        return new User("null-username", "null-password");
+    }
 
     public void setDueDate(Calendar date){ dueDate = date; }
 
