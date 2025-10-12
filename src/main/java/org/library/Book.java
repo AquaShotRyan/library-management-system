@@ -20,6 +20,10 @@ public class Book {
         holdQueue.add(user);
     }
 
+    public User popHolder(){
+        return new User("null-user", "null-password");
+    }
+
     public boolean containsHolder(User user){
         return holdQueue.contains(user);
     }

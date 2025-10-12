@@ -281,4 +281,35 @@ public class LibraryTest {
             assertThrows(IllegalStateException.class, () -> library.placeHold(BOOK_TITLE, RYAN));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-25: remove a borrower from a book's queue")
+    public class RemoveBorrowerFromQueue{
+        private final String BOOK_TITLE = "Crime and Punishment";
+
+        private Library library;
+        private Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+            library.placeHold(BOOK_TITLE, "ryan");
+            library.placeHold(BOOK_TITLE, "glorp");
+        }
+
+        @Test
+        @DisplayName("Add 2 borrowers to queue and remove 1, size should be 1")
+        void RESP_25_test_1(){
+            book.popHolder();
+            assertEquals(1, book.getHoldersNum());
+        }
+
+        @Test
+        @DisplayName("Add 2 borrowers to queue and remove 1, next borrower should be 'glorp'")
+        void RESP_25_test_2(){
+            book.popHolder();
+            assertEquals("glorp", book.getFirstHolder().getUsername());
+        }
+    }
 }
