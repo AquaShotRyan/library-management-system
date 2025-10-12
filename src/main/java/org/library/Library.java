@@ -133,6 +133,12 @@ public class Library {
     }
 
     public void removeBorrower(String bookTitle, String username){
-        return;
+        Book book = getBook(bookTitle);
+        if (!book.hasBorrower())
+            throw new NullPointerException("No borrower to remove");
+        if (!book.getCurBorrower().getUsername().equals(username))
+            throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
+        book.removeCurBorrower();
+        book.setDueDate(null);
     }
 }

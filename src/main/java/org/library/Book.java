@@ -45,6 +45,12 @@ public class Book {
         return holder;
     }
 
+    public User removeCurBorrower(){
+        User borrower = curBorrower;
+        curBorrower = null;
+        return borrower;
+    }
+
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
