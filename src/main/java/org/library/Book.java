@@ -30,6 +30,10 @@ public class Book {
         return holdQueue.contains(user);
     }
 
+    public boolean hasBorrower(){
+        return true;
+    }
+
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
@@ -42,6 +46,7 @@ public class Book {
     }
     public User getCurHolder(){ return curHolder; }
     public BookDetails getBookDetails(){ return bookDetails; }
+    public User getCurBorrower(){ return new User("null-username", "null-password"); }
 
     public void setDueDate(Calendar date){ dueDate = date; }
     public void setCurHolder(User holder){ curHolder = holder; }

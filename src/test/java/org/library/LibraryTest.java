@@ -364,4 +364,46 @@ public class LibraryTest {
             assertEquals(BOOK_TITLE, library.getHeldBook(BORROWER).getTitle());
         }
     }
+
+    @Nested
+    @DisplayName("RESP-22: set a book's current borrower")
+    public class UpdateBookBorrower{
+        private final String BOOK_TITLE = "The Handmaid's Tale";
+
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+        }
+
+        @Test
+        @DisplayName("Check 'squeex' is the current borrower when there's no holders")
+        void RESP_22_test_1(){
+            library.setBorrower(BOOK_TITLE, "squeex");
+
+            assertEquals("squeex", book.getCurBorrower().getUsername());
+        }
+
+        @Test
+        @DisplayName("Check 'glorp' is the current holder after 'squeex' (previous holder) becomes the borrower")
+        void RESP_22_test_2(){
+            library.placeHold(BOOK_TITLE, "glorp");
+            library.setHolder(BOOK_TITLE, "squeex");
+            library.setBorrower(BOOK_TITLE, "squeex");
+
+            assertEquals("glorp", book.getCurHolder().getUsername());
+        }
+
+        @Test
+        @DisplayName("Check checked-out book was added to borrower")
+        void RESP_22_test_3(){
+            library.setBorrower(BOOK_TITLE, "squeex");
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+
+            assertEquals(book, borrowedBooks.getBookByTitle(BOOK_TITLE));
+        }
+    }
 }

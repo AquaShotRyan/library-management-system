@@ -113,4 +113,8 @@ public class Library {
 
         return getBook(borrower.getCurHold().getTitle());
     }
+
+    public void setBorrower(String bookTitle, String username){
+        return;
+    }
 }
