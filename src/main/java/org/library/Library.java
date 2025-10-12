@@ -88,6 +88,11 @@ public class Library {
     }
 
     public void placeHold(String bookTitle, String username){
-        return;
+        Book book = getBook(bookTitle);
+        User user = borrowers.getBorrower(username);
+        if (book.containsHolder(user)){
+            throw new IllegalStateException(String.format("%s already has a hold or is in the queue of %s", username, bookTitle));
+        }
+        book.addHolder(user);
     }
 }
