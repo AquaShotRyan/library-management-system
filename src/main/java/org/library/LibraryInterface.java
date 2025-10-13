@@ -1,5 +1,6 @@
 package org.library;
 
+import java.util.List;
 import java.util.Scanner;
 import java.io.PrintWriter;
 
@@ -71,7 +72,20 @@ public class LibraryInterface {
     }
 
     public void displayBook(PrintWriter output, Book book, String curUsername){
-        return;
+        displayMsg(output, book.toString());
+        displayMsg(output, book.getAvailabilityStatus(curUsername).getDisplayStr());
+        displayMsg(output, "due: "+book.getDueDateStr());
+    }
+
+    public void displayAllBooks(PrintWriter output, List<Book> books, String username){
+        final String divider = "-----------------------";
+
+        displayMsg(output, divider);
+        for (int i=0; i<books.size(); ++i){
+            displayMsg(output, String.valueOf(i));
+            displayBook(output, books.get(i), username);
+            displayMsg(output, divider);
+        }
     }
 
     private void displayMsg(PrintWriter output, String msg){

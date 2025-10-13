@@ -65,6 +65,14 @@ public class Book {
     public User getCurHolder(){ return curHolder; }
     public BookDetails getBookDetails(){ return bookDetails; }
     public User getCurBorrower(){ return curBorrower; }
+    public String getDueDateStr(){
+        if (dueDate == null) return "N/A";
+        int year = dueDate.get(Calendar.YEAR);
+        int month = dueDate.get(Calendar.MONTH)+1;
+        int day = dueDate.get(Calendar.DAY_OF_MONTH);
+
+        return String.format("%d-%d-%d", year, month, day);
+    }
 
     // setters
     public void setDueDate(Calendar date){ dueDate = date; }

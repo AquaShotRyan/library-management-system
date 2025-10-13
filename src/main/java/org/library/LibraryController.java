@@ -1,6 +1,7 @@
 package org.library;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Scanner;
 
 public class LibraryController {
@@ -42,5 +43,11 @@ public class LibraryController {
         int borrowedBooksNum = library.getSessionBorrowedBooksNum();
         if (borrowedBooksNum == 0)
             ui.notifyNoBorrowedBooks(output);
+    }
+
+    public int promptBorrowBook(PrintWriter output){
+        List<Book> books = library.getAllBooks();
+        ui.displayAllBooks(output, library.getAllBooks(), library.getSessionUsername());
+        return 0;
     }
 }
