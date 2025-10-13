@@ -140,6 +140,7 @@ public class Library {
             throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
         book.removeCurBorrower();
         book.setDueDate(null);
+        borrowers.getBorrower(username).removeBorrowedBook(bookTitle);
     }
 
     public boolean borrowerHasBook(String bookTitle, String username){
