@@ -142,6 +142,10 @@ public class Library {
         book.setDueDate(null);
     }
 
+    public boolean borrowerHasBook(String bookTitle, String username){
+        return borrowers.getBorrower(username).hasBook(bookTitle);
+    }
+
     public TransactionEnum verifyBorrowing(String bookTitle, String username){
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);

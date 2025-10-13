@@ -454,8 +454,16 @@ public class LibraryTest {
         void RESP_26_test_4(){
             assertThrows(NullPointerException.class, () -> library.removeBorrower(BOOK_TITLE, "ryan"));
         }
-    }
 
+        @Test
+        @DisplayName("Check book is absent from borrower's checked-out books")
+        void RESP_26_test_5(){
+            library.setBorrower(BOOK_TITLE, "ryan");
+            library.removeBorrower(BOOK_TITLE, "ryan");
+
+            assertFalse(library.borrowerHasBook(BOOK_TITLE, "ryan"));
+        }
+    }
 
     @Nested
     @DisplayName("RESP-11: retrieve appropriate availability status")
