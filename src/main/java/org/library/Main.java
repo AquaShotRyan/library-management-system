@@ -20,9 +20,14 @@ public class Main {
             }
             MenuEnum menuInput = controller.promptMenu(input, output);
             if (menuInput == MenuEnum.BORROW){
+
                 int borrowedBooksNum = library.getSessionBorrowedBooksNum();
                 controller.displayNumberOfBorrowedBooks(output, borrowedBooksNum);
-                controller.promptBorrowBook(output);
+
+                int bookIndex = controller.promptBorrowBook(input, output);
+                Book selectedBook = controller.getBookByIndex(bookIndex);
+                controller.checkOut(selectedBook.getTitle());
+
             }else if(menuInput == MenuEnum.RETURN){
                 controller.notifyNoBorrowedBooks(output);
 

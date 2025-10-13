@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 
 public class LibraryInterface {
+    private static final int ERROR_BOOK_SELECTION = -1;
+
     public String promptStringInput(Scanner input, PrintWriter output, String prompt){
         displayMsg(output, prompt);
         String inputStr = input.nextLine();
@@ -35,7 +37,17 @@ public class LibraryInterface {
     }
 
     public int promptBookSelection(Scanner input, PrintWriter output){
-        return -2;
+        String inputStr = promptStringInput(input, output, "Enter a book number: ");
+        int selectionNum;
+        try {
+            selectionNum = Integer.parseInt(inputStr);
+
+            if (selectionNum < 0) throw new NumberFormatException();
+            return selectionNum;
+        }catch (NumberFormatException e){
+            displayMsg(output, "ERROR: invalid input");
+        }
+        return ERROR_BOOK_SELECTION;
     }
 
     public void displayAuthError(AuthEnum error, PrintWriter output){
@@ -92,7 +104,7 @@ public class LibraryInterface {
         }
     }
 
-    private void displayMsg(PrintWriter output, String msg){
+    public void displayMsg(PrintWriter output, String msg){
         output.println(msg);
         output.flush();
     }

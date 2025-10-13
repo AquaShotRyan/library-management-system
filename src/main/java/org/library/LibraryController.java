@@ -1,6 +1,7 @@
 package org.library;
 
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,9 +46,33 @@ public class LibraryController {
             ui.notifyNoBorrowedBooks(output);
     }
 
-    public int promptBorrowBook(PrintWriter output){
+    public int promptBorrowBook(Scanner input, PrintWriter output){
         List<Book> books = library.getAllBooks();
         ui.displayAllBooks(output, library.getAllBooks(), library.getSessionUsername());
-        return 0;
+        return ui.promptBookSelection(input, output);
+    }
+
+    public Book getBookByIndex(int i){
+        return library.getAllBooks().get(i);
+    }
+
+    public void confirmBookCheckOut(Scanner input, PrintWriter output, String bookTitle){
+        String dueDate = library.getBook(bookTitle).getDueDateStr();
+        ui.displayMsg(output, String.format("'%s' has been borrowed and is due on %s", bookTitle, dueDate));
+        ui.promptConfirmation(input, output, "Acknowledge completion?");
+    }
+
+    public boolean checkOut(String bookTitle){
+        final String curUser = library.getSessionUsername();
+
+        // verify if book can be checked out
+        TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, curUser);
+        if (borrowValidation != TransactionEnum.CAN_BORROW) return false;
+
+        // borrow the book
+        library.setBorrower(bookTitle, curUser);
+        library.updateDueDateFromDate(bookTitle, Calendar.getInstance());
+
+        return true;
     }
 }
