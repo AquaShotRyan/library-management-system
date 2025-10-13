@@ -143,6 +143,21 @@ public class Library {
     }
 
     public TransactionEnum verifyBorrowing(String bookTitle, String username){
-        return TransactionEnum.NULL;
+        Book book = getBook(bookTitle);
+        Borrower borrower = borrowers.getBorrower(username);
+
+        TransactionEnum result = TransactionEnum.CAN_BORROW;
+
+        if (book.hasBorrower()){
+            boolean isCurUser = book.getCurBorrower().getUsername().equals(username);
+            result = isCurUser ? TransactionEnum.CHECKED_OUT_BY_USER : TransactionEnum.CHECKED_OUT_BY_ANOTHER;
+        }else if (book.hasHolder()){
+            boolean isCurUser = book.getCurHolder().getUsername().equals(username);
+            result = isCurUser ? result : TransactionEnum.ON_HOLD_BY_ANOTHER;
+        }else if (borrower.getBorrowedBooksNum() >= 3){
+            result = TransactionEnum.AT_BORROWING_LIMIT;
+        }
+
+        return result;
     }
 }

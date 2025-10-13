@@ -5,6 +5,5 @@ public enum TransactionEnum {
     ON_HOLD_BY_ANOTHER,
     CHECKED_OUT_BY_USER,
     AT_BORROWING_LIMIT,
-    CAN_BORROW,
-    NULL
+    CAN_BORROW
 }
