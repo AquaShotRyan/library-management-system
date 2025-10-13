@@ -363,6 +363,17 @@ public class LibraryTest {
 
             assertEquals(BOOK_TITLE, library.getHeldBook(BORROWER).getTitle());
         }
+
+        @Test
+        @DisplayName("'ryan' should be in the queue if the book already has a current holder")
+        void RESP_21_test_5(){
+            library.setHolder(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, BORROWER);
+
+            User result = book.peekHolderQueue();
+            if (result == null) fail("No user in queue");
+            assertEquals(BORROWER, result.getUsername());
+        }
     }
 
     @Nested
