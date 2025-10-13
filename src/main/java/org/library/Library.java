@@ -162,6 +162,18 @@ public class Library {
     }
 
     public TransactionEnum verifyHolding(String bookTitle, String username){
-        return TransactionEnum.CAN_BORROW;
+        Book book = getBook(bookTitle);
+        Borrower borrower = borrowers.getBorrower(username);
+
+        if (book.hasHolder()){
+            boolean isCurUser = book.getCurHolder().getUsername().equals(username);
+            boolean isInQueue = book.containsHolder(borrower);
+            if (isCurUser || isInQueue) return TransactionEnum.ON_HOLD_BY_USER;
+        }
+        if (borrower.hasHold()){
+            if (!borrower.getCurHold().getTitle().equals(book.getTitle()))
+                return TransactionEnum.AT_HOLD_LIMIT;
+        }
+        return TransactionEnum.CAN_HOLD;
     }
 }
