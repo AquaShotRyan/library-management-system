@@ -582,4 +582,65 @@ public class LibraryTest {
             assertEquals(TransactionEnum.CAN_BORROW, result);
         }
     }
+
+    @Nested
+    @DisplayName("RESP-16: verify borrower's eligibility to place a hold on a book")
+    public class VerifyEligibilityToHold{
+        private final String BOOK_TITLE = "The Hunger Games";
+        private final String CUR_USER = "squeex";
+
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.ON_HOLD_BY_USER if the user is the current holder")
+        void RESP_16_test_1(){
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.ON_HOLD_BY_USER, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.ON_HOLD_BY_USER if the book has another holder, but user is in the hold queue")
+        void RESP_16_test_2(){
+            library.setHolder(BOOK_TITLE, "glorp");
+            library.addToHoldQueue(BOOK_TITLE, CUR_USER);
+            TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.ON_HOLD_BY_USER, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.AT_HOLD_LIMIT if the user is holding another book")
+        void RESP_16_test_3(){
+            library.setHolder("No Longer Human", CUR_USER);
+            TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.AT_HOLD_LIMIT, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CAN_HOLD if the book has a hold, the user has no holds, and the user isn't a holder of the book")
+        void RESP_16_test_4(){
+            library.setHolder(BOOK_TITLE, "glorp");
+            TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CAN_HOLD, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CAN_HOLD if the user has no holds and book has no holds")
+        void RESP_16_test_5(){
+            TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CAN_HOLD, result);
+        }
+    }
 }

@@ -160,4 +160,8 @@ public class Library {
 
         return result;
     }
+
+    public TransactionEnum verifyHolding(String bookTitle, String username){
+        return TransactionEnum.CAN_BORROW;
+    }
 }
