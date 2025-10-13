@@ -388,5 +388,65 @@ public class InterfaceTest {
         }
     }
 
+    @Nested
+    @DisplayName("RESP-08: prompt user to select a book")
+    public class PromptBookSelection{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @Test
+        @DisplayName("Entering a non-negative number returns the same number")
+        void RESP_08_test_1(){
+            Scanner input = new Scanner("5");
+            int result = libraryInterface.promptBookSelection(input, new PrintWriter(output));
+
+            assertEquals(5, result);
+        }
+
+        @Test
+        @DisplayName("Entering words displays 'ERROR: invalid input'")
+        void RESP_08_test_2(){
+            Scanner input = new Scanner("not a number");
+            int result = libraryInterface.promptBookSelection(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains("ERROR: invalid input"));
+        }
+
+        @Test
+        @DisplayName("Prompt displays 'Enter a book number: '")
+        void RESP_08_test_3(){
+            Scanner input = new Scanner("4");
+            int result = libraryInterface.promptBookSelection(input, new PrintWriter(output));
+
+            assertTrue(output.toString().contains("Enter a book number: "));
+        }
+
+        @Test
+        @DisplayName("Entering words returns -1")
+        void RESP_08_test_4(){
+            Scanner input = new Scanner("not a number");
+            int result = libraryInterface.promptBookSelection(input, new PrintWriter(output));
+            assertEquals(-1, result);
+        }
+
+        @Test
+        @DisplayName("Entering negative number returns -1")
+        void RESP_08_test_5(){
+            Scanner input = new Scanner("-5");
+            int result = libraryInterface.promptBookSelection(input, new PrintWriter(output));
+            assertEquals(-1, result);
+        }
+    }
+
 }
 

@@ -34,6 +34,10 @@ public class LibraryInterface {
         return MenuEnum.getOption(inputNum);
     }
 
+    public int promptBookSelection(Scanner input, PrintWriter output){
+        return -2;
+    }
+
     public void displayAuthError(AuthEnum error, PrintWriter output){
         if (error == AuthEnum.INVALID_CREDENTIALS){
             displayMsg(output, "ERROR: credentials not found");
