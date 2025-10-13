@@ -141,4 +141,8 @@ public class Library {
         book.removeCurBorrower();
         book.setDueDate(null);
     }
+
+    public TransactionEnum verifyBorrowing(String bookTitle, String username){
+        return TransactionEnum.NULL;
+    }
 }

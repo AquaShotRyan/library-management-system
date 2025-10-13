@@ -506,4 +506,80 @@ public class LibraryTest {
             assertEquals(AvailabilityEnum.AVAILABLE, result);
         }
     }
+
+    @Nested
+    @DisplayName("RESP-15: verify borrower’s eligibility to check out a book ")
+    public class VerifyEligibilityToBorrow{
+        private final String BOOK_TITLE = "The Science of Beauty";
+        private final String CUR_USER = "ryan";
+
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook(BOOK_TITLE);
+
+            // add 2 books to current user
+            Book batman = library.getBook("Absolute Batman #1");
+            Book eragon = library.getBook("Eragon");
+            library.addBookToBorrower(batman, CUR_USER);
+            library.addBookToBorrower(eragon, CUR_USER);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CHECKED_OUT_BY_ANOTHER if book is checked out by another borrower")
+        void RESP_15_test_1(){
+            library.setBorrower(BOOK_TITLE, "glorp");
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CHECKED_OUT_BY_ANOTHER, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.ON_HOLD_BY_ANOTHER if the book has no borrower, but is on hold by another borrower")
+        void RESP_15_test_2(){
+            library.setHolder(BOOK_TITLE, "glorp");
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.ON_HOLD_BY_ANOTHER, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CHECKED_OUT_BY_USER if book is checked out by current user")
+        void RESP_15_test_3(){
+            library.setBorrower(BOOK_TITLE, CUR_USER);
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CHECKED_OUT_BY_USER, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.AT_BORROWING_LIMIT if the book is available, but user is at the 3-book limit")
+        void RESP_15_test_4(){
+            Book apothecary= library.getBook("The Apothecary Diaries: Volume 1");
+            library.addBookToBorrower(apothecary, CUR_USER);
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.AT_BORROWING_LIMIT, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CAN_BORROW if the book has no borrower, no holder, and user is not at the limit")
+        void RESP_15_test_5(){
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CAN_BORROW, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CAN_BORROW if the book has no borrower, the holder is the user, and user is not at the limit")
+        void RESP_15_test_6(){
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.CAN_BORROW, result);
+        }
+    }
 }
