@@ -100,10 +100,16 @@ public class Library {
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
 
-        book.setCurHolder(borrower);
-        User firstInQueue = book.peekHolderQueue();
-        if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
-            book.popHolder();
+        if (book.hasHolder()){
+            book.addHolder(borrower);
+        }else{
+            book.setCurHolder(borrower);
+
+            // delete from queue if user was first in queue
+            User firstInQueue = book.peekHolderQueue();
+            if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
+                book.popHolder();
+            }
         }
         borrower.setCurHold(book.getBookDetails());
     }
