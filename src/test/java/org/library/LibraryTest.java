@@ -259,8 +259,8 @@ public class LibraryTest {
         void initLibrary(){
             library = new Library();
             book = library.getBook(BOOK_TITLE);
-            library.placeHold(BOOK_TITLE, RYAN);
-            library.placeHold(BOOK_TITLE, GLORP);
+            library.addToHoldQueue(BOOK_TITLE, RYAN);
+            library.addToHoldQueue(BOOK_TITLE, GLORP);
         }
 
         @Test
@@ -272,13 +272,13 @@ public class LibraryTest {
         @Test
         @DisplayName("Add 'ryan' first and then 'glorp', check user 'ryan' is at the head")
         void RESP_17_test_2(){
-            assertEquals(RYAN, book.getFirstHolder().getUsername());
+            assertEquals(RYAN, book.peekHolderQueue().getUsername());
         }
 
         @Test
         @DisplayName("Add 2 borrowers and adding a duplicate borrower throws IllegalStateException")
         void RESP_17_test_3(){
-            assertThrows(IllegalStateException.class, () -> library.placeHold(BOOK_TITLE, RYAN));
+            assertThrows(IllegalStateException.class, () -> library.addToHoldQueue(BOOK_TITLE, RYAN));
         }
     }
 
@@ -294,8 +294,8 @@ public class LibraryTest {
         void initLibrary(){
             library = new Library();
             book = library.getBook(BOOK_TITLE);
-            library.placeHold(BOOK_TITLE, "ryan");
-            library.placeHold(BOOK_TITLE, "glorp");
+            library.addToHoldQueue(BOOK_TITLE, "ryan");
+            library.addToHoldQueue(BOOK_TITLE, "glorp");
         }
 
         @Test
@@ -309,13 +309,13 @@ public class LibraryTest {
         @DisplayName("Add 2 borrowers to queue and remove 1, next borrower should be 'glorp'")
         void RESP_25_test_2(){
             book.popHolder();
-            assertEquals("glorp", book.getFirstHolder().getUsername());
+            assertEquals("glorp", book.peekHolderQueue().getUsername());
         }
     }
 
     @Nested
     @DisplayName("RESP-21: update a book's current holder")
-    public class NestedTestClass{
+    public class UpdateBookHolder{
         private final String BOOK_TITLE = "The Handmaid's Tale";
         private final String BORROWER = "ryan";
 
@@ -339,18 +339,18 @@ public class LibraryTest {
         @Test
         @DisplayName("'ryan' is removed from the queue after placing a hold and was first in queue")
         void RESP_21_test_2(){
-            library.placeHold(BOOK_TITLE, BORROWER);
-            library.placeHold(BOOK_TITLE, "squeex");
+            library.addToHoldQueue(BOOK_TITLE, BORROWER);
+            library.addToHoldQueue(BOOK_TITLE, "squeex");
             library.setHolder(BOOK_TITLE, BORROWER);
 
-            assertNotEquals(BORROWER, book.getFirstHolder().getUsername());
+            assertNotEquals(BORROWER, book.peekHolderQueue().getUsername());
         }
 
         @Test
         @DisplayName("'ryan' is the current holder after placing a hold and was first in queue")
         void RESP_21_test_3(){
-            library.placeHold(BOOK_TITLE, BORROWER);
-            library.placeHold(BOOK_TITLE, "squeex");
+            library.addToHoldQueue(BOOK_TITLE, BORROWER);
+            library.addToHoldQueue(BOOK_TITLE, "squeex");
             library.setHolder(BOOK_TITLE, BORROWER);
 
             assertEquals(BORROWER, book.getCurHolder().getUsername());
@@ -390,7 +390,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Check 'glorp' is the current holder after 'squeex' (previous holder) becomes the borrower")
         void RESP_22_test_2(){
-            library.placeHold(BOOK_TITLE, "glorp");
+            library.addToHoldQueue(BOOK_TITLE, "glorp");
             library.setHolder(BOOK_TITLE, "squeex");
             library.setBorrower(BOOK_TITLE, "squeex");
 

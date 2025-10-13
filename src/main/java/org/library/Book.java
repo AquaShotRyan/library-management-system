@@ -1,7 +1,6 @@
 package org.library;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Queue;
 import java.util.LinkedList;
 
@@ -28,17 +27,6 @@ public class Book {
         return holdQueue.poll();
     }
 
-    public boolean containsHolder(User user){
-        return holdQueue.contains(user);
-    }
-
-    public boolean hasBorrower(){
-        return curBorrower != null;
-    }
-    public boolean hasHolder(){
-        return curHolder != null;
-    }
-
     public User removeCurHolder(){
         User holder = curHolder;
         curHolder = null;
@@ -61,6 +49,7 @@ public class Book {
         return AvailabilityEnum.AVAILABLE;
     }
 
+    // getters
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
     public Calendar getDueDate() {
@@ -68,17 +57,24 @@ public class Book {
         Calendar copy = (Calendar)dueDate.clone();
         return copy;
     }
+
     public int getHoldersNum(){ return holdQueue.size(); }
-    public User getFirstHolder(){
+    public User peekHolderQueue(){
         return holdQueue.peek();
     }
     public User getCurHolder(){ return curHolder; }
     public BookDetails getBookDetails(){ return bookDetails; }
     public User getCurBorrower(){ return curBorrower; }
 
+    // setters
     public void setDueDate(Calendar date){ dueDate = date; }
     public void setCurHolder(User holder){ curHolder = holder; }
     public void setCurBorrower(User borrower){ curBorrower = borrower; }
+
+    // simple booleans
+    public boolean containsHolder(User user){ return holdQueue.contains(user); }
+    public boolean hasBorrower(){ return curBorrower != null; }
+    public boolean hasHolder(){ return curHolder != null; }
 
     @Override
     public String toString() {

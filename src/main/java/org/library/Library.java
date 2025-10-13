@@ -87,7 +87,7 @@ public class Library {
         borrower.removeBorrowedBook(bookTitle);
     }
 
-    public void placeHold(String bookTitle, String username){
+    public void addToHoldQueue(String bookTitle, String username){
         Book book = getBook(bookTitle);
         User user = borrowers.getBorrower(username);
         if (book.containsHolder(user)){
@@ -101,7 +101,7 @@ public class Library {
         Borrower borrower = borrowers.getBorrower(username);
 
         book.setCurHolder(borrower);
-        User firstInQueue = book.getFirstHolder();
+        User firstInQueue = book.peekHolderQueue();
         if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
             book.popHolder();
         }
@@ -124,7 +124,7 @@ public class Library {
             book.removeCurHolder();
         }
         // update curHolder
-        User nextHolder = book.getFirstHolder();
+        User nextHolder = book.peekHolderQueue();
         if (nextHolder != null){
             book.setCurHolder(nextHolder);
         }

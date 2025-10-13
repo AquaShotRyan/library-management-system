@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 public class LibraryInterface {
     public String promptStringInput(Scanner input, PrintWriter output, String prompt){
-        output.println(prompt); output.flush();
+        displayMsg(output, prompt);
         String inputStr = input.nextLine();
 
         return inputStr;
@@ -15,8 +15,7 @@ public class LibraryInterface {
         // display menu options
         for (MenuEnum o: MenuEnum.values()){
             if (o != MenuEnum.INVALID_INPUT){
-                output.println(o.getFullOptionDesc());
-                output.flush();
+                displayMsg(output, o.getFullOptionDesc());
             }
         }
         // get and return user input
@@ -26,48 +25,49 @@ public class LibraryInterface {
         try {
             inputNum = Integer.parseInt(inputStr);
         } catch (NumberFormatException e){
-            output.println("ERROR: invalid input"); output.flush();
+            displayMsg(output, "ERROR: invalid input");
         }
         if (inputNum < 1 || inputNum > 3)
-            output.println("ERROR: invalid input"); output.flush();
+            displayMsg(output, "ERROR: invalid input");
 
         return MenuEnum.getOption(inputNum);
     }
 
     public void displayAuthError(AuthEnum error, PrintWriter output){
         if (error == AuthEnum.INVALID_CREDENTIALS){
-            output.println("ERROR: credentials not found");
-            output.flush();
+            displayMsg(output, "ERROR: credentials not found");
         }else if(error == AuthEnum.INVALID_INPUT){
-            output.println("ERROR: invalid input");
-            output.flush();
+            displayMsg(output, "ERROR: invalid input");
         }
     }
     public void displayAvailableBookNotification(PrintWriter output, Book b){
         String msg = String.format("NOTIFICATION: %s is available!", b.toString());
-        output.println(msg);
-        output.flush();
+        displayMsg(output, msg);
     }
 
     public boolean promptConfirmation(Scanner input, PrintWriter output, String msg){
         if (msg.isBlank()){
-            output.println("(y/n): "); output.flush();
+            displayMsg(output, "(y/n): ");
         }else{
-            output.println(String.format("%s (y/n): ", msg)); output.flush();
+            String message = String.format("%s (y/n): ", msg);
+            displayMsg(output, message);
         }
-
         String inputStr = input.nextLine();
 
         return inputStr.equals("y");
     }
 
     public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
-        output.println(String.format("Current number of borrowed books: %d", n));
-        output.flush();
+        String msg = String.format("Current number of borrowed books: %d", n);
+        displayMsg(output, msg);
     }
 
     public void notifyNoBorrowedBooks(PrintWriter output){
-        output.println("You have no borrowed books to return");
+        displayMsg(output, "You have no borrowed books to return");
+    }
+
+    private void displayMsg(PrintWriter output, String msg){
+        output.println(msg);
         output.flush();
     }
 
