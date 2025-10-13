@@ -67,7 +67,7 @@ public class LibraryInterface {
     }
 
     public void notifyMaxBorrowingLimit(PrintWriter output){
-        return;
+        displayMsg(output, "You have reached the maximum borrowing limit and cannot borrow another book");
     }
 
     private void displayMsg(PrintWriter output, String msg){
