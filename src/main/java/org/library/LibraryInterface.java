@@ -66,6 +66,10 @@ public class LibraryInterface {
         displayMsg(output, "You have no borrowed books to return");
     }
 
+    public void notifyMaxBorrowingLimit(PrintWriter output){
+        return;
+    }
+
     private void displayMsg(PrintWriter output, String msg){
         output.println(msg);
         output.flush();

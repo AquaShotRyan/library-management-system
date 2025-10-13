@@ -280,5 +280,22 @@ public class InterfaceTest {
             assertTrue(result.contains("You have no borrowed books to return"), result);
         }
     }
+
+    @Nested
+    @DisplayName("RESP-28: display maximum borrowing limit")
+    public class DisplayBorrowingLimit{
+        @Test
+        @DisplayName("Displays 'You have reached the maximum borrowing limit and cannot borrow another book'")
+        void RESP_28_test_1(){
+            LibraryInterface libraryInterface = new LibraryInterface();
+            StringWriter output = new StringWriter();
+
+            libraryInterface.notifyMaxBorrowingLimit(new PrintWriter(output));
+            String result = output.toString();
+
+            assertTrue(result.contains("You have reached the maximum borrowing limit and cannot borrow another book"), result);
+        }
+    }
+
 }
 
