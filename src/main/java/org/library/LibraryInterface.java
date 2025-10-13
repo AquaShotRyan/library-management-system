@@ -70,6 +70,10 @@ public class LibraryInterface {
         displayMsg(output, "You have reached the maximum borrowing limit and cannot borrow another book");
     }
 
+    public void displayBook(PrintWriter output, Book book, String curUsername){
+        return;
+    }
+
     private void displayMsg(PrintWriter output, String msg){
         output.println(msg);
         output.flush();

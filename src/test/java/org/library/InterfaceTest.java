@@ -2,11 +2,13 @@ package org.library;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -294,6 +296,95 @@ public class InterfaceTest {
             String result = output.toString();
 
             assertTrue(result.contains("You have reached the maximum borrowing limit and cannot borrow another book"), result);
+        }
+    }
+
+    @Nested
+    @DisplayName("RESP-14: display a book")
+    public class DisplayBook{
+        private final String BOOK_TITLE = "Great Gatsby";
+        private final String TITLE_AUTHOR = "Great Gatsby by F. Scott FitzGerald";
+        private final String AVAILABLE = "Available";
+        private final String CHECKED_OUT = "Checked Out";
+        private final String ON_HOLD = "On Hold";
+        private final String NO_DUE_DATE = "due: N/A";
+        private final String DUE_DATE = "due: 2025-10-27";
+        private final String CUR_USER = "squeex";
+
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+        Library library;
+        Book book;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            book = library.getBook("Great Gatsby");
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {TITLE_AUTHOR, AVAILABLE, NO_DUE_DATE})
+        @DisplayName("Display book with no borrowers nor holders")
+        void RESP_14_test_1(String expected){
+            libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
+
+            String result = output.toString();
+            assertTrue(result.contains(expected), result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {TITLE_AUTHOR, AVAILABLE, NO_DUE_DATE})
+        @DisplayName("Display book with no borrower, but on hold by user")
+        void RESP_14_test_2(String expected){
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
+
+            String result = output.toString();
+            assertTrue(result.contains(expected), result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {TITLE_AUTHOR, ON_HOLD, NO_DUE_DATE})
+        @DisplayName("Display book with no borrower, but on hold by another borrower")
+        void RESP_14_test_3(String expected){
+            library.setHolder(BOOK_TITLE, "ryan");
+            libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
+
+            String result = output.toString();
+            assertTrue(result.contains(expected), result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {TITLE_AUTHOR, CHECKED_OUT, DUE_DATE})
+        @DisplayName("Display book where the user is the current borrower")
+        void RESP_14_test_4(String expected)    {
+            library.setBorrower(BOOK_TITLE, CUR_USER);
+            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, GregorianCalendar.OCTOBER, 13));
+            libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
+
+            String result = output.toString();
+            assertTrue(result.contains(expected), result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {TITLE_AUTHOR, CHECKED_OUT, NO_DUE_DATE})
+        @DisplayName("Display book with a current borrower (not user)")
+        void RESP_14_test_5(String expected){
+            library.setBorrower(BOOK_TITLE, "squeex");
+            libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
+
+            String result = output.toString();
+            assertTrue(result.contains(expected), result);
         }
     }
 
