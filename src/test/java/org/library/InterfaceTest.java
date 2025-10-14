@@ -448,5 +448,36 @@ public class InterfaceTest {
         }
     }
 
+    @Nested
+    @DisplayName("RESP-27: display already is borrower/holder error")
+    public class DisplayAlreadyIsBorrowerHolder{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+
+        @Test
+        @DisplayName("Display 'You already have a hold on this book'")
+        void RESP_27_test_1(){
+            libraryInterface.displayAlreadyIsHolder(new PrintWriter(output));
+            assertTrue(output.toString().contains("You already have a hold on this book"));
+        }
+
+        @Test
+        @DisplayName("Display 'You already have this book checked out'")
+        void RESP_27_test_2(){
+            libraryInterface.displayAlreadyIsBorrower(new PrintWriter(output));
+            assertTrue(output.toString().contains("You already have this book checked out"));
+        }
+    }
+
 }
 

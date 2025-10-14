@@ -104,6 +104,14 @@ public class LibraryInterface {
         }
     }
 
+    public void displayAlreadyIsHolder(PrintWriter output){
+        return;
+    }
+
+    public void displayAlreadyIsBorrower(PrintWriter output){
+        return;
+    }
+
     public void displayMsg(PrintWriter output, String msg){
         output.println(msg);
         output.flush();
