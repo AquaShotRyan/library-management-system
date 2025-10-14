@@ -90,7 +90,10 @@ public class LibraryInterface {
     public void displayBook(PrintWriter output, Book book, String curUsername){
         displayMsg(output, book.toString());
         displayMsg(output, book.getAvailabilityStatus(curUsername).getDisplayStr());
-        displayMsg(output, "due: "+book.getDueDateStr());
+        if (book.hasBorrower() && curUsername.equals(book.getCurBorrower().getUsername()))
+            displayMsg(output, "due: "+book.getDueDateStr());
+        else
+            displayMsg(output, "due: N/A");
     }
 
     public void displayAllBooks(PrintWriter output, List<Book> books, String username){

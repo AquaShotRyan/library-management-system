@@ -71,7 +71,10 @@ public class Book {
         int month = dueDate.get(Calendar.MONTH)+1;
         int day = dueDate.get(Calendar.DAY_OF_MONTH);
 
-        return String.format("%d-%d-%d", year, month, day);
+        String monthStr = (month <= 9) ? "0"+month : ""+month;
+        String dayStr = (day <= 9) ? "0"+day : ""+day;
+
+        return String.format("%d-%s-%s", year, monthStr, dayStr);
     }
 
     // setters
