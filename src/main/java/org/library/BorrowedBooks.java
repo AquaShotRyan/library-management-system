@@ -33,5 +33,9 @@ public class BorrowedBooks {
         }
     }
 
+    public List<Book> getBorrowedBooksList(){
+        return books;
+    }
+
     public int size(){ return books.size(); }
 }

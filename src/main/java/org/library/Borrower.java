@@ -1,5 +1,8 @@
 package org.library;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Borrower extends User{
 
     BorrowedBooks borrowedBooks;
@@ -12,6 +15,10 @@ public class Borrower extends User{
 
     public BorrowedBooks getBorrowedBooks() {
         return borrowedBooks;
+    }
+
+    public List<Book> getBorrowedBooksList(){
+        return borrowedBooks.getBorrowedBooksList();
     }
 
     public boolean hasBook(String bookTitle){

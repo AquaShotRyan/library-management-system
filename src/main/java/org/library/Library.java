@@ -71,7 +71,10 @@ public class Library {
     }
 
     public List<Book> getBorrowedBooksSorted(String username){
-        return null;
+        Borrower borrower = borrowers.getBorrower(username);
+        List<Book> borrowedBooksList = borrower.getBorrowedBooksList();
+        borrowedBooksList.sort(new BookAuthorComparator());
+        return borrowedBooksList;
     }
 
     public int getSessionBorrowedBooksNum(){
