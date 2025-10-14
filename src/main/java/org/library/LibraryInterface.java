@@ -105,11 +105,11 @@ public class LibraryInterface {
     }
 
     public void displayAlreadyIsHolder(PrintWriter output){
-        return;
+        displayMsg(output, "You already have a hold on this book");
     }
 
     public void displayAlreadyIsBorrower(PrintWriter output){
-        return;
+        displayMsg(output, "You already have this book checked out");
     }
 
     public void displayMsg(PrintWriter output, String msg){
