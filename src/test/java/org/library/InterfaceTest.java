@@ -309,7 +309,8 @@ public class InterfaceTest {
         private final String CHECKED_OUT = "Checked Out";
         private final String ON_HOLD = "On Hold";
         private final String NO_DUE_DATE = "due: N/A";
-        private final String DUE_DATE = "due: 2025-10-27";
+        private final Calendar START_DATE = new GregorianCalendar(2025, GregorianCalendar.JUNE, 20);
+        private final String DUE_DATE = "due: 2025-07-04";
         private final String CUR_USER = "squeex";
 
         private LibraryInterface libraryInterface;
@@ -370,7 +371,7 @@ public class InterfaceTest {
         @DisplayName("Display book where the user is the current borrower")
         void RESP_14_test_4(String expected)    {
             library.setBorrower(BOOK_TITLE, CUR_USER);
-            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, GregorianCalendar.OCTOBER, 13));
+            library.updateDueDateFromDate(BOOK_TITLE, START_DATE);
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();
@@ -381,7 +382,8 @@ public class InterfaceTest {
         @ValueSource(strings = {TITLE_AUTHOR, CHECKED_OUT, NO_DUE_DATE})
         @DisplayName("Display book with a current borrower (not user)")
         void RESP_14_test_5(String expected){
-            library.setBorrower(BOOK_TITLE, "squeex");
+            library.setBorrower(BOOK_TITLE, "ryan");
+            library.updateDueDateFromDate(BOOK_TITLE, START_DATE);
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();
