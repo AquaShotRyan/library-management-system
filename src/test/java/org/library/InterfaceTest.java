@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -479,5 +480,51 @@ public class InterfaceTest {
         }
     }
 
+    @Nested
+    @DisplayName("RESP-29: display a book for return")
+    public class DisplayBookForReturn{
+        private LibraryInterface libraryInterface;
+        private StringWriter output;
+        Library library;
+
+        @BeforeEach
+        void initLibraryInterface(){
+            libraryInterface = new LibraryInterface();
+        }
+        @BeforeEach
+        void initOutput(){
+            output = new StringWriter();
+        }
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            library.setBorrower("Great Gatsby", "squeex");
+            library.updateDueDateFromDate("Great Gatsby", new GregorianCalendar(2025, Calendar.OCTOBER, 14));
+            library.setBorrower("The Handmaid's Tale", "squeex");
+            library.updateDueDateFromDate("The Handmaid's Tale", new GregorianCalendar(2025, Calendar.NOVEMBER, 6));
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"Great Gatsby by F. Scott FitzGerald", "due: 2025-10-28"})
+        @DisplayName("Displays title, author, and due date for book 'Great Gatsby'")
+        void RESP_29_test_1(String expected){
+            Book book = library.getBook("Great Gatsby");
+            libraryInterface.displayReturnBook(new PrintWriter(output), book);
+            String result = output.toString();
+
+            assertTrue(result.contains(expected), result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"The Handmaid's Tale by Margaret Atwood", "due: 2025-11-20"})
+        @DisplayName("Displays title, author, and due date for book 'The Handmaid's Tale'")
+        void RESP_29_test_2(String expected){
+            Book book = library.getBook("The Handmaid's Tale");
+            libraryInterface.displayReturnBook(new PrintWriter(output), book);
+            String result = output.toString();
+
+            assertTrue(result.contains(expected), result);
+        }
+    }
 }
 

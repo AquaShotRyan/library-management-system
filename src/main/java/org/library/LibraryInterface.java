@@ -112,6 +112,10 @@ public class LibraryInterface {
         displayMsg(output, "You already have this book checked out");
     }
 
+    public void displayReturnBook(PrintWriter output, Book book){
+        return;
+    }
+
     public void displayMsg(PrintWriter output, String msg){
         output.println(msg);
         output.flush();
