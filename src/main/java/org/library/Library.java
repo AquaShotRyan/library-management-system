@@ -193,11 +193,11 @@ public class Library {
     }
 
     public void addBorrowTransaction(BorrowTransaction b){
-        return;
+        borrowTransactions.add(b);
     }
 
     public BorrowTransaction getBorrowTransaction(int index){
-        return new BorrowTransaction("null-title", "null-borrower", "null-date");
+        return borrowTransactions.get(index);
     }
 
     public int getBorrowerTransactionsSize(){

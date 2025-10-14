@@ -72,6 +72,7 @@ public class LibraryController {
         // borrow the book
         library.setBorrower(bookTitle, curUser);
         library.updateDueDateFromDate(bookTitle, Calendar.getInstance());
+        library.addBorrowTransaction(new BorrowTransaction(bookTitle, curUser, library.getBook(bookTitle).getDueDateStr()));
 
         return true;
     }
