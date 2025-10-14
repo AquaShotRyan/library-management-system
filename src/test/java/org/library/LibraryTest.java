@@ -1,6 +1,8 @@
 package org.library;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -660,6 +662,47 @@ public class LibraryTest {
             TransactionEnum result = library.verifyHolding(BOOK_TITLE, CUR_USER);
 
             assertEquals(TransactionEnum.CAN_HOLD, result);
+        }
+    }
+
+    @Nested
+    @DisplayName("RESP-19: record book borrowing transaction details")
+    public class RecordTransaction{
+        Library library;
+
+        @BeforeEach
+        void initTransactions(){
+            library = new Library();
+            library.addBorrowTransaction(new BorrowTransaction("Nineteen Eighty-Four", "glorp", "2025-10-13"));
+            library.addBorrowTransaction(new BorrowTransaction("Eragon", "ryan", "2025-11-13"));
+            library.addBorrowTransaction(new BorrowTransaction("Moby-Dick", "glorp", "2025-11-20"));
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check title of 2nd book")
+        void RESP_19_test_1(){
+            BorrowTransaction borrowTransaction = library.getBorrowTransaction(1);
+            assertEquals("Eragon", borrowTransaction.getBookTitle());
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check borrower of 2nd book")
+        void RESP_19_test_2(){
+            BorrowTransaction borrowTransaction = library.getBorrowTransaction(1);
+            assertEquals("ryan", borrowTransaction.getBorrower());
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check borrow date of 2nd book")
+        void RESP_19_test_3(){
+            BorrowTransaction borrowTransaction = library.getBorrowTransaction(1);
+            assertEquals("2025-11-13", borrowTransaction.getBorrowDate());
+        }
+
+        @Test
+        @DisplayName("Check size of borrower transactions is 3")
+        void RESP_19_test_4(){
+            assertEquals(3, library.getBorrowerTransactionsSize());
         }
     }
 }

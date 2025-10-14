@@ -1,12 +1,14 @@
 package org.library;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class Library {
     private Catalogue catalogue;
     private Borrowers borrowers;
+    List<BorrowTransaction> borrowTransactions;
 
     private LibraryAuth auth;
     private Borrower sessionBorrower;
@@ -17,6 +19,7 @@ public class Library {
         InitializeLibrary initLibrary = new InitializeLibrary();
         catalogue = initLibrary.initCatalogue();
         borrowers = initLibrary.initBorrowers();
+        borrowTransactions = new ArrayList<>();
 
         auth = new LibraryAuth(borrowers);
         sessionBorrower = null;
@@ -187,5 +190,17 @@ public class Library {
                 return TransactionEnum.AT_HOLD_LIMIT;
         }
         return TransactionEnum.CAN_HOLD;
+    }
+
+    public void addBorrowTransaction(BorrowTransaction b){
+        return;
+    }
+
+    public BorrowTransaction getBorrowTransaction(int index){
+        return new BorrowTransaction("null-title", "null-borrower", "null-date");
+    }
+
+    public int getBorrowerTransactionsSize(){
+        return borrowTransactions.size();
     }
 }
