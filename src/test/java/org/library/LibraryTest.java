@@ -2,6 +2,7 @@ package org.library;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Calendar;
@@ -703,6 +704,39 @@ public class LibraryTest {
         @DisplayName("Check size of borrower transactions is 3")
         void RESP_19_test_4(){
             assertEquals(3, library.getBorrowerTransactionsSize());
+        }
+    }
+
+    @Nested
+    @DisplayName("RESP-30: retrieve all borrowed books, sorted by author")
+    public class RetrieveAllBorrowedBooksSorted{
+        Library library;
+
+        @BeforeEach
+        void initLibrary(){
+            library = new Library();
+            library.setBorrower("The Ways of Kings", "ryan");
+            library.setBorrower("The Hunger Games", "ryan");
+            library.setBorrower("Red Rising", "ryan");
+        }
+
+        @ParameterizedTest
+        @CsvSource({"0,The Ways of Kings", "1,Red Rising", "2,The Hunger Games"})
+        @DisplayName("Add 3 books and check they're at the correct index")
+        void RESP_30_test_1(int index, String bookTitle){
+            List<Book> books = library.getBorrowedBooksSorted("ryan");
+            if (books == null)
+                fail("books array is null");
+            assertEquals(books.get(index).getTitle(), bookTitle);
+        }
+
+        @Test
+        @DisplayName("Add 3 books and check size is 3")
+        void RESP_30_test_2(){
+            List<Book> books = library.getBorrowedBooksSorted("ryan");
+            if (books == null)
+                fail("books array is null");
+            assertEquals(3, books.size());
         }
     }
 }

@@ -70,6 +70,10 @@ public class Library {
         return borrower.getBorrowedBooksNum();
     }
 
+    public List<Book> getBorrowedBooksSorted(String username){
+        return null;
+    }
+
     public int getSessionBorrowedBooksNum(){
         return getBorrowedBooksNum(getSessionUsername());
     }
