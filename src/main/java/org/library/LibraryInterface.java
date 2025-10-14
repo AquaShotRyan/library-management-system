@@ -113,7 +113,8 @@ public class LibraryInterface {
     }
 
     public void displayReturnBook(PrintWriter output, Book book){
-        return;
+        displayMsg(output, book.toString());
+        displayMsg(output, "due: "+book.getDueDateStr());
     }
 
     public void displayMsg(PrintWriter output, String msg){
