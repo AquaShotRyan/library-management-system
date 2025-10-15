@@ -455,5 +455,45 @@ public class InterfaceTest {
             assertTrue(result.contains(expected), result);
         }
     }
+
+    @Nested
+    @DisplayName("RESP-31: prompt offer to place a hold")
+    public class PromptPlaceHold{
+        final Scanner input = new Scanner("y");
+
+        @Test
+        @DisplayName("If user is at borrow limit, displays 'You are at the borrow limit and can't check out another book. Do you want to place a hold?'")
+        void RESP_31_test_1(){
+            libraryInterface.promptOfferHold(input, new PrintWriter(output), TransactionEnum.AT_BORROWING_LIMIT);
+            String result = output.toString();
+
+            assertTrue(result.contains("You are at the borrow limit and can't check out another book. Do you want to place a hold?"), result);
+        }
+
+        @Test
+        @DisplayName("If book is checked out, displays 'This book is checked out by another user. Do you want to place a hold?'")
+        void RESP_31_test_2(){
+            libraryInterface.promptOfferHold(input, new PrintWriter(output), TransactionEnum.CHECKED_OUT_BY_ANOTHER);
+            String result = output.toString();
+
+            assertTrue(result.contains("This book is checked out by another user. Do you want to place a hold?"), result);
+        }
+
+        @Test
+        @DisplayName("If book is on hold, displays 'This book is on hold by another user. Do you want to place a hold?'")
+        void RESP_31_test_3(){
+            libraryInterface.promptOfferHold(input, new PrintWriter(output), TransactionEnum.ON_HOLD_BY_ANOTHER);
+            String result = output.toString();
+
+            assertTrue(result.contains("This book is on hold by another user. Do you want to place a hold?"), result);
+        }
+
+        @ParameterizedTest
+        @EnumSource(value = TransactionEnum.class, names = {"CHECKED_OUT_BY_USER", "ON_HOLD_BY_USER", "AT_HOLD_LIMIT", "CAN_BORROW", "CAN_HOLD"})
+        @DisplayName("Other TransactionEnum inputs throws IllegalArgumentException")
+        void RESP_31_test_4(TransactionEnum transactionEnum){
+            assertThrows(IllegalArgumentException.class, () -> libraryInterface.promptOfferHold(input, new PrintWriter(output), transactionEnum));
+        }
+    }
 }
 

@@ -74,6 +74,10 @@ public class LibraryInterface {
         return inputStr.equals("y");
     }
 
+    public boolean promptOfferHold(Scanner input, PrintWriter output, TransactionEnum transactionEnum){
+        return true;
+    }
+
     public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
         String msg = String.format("Current number of borrowed books: %d", n);
         displayMsg(output, msg);
