@@ -124,6 +124,17 @@ public class LibraryInterface {
         }
     }
 
+    public void displayAllReturnBooks(PrintWriter output, List<Book> books){
+        final String divider = "~~~~~~~~~~~~~~~~~~~";
+
+        displayMsg(output, divider);
+        for (int i=0; i<books.size(); ++i){
+            displayMsg(output, String.valueOf(i));
+            displayReturnBook(output, books.get(i));
+            displayMsg(output, divider);
+        }
+    }
+
     public void displayAlreadyIsHolder(PrintWriter output){
         displayMsg(output, "You already have a hold on this book");
     }
