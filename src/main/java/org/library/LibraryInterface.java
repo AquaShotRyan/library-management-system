@@ -75,7 +75,8 @@ public class LibraryInterface {
     }
 
     public void promptAcknowledgement(Scanner input, PrintWriter output, String msg){
-        return;
+        displayMsg(output, msg);
+        input.nextLine();
     }
 
     public boolean promptOfferHold(Scanner input, PrintWriter output, TransactionEnum transactionEnum){
