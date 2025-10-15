@@ -74,6 +74,10 @@ public class LibraryInterface {
         return inputStr.equals("y");
     }
 
+    public void promptAcknowledgement(Scanner input, PrintWriter output, String msg){
+        return;
+    }
+
     public boolean promptOfferHold(Scanner input, PrintWriter output, TransactionEnum transactionEnum){
         return switch (transactionEnum) {
             case AT_BORROWING_LIMIT ->

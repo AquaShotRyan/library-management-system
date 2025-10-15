@@ -495,5 +495,19 @@ public class InterfaceTest {
             assertThrows(IllegalArgumentException.class, () -> libraryInterface.promptOfferHold(input, new PrintWriter(output), transactionEnum));
         }
     }
+
+    @Nested
+    @DisplayName("RESP-32: prompt user acknowledgement")
+    public class PromptAcknowledgement{
+        @Test
+        @DisplayName("Displays: 'The Apothecary Diaries: Volume 1' has been borrowed and is due on 2025-10-29")
+        void RESP_32_test_1(){
+            Scanner input = new Scanner("Any input");
+
+            libraryInterface.promptAcknowledgement(input, new PrintWriter(output), "'The Apothecary Diaries: Volume 1' has been borrowed and is due on 2025-10-29");
+            String result = output.toString();
+            assertTrue(output.toString().contains("'The Apothecary Diaries: Volume 1' has been borrowed and is due on 2025-10-29"));
+        }
+    }
 }
 
