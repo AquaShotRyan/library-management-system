@@ -1,12 +1,11 @@
 package org.library;
 
-import java.util.Calendar;
 import java.util.Queue;
 import java.util.LinkedList;
 
 public class Book {
     private BookDetails bookDetails;
-    private Calendar dueDate;
+    private LibraryDate dueDate;
     private Queue<User> holdQueue;
     private User curHolder;
     private User curBorrower;
@@ -52,10 +51,9 @@ public class Book {
     // getters
     public String getTitle(){ return bookDetails.getTitle(); }
     public String getAuthor() { return bookDetails.getAuthor(); }
-    public Calendar getDueDate() {
+    public LibraryDate getDueDate() {
         if (dueDate == null) return null;
-        Calendar copy = (Calendar)dueDate.clone();
-        return copy;
+        return new LibraryDate(dueDate);
     }
 
     public int getHoldersNum(){ return holdQueue.size(); }
@@ -67,18 +65,11 @@ public class Book {
     public User getCurBorrower(){ return curBorrower; }
     public String getDueDateStr(){
         if (dueDate == null) return "N/A";
-        int year = dueDate.get(Calendar.YEAR);
-        int month = dueDate.get(Calendar.MONTH)+1;
-        int day = dueDate.get(Calendar.DAY_OF_MONTH);
-
-        String monthStr = (month <= 9) ? "0"+month : ""+month;
-        String dayStr = (day <= 9) ? "0"+day : ""+day;
-
-        return String.format("%d-%s-%s", year, monthStr, dayStr);
+        return dueDate.toString();
     }
 
     // setters
-    public void setDueDate(Calendar date){ dueDate = date; }
+    public void setDueDate(LibraryDate date){ dueDate = date; }
     public void setCurHolder(User holder){ curHolder = holder; }
     public void setCurBorrower(User borrower){ curBorrower = borrower; }
 

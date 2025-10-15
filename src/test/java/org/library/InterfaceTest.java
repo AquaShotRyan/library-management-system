@@ -2,7 +2,6 @@ package org.library;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -15,22 +14,22 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InterfaceTest {
+    private static LibraryInterface libraryInterface;
+    private StringWriter output;
+
+    @BeforeAll
+    static void initLibraryInterface(){
+        libraryInterface = new LibraryInterface();
+    }
+
+    @BeforeEach
+    void initOutput(){
+        output = new StringWriter();
+    }
 
     @Nested
     @DisplayName("RESP-03: prompting username and password")
     public class PromptCredentials{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @Test
         @DisplayName("Check username is prompted")
@@ -67,18 +66,6 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-07: prompt menu")
     public class PromptMenu{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @ParameterizedTest
         @EnumSource(names = { "BORROW", "RETURN", "LOGOUT" })
@@ -164,13 +151,10 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-06: display available on-hold book")
     public class OnHoldBookNotification{
-        private StringWriter output;
-        private LibraryInterface libraryInterface;
         private Library library;
 
         @BeforeEach
         void initLibrary(){
-            libraryInterface = new LibraryInterface();
             library = new Library();
         }
 
@@ -189,18 +173,6 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-09: prompt user confirmation")
     public class PromptUserConfirmation{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @Test
         @DisplayName("Returns true if user types 'y'")
@@ -242,18 +214,6 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-12: display current checked-out book count")
     public class DisplayBookCount{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @ParameterizedTest
         @ValueSource(ints = {0,1,2,3})
@@ -309,7 +269,7 @@ public class InterfaceTest {
         private final String CHECKED_OUT = "Checked Out";
         private final String ON_HOLD = "On Hold";
         private final String NO_DUE_DATE = "due: N/A";
-        private final Calendar START_DATE = new GregorianCalendar(2025, GregorianCalendar.JUNE, 20);
+        private final LibraryDate START_DATE = new LibraryDate(2025, GregorianCalendar.JUNE, 20);
         private final String DUE_DATE = "due: 2025-07-04";
         private final String CUR_USER = "squeex";
 
@@ -394,18 +354,6 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-08: prompt user to select a book")
     public class PromptBookSelection{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @Test
         @DisplayName("Entering a non-negative number returns the same number")
@@ -454,18 +402,6 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-27: display already is borrower/holder error")
     public class DisplayAlreadyIsBorrowerHolder{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
-
-        @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
 
         @Test
         @DisplayName("Display 'You already have a hold on this book'")
@@ -485,25 +421,16 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-29: display a book for return")
     public class DisplayBookForReturn{
-        private LibraryInterface libraryInterface;
-        private StringWriter output;
         Library library;
 
         @BeforeEach
-        void initLibraryInterface(){
-            libraryInterface = new LibraryInterface();
-        }
-        @BeforeEach
-        void initOutput(){
-            output = new StringWriter();
-        }
-        @BeforeEach
         void initLibrary(){
             library = new Library();
+
             library.setBorrower("Great Gatsby", "squeex");
-            library.updateDueDateFromDate("Great Gatsby", new GregorianCalendar(2025, Calendar.OCTOBER, 14));
+            library.updateDueDateFromDate("Great Gatsby", new LibraryDate(2025, Calendar.OCTOBER, 14));
             library.setBorrower("The Handmaid's Tale", "squeex");
-            library.updateDueDateFromDate("The Handmaid's Tale", new GregorianCalendar(2025, Calendar.NOVEMBER, 6));
+            library.updateDueDateFromDate("The Handmaid's Tale", new LibraryDate(2025, Calendar.NOVEMBER, 6));
         }
 
         @ParameterizedTest

@@ -1,8 +1,6 @@
 package org.library;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class Library {
@@ -81,8 +79,8 @@ public class Library {
         return getBorrowedBooksNum(getSessionUsername());
     }
 
-    public void updateDueDateFromDate(String bookTitle, Calendar date){
-        date.add(Calendar.DATE, BORROWING_DAY_LENGTH);
+    public void updateDueDateFromDate(String bookTitle, LibraryDate date){
+        date.addDays(BORROWING_DAY_LENGTH);
 
         Book book = getBook(bookTitle);
         book.setDueDate(date);

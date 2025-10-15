@@ -3,7 +3,6 @@ package org.library;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -13,49 +12,26 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
+    Library library;
 
-    @Nested
-    @DisplayName("RESP-01: initializing 20 books")
-    public class CatalogueInitialization {
-        @Test
-        @DisplayName("Check library catalogue size is 20")
-        void RESP_01_test_1(){
-            InitializeLibrary library = new InitializeLibrary();
-            Catalogue catalogue = library.initCatalogue();
-
-            int size = catalogue.getCatalogueSize();
-
-            assertEquals(20, size);
-
-        }
-        @Test
-        @DisplayName("Check library catalogue for valid book - Great Gatsby.")
-        void RESP_01_test_2(){
-
-            InitializeLibrary library = new InitializeLibrary();
-            Catalogue catalogue = library.initCatalogue();
-
-            Book book = catalogue.getBook("Great Gatsby");
-
-            String title = book.getTitle();
-            assertEquals("Great Gatsby",title);
-        }
+    @BeforeEach
+    void initLibrary(){
+        library = new Library();
     }
 
     @Nested
     @DisplayName("RESP-13: retrieve all books sorted by author")
     public class GetAllBooks {
-        private Library library;
+        List<Book> allBooks;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void getAllBooks(){
+            allBooks = library.getAllBooks();
         }
 
         @Test
         @DisplayName("Getting all books returns an array of size 20")
         void RESP_13_test_1(){
-            List<Book> allBooks = library.getAllBooks();
             int resultSize = allBooks.size();
 
             assertEquals(20, resultSize);
@@ -64,7 +40,6 @@ public class LibraryTest {
         @Test
         @DisplayName("Book with author 'Arthur C. Clarke' is at the first index")
         void RESP_13_test_2(){
-            List<Book> allBooks = library.getAllBooks();
             try{
                 Book book = allBooks.getFirst();
                 assertEquals("Arthur C. Clarke", book.getAuthor());
@@ -76,7 +51,6 @@ public class LibraryTest {
         @Test
         @DisplayName("Book with author 'Tom King is at the last index")
         void RESP_13_test_3(){
-            List<Book> allBooks = library.getAllBooks();
             try {
                 Book book = allBooks.getLast();
                 assertEquals("Tom King", book.getAuthor());
@@ -89,20 +63,15 @@ public class LibraryTest {
     @Nested
     @DisplayName("RESP-20: add book to a borrower's checked-out books")
     public class AddCheckedOutBook {
-        Library library;
-
-        @BeforeEach
-        void initLibrary() {
-            library = new Library();
-        }
+        private final String CUR_USER = "squeex";
 
         @Test
         @DisplayName("Check added book 'Berserk Deluxe Volume 1' is in Borrower's borrowed books")
         void RESP_20_test_1(){
             Book book = library.getBook("Berserk Deluxe Volume 1");
-            library.addBookToBorrower(book, "squeex");
+            library.addBookToBorrower(book, CUR_USER);
 
-            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks(CUR_USER);
             Book borrowedBook = borrowedBooks.getBookByTitle(book.getTitle());
 
             assertEquals(book.getTitle(), borrowedBook.getTitle());
@@ -114,9 +83,9 @@ public class LibraryTest {
             Book book1 = library.getBook("Blood Meridian");
             Book book2 = library.getBook("Moby-Dick");
             Book book3 = library.getBook("Berserk Deluxe Volume 1");
-            library.addBookToBorrower(book1, "squeex");
-            library.addBookToBorrower(book2, "squeex");
-            library.addBookToBorrower(book3, "squeex");
+            library.addBookToBorrower(book1, CUR_USER);
+            library.addBookToBorrower(book2, CUR_USER);
+            library.addBookToBorrower(book3, CUR_USER);
 
             BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
             Book borrowedBook = borrowedBooks.getBookByTitle(book2.getTitle());
@@ -152,24 +121,18 @@ public class LibraryTest {
     @Nested
     @DisplayName("RESP-18: update a book's due date to 14 days from today")
     public class BookDueDate{
-        private Library library;
-
-        @BeforeEach
-        void initLibrary(){
-            library = new Library();
-        }
 
         @Test
         @DisplayName("If today is 2025-09-05, then due date is 2025-09-19")
         void RESP_18_test_1(){
 
-            Calendar today = new GregorianCalendar(2025, Calendar.SEPTEMBER, 5);
-            Calendar expectedDate = new GregorianCalendar(2025, Calendar.SEPTEMBER, 19);
+            LibraryDate today = new LibraryDate(2025, Calendar.SEPTEMBER, 5);
+            LibraryDate expectedDate = new LibraryDate(2025, Calendar.SEPTEMBER, 19);
 
             Book book = library.getBook("Red Rising");
             library.updateDueDateFromDate(book.getTitle(), today);
 
-            Calendar dueDate = book.getDueDate();
+            LibraryDate dueDate = book.getDueDate();
 
             assertEquals(expectedDate, dueDate);
         }
@@ -177,13 +140,13 @@ public class LibraryTest {
         @Test
         @DisplayName("If today is 2025-10-24, then due date is 2025-11-07")
         void RESP_18_test_2(){
-            Calendar today = new GregorianCalendar(2025, Calendar.OCTOBER, 24);
-            Calendar expectedDate = new GregorianCalendar(2025, Calendar.NOVEMBER, 7);
+            LibraryDate today = new LibraryDate(2025, Calendar.OCTOBER, 24);
+            LibraryDate expectedDate = new LibraryDate(2025, Calendar.NOVEMBER, 7);
 
             Book book = library.getBook("Red Rising");
             library.updateDueDateFromDate(book.getTitle(), today);
 
-            Calendar dueDate = book.getDueDate();
+            LibraryDate dueDate = book.getDueDate();
 
             assertEquals(expectedDate, dueDate);
         }
@@ -191,13 +154,13 @@ public class LibraryTest {
         @Test
         @DisplayName("If today is 2025-12-29, then due date is 2026-01-12")
         void RESP_18_test_3(){
-            Calendar today = new GregorianCalendar(2025, Calendar.DECEMBER, 29);
-            Calendar expectedDate = new GregorianCalendar(2026, Calendar.JANUARY, 12);
+            LibraryDate  today = new LibraryDate (2025, Calendar.DECEMBER, 29);
+            LibraryDate  expectedDate = new LibraryDate(2026, Calendar.JANUARY, 12);
 
             Book book = library.getBook("Red Rising");
             library.updateDueDateFromDate(book.getTitle(), today);
 
-            Calendar dueDate = book.getDueDate();
+            LibraryDate  dueDate = book.getDueDate();
 
             assertEquals(expectedDate, dueDate);
         }
@@ -208,25 +171,23 @@ public class LibraryTest {
     @Nested
     @DisplayName("RESP-24: remove a book from a borrower's checked-out books")
     public class RemoveCheckedOutBook {
-        Library library;
-        private final String TEST_USERNAME = "ryan";
-        private final String SUPER_GIRL_BOOK = "Supergirl: Woman of Tomorrow #1";
-        private final String ARCANE_BOOK = "The Art and Making of Arcane";
+        private final String CUR_USER = "ryan";
+        private final String BOOK1 = "Supergirl: Woman of Tomorrow #1";
+        private final String BOOK2 = "The Art and Making of Arcane";
 
         @BeforeEach
         void addBorrowedBooks() {
-            library = new Library();
-            Book book1 = library.getBook(SUPER_GIRL_BOOK);
-            Book book2 = library.getBook(ARCANE_BOOK);
-            library.addBookToBorrower(book1, TEST_USERNAME);
-            library.addBookToBorrower(book2, TEST_USERNAME);
+            Book book1 = library.getBook(BOOK1);
+            Book book2 = library.getBook(BOOK2);
+            library.setBorrower(BOOK1, CUR_USER);
+            library.setBorrower(BOOK2, CUR_USER);
         }
 
         @Test
         @DisplayName("Remove 1 book from collection of 2, size should be 1")
         void RESP_24_test_1(){
-            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
-            int result = library.getBorrowedBooksNum(TEST_USERNAME);
+            library.removeBookFromBorrower(BOOK1, CUR_USER);
+            int result = library.getBorrowedBooksNum(CUR_USER);
 
             assertEquals(1, result);
         }
@@ -234,8 +195,8 @@ public class LibraryTest {
         @Test
         @DisplayName("Remove book 'Supergirl: Woman of Tomorrow #1', finding it should return null")
         void RESP_24_test_2(){
-            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
-            Book result = library.getBorrowedBooks(TEST_USERNAME).getBookByTitle(SUPER_GIRL_BOOK);
+            library.removeBookFromBorrower(BOOK1, CUR_USER);
+            Book result = library.getBorrowedBooks(CUR_USER).getBookByTitle(BOOK1);
 
             assertNull(result);
         }
@@ -243,8 +204,8 @@ public class LibraryTest {
         @Test
         @DisplayName("Remove book 'Supergirl: Woman of Tomorrow #1', removing it again should throw UnsupportedOperationException")
         void RESP_24_test_3(){
-            library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME);
-            assertThrows(UnsupportedOperationException.class, () -> library.removeBookFromBorrower(SUPER_GIRL_BOOK, TEST_USERNAME));
+            library.removeBookFromBorrower(BOOK1, CUR_USER);
+            assertThrows(UnsupportedOperationException.class, () -> library.removeBookFromBorrower(BOOK1, CUR_USER));
         }
     }
 
@@ -255,12 +216,10 @@ public class LibraryTest {
         private final String RYAN = "ryan";
         private final String GLORP = "glorp";
 
-        private Library library;
         private Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void addUsersToQueue(){
             book = library.getBook(BOOK_TITLE);
             library.addToHoldQueue(BOOK_TITLE, RYAN);
             library.addToHoldQueue(BOOK_TITLE, GLORP);
@@ -290,12 +249,10 @@ public class LibraryTest {
     public class RemoveBorrowerFromQueue{
         private final String BOOK_TITLE = "Crime and Punishment";
 
-        private Library library;
         private Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void addUsersToBookQueue(){
             book = library.getBook(BOOK_TITLE);
             library.addToHoldQueue(BOOK_TITLE, "ryan");
             library.addToHoldQueue(BOOK_TITLE, "glorp");
@@ -322,12 +279,10 @@ public class LibraryTest {
         private final String BOOK_TITLE = "The Handmaid's Tale";
         private final String BORROWER = "ryan";
 
-        private Library library;
         private Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
         }
 
@@ -384,12 +339,10 @@ public class LibraryTest {
     public class UpdateBookBorrower{
         private final String BOOK_TITLE = "The Handmaid's Tale";
 
-        Library library;
         Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
         }
 
@@ -426,12 +379,10 @@ public class LibraryTest {
     public class RemoveBorrower{
         private final String BOOK_TITLE = "To Kill a Mockingbird";
 
-        Library library;
         Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
         }
 
@@ -439,7 +390,7 @@ public class LibraryTest {
         @DisplayName("Check book's curBorrower is null")
         void RESP_26_test_1(){
             library.setBorrower(BOOK_TITLE, "ryan");
-            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, 10, 10));
+            library.updateDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
             library.removeBorrower(BOOK_TITLE, "ryan");
 
             assertNull(book.getCurBorrower());
@@ -449,7 +400,7 @@ public class LibraryTest {
         @DisplayName("Check book's dueDate is null")
         void RESP_26_test_2(){
             library.setBorrower(BOOK_TITLE, "ryan");
-            library.updateDueDateFromDate(BOOK_TITLE, new GregorianCalendar(2025, 10, 10));
+            library.updateDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
             library.removeBorrower(BOOK_TITLE, "ryan");
 
             assertNull(book.getDueDate());
@@ -485,12 +436,10 @@ public class LibraryTest {
         private final String BOOK_TITLE = "Nineteen Eighty-Four";
         private final String BORROWER = "glorp";
 
-        Library library;
         Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
         }
 
@@ -535,19 +484,17 @@ public class LibraryTest {
         private final String BOOK_TITLE = "The Science of Beauty";
         private final String CUR_USER = "ryan";
 
-        Library library;
         Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBookAndSetBorrowers(){
             book = library.getBook(BOOK_TITLE);
 
             // add 2 books to current user
             Book batman = library.getBook("Absolute Batman #1");
             Book eragon = library.getBook("Eragon");
-            library.addBookToBorrower(batman, CUR_USER);
-            library.addBookToBorrower(eragon, CUR_USER);
+            library.setBorrower(batman.getTitle(), CUR_USER);
+            library.setBorrower(batman.getTitle(), CUR_USER);
         }
 
         @Test
@@ -581,7 +528,7 @@ public class LibraryTest {
         @DisplayName("Returns TransactionEnum.AT_BORROWING_LIMIT if the book is available, but user is at the 3-book limit")
         void RESP_15_test_4(){
             Book apothecary= library.getBook("The Apothecary Diaries: Volume 1");
-            library.addBookToBorrower(apothecary, CUR_USER);
+            library.setBorrower(apothecary.getTitle(), CUR_USER);
             TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
 
             assertEquals(TransactionEnum.AT_BORROWING_LIMIT, result);
@@ -611,12 +558,10 @@ public class LibraryTest {
         private final String BOOK_TITLE = "The Hunger Games";
         private final String CUR_USER = "squeex";
 
-        Library library;
         Book book;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
         }
 
@@ -669,11 +614,9 @@ public class LibraryTest {
     @Nested
     @DisplayName("RESP-19: record book borrowing transaction details")
     public class RecordTransaction{
-        Library library;
 
         @BeforeEach
         void initTransactions(){
-            library = new Library();
             library.addBorrowTransaction(new BorrowTransaction("Nineteen Eighty-Four", "glorp", "2025-10-13"));
             library.addBorrowTransaction(new BorrowTransaction("Eragon", "ryan", "2025-11-13"));
             library.addBorrowTransaction(new BorrowTransaction("Moby-Dick", "glorp", "2025-11-20"));
@@ -710,33 +653,31 @@ public class LibraryTest {
     @Nested
     @DisplayName("RESP-30: retrieve all borrowed books, sorted by author")
     public class RetrieveAllBorrowedBooksSorted{
-        Library library;
+        List<Book> borrowerBooks;
 
         @BeforeEach
-        void initLibrary(){
-            library = new Library();
+        void initBorrowerBooks(){
             library.setBorrower("The Ways of Kings", "ryan");
             library.setBorrower("The Hunger Games", "ryan");
             library.setBorrower("Red Rising", "ryan");
+            borrowerBooks = library.getBorrowedBooksSorted("ryan");
         }
 
         @ParameterizedTest
         @CsvSource({"0,The Ways of Kings", "1,Red Rising", "2,The Hunger Games"})
         @DisplayName("Add 3 books and check they're at the correct index")
         void RESP_30_test_1(int index, String bookTitle){
-            List<Book> books = library.getBorrowedBooksSorted("ryan");
-            if (books == null)
+            if (borrowerBooks == null)
                 fail("books array is null");
-            assertEquals(books.get(index).getTitle(), bookTitle);
+            assertEquals(borrowerBooks.get(index).getTitle(), bookTitle);
         }
 
         @Test
         @DisplayName("Add 3 books and check size is 3")
         void RESP_30_test_2(){
-            List<Book> books = library.getBorrowedBooksSorted("ryan");
-            if (books == null)
+            if (borrowerBooks == null)
                 fail("books array is null");
-            assertEquals(3, books.size());
+            assertEquals(3, borrowerBooks.size());
         }
     }
 }

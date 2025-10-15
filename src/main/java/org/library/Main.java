@@ -8,32 +8,13 @@ public class Main {
         // setup
         Library library = new Library();
         LibraryInterface ui = new LibraryInterface();
-        LibraryController controller = new LibraryController(library, ui);
-
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
 
+        LibraryController controller = new LibraryController(library, ui, input, output);
+
         // main loop
-        while (true){
-            while (!controller.isLoggedIn()){
-                controller.promptLogin(input, output);
-            }
-            MenuEnum menuInput = controller.promptMenu(input, output);
-            if (menuInput == MenuEnum.BORROW){
+        controller.run();
 
-                int borrowedBooksNum = library.getSessionBorrowedBooksNum();
-                controller.displayNumberOfBorrowedBooks(output, borrowedBooksNum);
-
-                int bookIndex = controller.promptBorrowBook(input, output);
-                Book selectedBook = controller.getBookByIndex(bookIndex);
-                controller.checkOut(selectedBook.getTitle());
-
-            }else if(menuInput == MenuEnum.RETURN){
-                controller.notifyNoBorrowedBooks(output);
-
-            }else if (menuInput == MenuEnum.LOGOUT){
-                controller.logout(input, output);
-            }
-        }
     }
 }
