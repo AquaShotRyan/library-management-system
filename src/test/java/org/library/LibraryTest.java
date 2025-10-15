@@ -372,6 +372,25 @@ public class LibraryTest {
 
             assertEquals(book, borrowedBooks.getBookByTitle(BOOK_TITLE));
         }
+
+        @Test
+        @DisplayName("If 'squeex' was the only holder, then there should be no current holder after borrowing")
+        void RESP_22_test_4(){
+            library.setHolder(BOOK_TITLE, "squeex");
+            library.setBorrower(BOOK_TITLE, "squeex");
+            BorrowedBooks borrowedBooks = library.getBorrowedBooks("squeex");
+
+            assertNull(book.getCurHolder());
+        }
+
+        @Test
+        @DisplayName("Check the queue is empty after 'squeex' was the current holder (and became the current borrower) and 'glorp' became the current holder")
+        void RESP_22_test_5(){
+            library.setHolder(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, "glorp");
+            library.setBorrower(BOOK_TITLE, "squeex");
+            assertNull(library.getBook(BOOK_TITLE).peekHolderQueue());
+        }
     }
 
     @Nested
