@@ -213,6 +213,10 @@ public class Library {
     }
 
     public boolean heldBookIsAvailable(String username){
-        return true;
+        Borrower borrower = borrowers.getBorrower(username);
+        if (!borrower.hasHold())
+            return false;
+        Book heldBook = getBook(borrower.getCurHold().getTitle());
+        return heldBook.getAvailabilityStatus(username) == AvailabilityEnum.AVAILABLE;
     }
 }

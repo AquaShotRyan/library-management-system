@@ -100,12 +100,20 @@ public class LibraryController {
         }
     }
 
+    public void notifyHeldBookAvailability(String username){
+        if (library.heldBookIsAvailable(username)){
+            ui.displayAvailableBookNotification(output, library.getHeldBook(username));
+        }
+    }
+
     public void run(){
         while (true){
             while (!isLoggedIn()){
                 promptLogin();
             }
             String sessionUsername = library.getSessionUsername();
+
+            notifyHeldBookAvailability(sessionUsername);
 
             MenuEnum menuInput = promptMenu();
 
