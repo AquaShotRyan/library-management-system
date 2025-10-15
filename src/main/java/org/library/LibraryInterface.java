@@ -75,7 +75,15 @@ public class LibraryInterface {
     }
 
     public boolean promptOfferHold(Scanner input, PrintWriter output, TransactionEnum transactionEnum){
-        return true;
+        return switch (transactionEnum) {
+            case AT_BORROWING_LIMIT ->
+                    promptConfirmation(input, output, "You are at the borrow limit and can't check out another book. Do you want to place a hold?");
+            case CHECKED_OUT_BY_ANOTHER ->
+                    promptConfirmation(input, output, "This book is checked out by another user. Do you want to place a hold?");
+            case ON_HOLD_BY_ANOTHER ->
+                    promptConfirmation(input, output, "This book is on hold by another user. Do you want to place a hold?");
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public void displayNumberOfBorrowedBooks(PrintWriter output, int n){
