@@ -135,13 +135,16 @@ public class Library {
 
         // set user as borrower
         book.setCurBorrower(borrower);
+
+        // update curHolder
+        // remove borrower as current holder if he was current holder
         if (book.hasHolder() && book.getCurHolder().equals(borrower)){
             book.removeCurHolder();
         }
-        // update curHolder
+        // the first in queue gets popped and set as current holder
         User nextHolder = book.peekHolderQueue();
         if (nextHolder != null){
-            book.setCurHolder(nextHolder);
+            setHolder(book.getTitle(), nextHolder.getUsername());
         }
         // add book to Borrower's checked-out books
         borrower.addBorrowedBook(book);
