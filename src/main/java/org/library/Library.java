@@ -211,4 +211,8 @@ public class Library {
     public int getBorrowerTransactionsSize(){
         return borrowTransactions.size();
     }
+
+    public boolean heldBookIsAvailable(String username){
+        return true;
+    }
 }

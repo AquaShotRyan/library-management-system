@@ -699,4 +699,41 @@ public class LibraryTest {
             assertEquals(3, borrowerBooks.size());
         }
     }
+
+    @Nested
+    @DisplayName("RESP-33: check if a user's on-hold book is available")
+    public class NestedTestClass{
+        private final String CUR_USER = "ryan";
+        private final String BOOK_TITLE = "Eragon";
+
+        @Test
+        @DisplayName("Returns true if user is the current holder of a book and there's no current borrower")
+        void RESP_33_test_1(){
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            assertTrue(library.heldBookIsAvailable(CUR_USER));
+        }
+
+        @Test
+        @DisplayName("Returns false if the user is the current holder of a book and there's a current borrower")
+        void RESP_33_test_2(){
+            library.setBorrower(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            assertFalse(library.heldBookIsAvailable(CUR_USER));
+        }
+
+        @Test
+        @DisplayName("Returns false if the user isn't the current holder, but is in the queue")
+        void RESP_33_test_3(){
+            library.setBorrower(BOOK_TITLE, "squeex");
+            library.setHolder(BOOK_TITLE, "glorp");
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            assertFalse(library.heldBookIsAvailable(CUR_USER));
+        }
+
+        @Test
+        @DisplayName("Returns false if the user has no holds")
+        void RESP_33_test_4(){
+            assertFalse(library.heldBookIsAvailable(CUR_USER));
+        }
+    }
 }
