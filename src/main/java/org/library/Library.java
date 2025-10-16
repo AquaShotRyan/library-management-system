@@ -171,16 +171,15 @@ public class Library {
 
         TransactionEnum result = TransactionEnum.CAN_BORROW;
 
-        if (book.hasBorrower()){
+        if (borrower.getBorrowedBooksNum() >= 3){
+            result = TransactionEnum.AT_BORROWING_LIMIT;
+        }else if (book.hasBorrower()){
             boolean isCurUser = book.getCurBorrower().getUsername().equals(username);
             result = isCurUser ? TransactionEnum.CHECKED_OUT_BY_USER : TransactionEnum.CHECKED_OUT_BY_ANOTHER;
-        }else if (book.hasHolder()){
+        }else if (book.hasHolder()) {
             boolean isCurUser = book.getCurHolder().getUsername().equals(username);
             result = isCurUser ? result : TransactionEnum.ON_HOLD_BY_ANOTHER;
-        }else if (borrower.getBorrowedBooksNum() >= 3){
-            result = TransactionEnum.AT_BORROWING_LIMIT;
         }
-
         return result;
     }
 
