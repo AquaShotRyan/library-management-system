@@ -506,14 +506,8 @@ public class LibraryTest {
         Book book;
 
         @BeforeEach
-        void initBookAndSetBorrowers(){
+        void initBook(){
             book = library.getBook(BOOK_TITLE);
-
-            // add 2 books to current user
-            Book batman = library.getBook("Absolute Batman #1");
-            Book eragon = library.getBook("Eragon");
-            library.setBorrower(batman.getTitle(), CUR_USER);
-            library.setBorrower(batman.getTitle(), CUR_USER);
         }
 
         @Test
@@ -546,8 +540,9 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.AT_BORROWING_LIMIT if the book is available, but user is at the 3-book limit")
         void RESP_15_test_4(){
-            Book apothecary= library.getBook("The Apothecary Diaries: Volume 1");
-            library.setBorrower(apothecary.getTitle(), CUR_USER);
+            library.setBorrower("Eragon", CUR_USER);
+            library.setBorrower("The Ways of Kings", CUR_USER);
+            library.setBorrower(BOOK_TITLE, CUR_USER);
             TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
 
             assertEquals(TransactionEnum.AT_BORROWING_LIMIT, result);
@@ -568,6 +563,18 @@ public class LibraryTest {
             TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
 
             assertEquals(TransactionEnum.CAN_BORROW, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.AT_BORROW_LIMIT if the borrower has 3 books and is a current holder of the book")
+        void RESP_15_test_7(){
+            library.setBorrower("Eragon", CUR_USER);
+            library.setBorrower("The Ways of Kings", CUR_USER);
+            library.setBorrower("No Longer Human", CUR_USER);
+            library.setHolder(BOOK_TITLE, CUR_USER);
+            TransactionEnum result = library.verifyBorrowing(BOOK_TITLE, CUR_USER);
+
+            assertEquals(TransactionEnum.AT_BORROWING_LIMIT, result);
         }
     }
 
