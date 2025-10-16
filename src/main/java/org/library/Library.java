@@ -212,6 +212,10 @@ public class Library {
         return borrowTransactions.size();
     }
 
+    public int getBorrowersSize(){
+        return borrowers.getBorrowersSize();
+    }
+
     public boolean heldBookIsAvailable(String username){
         Borrower borrower = borrowers.getBorrower(username);
         if (!borrower.hasHold())

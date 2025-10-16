@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -204,5 +205,69 @@ public class AcceptanceTest {
         // --- UC-04: User 2 logs out again ---
         controller.logout(new Scanner("y\n"));
         assertNull(library.getSessionUsername());
+    }
+
+    @Test
+    @DisplayName("A-TEST-02: Initialization and Authentication with Error Handling")
+    void A_TEST_02(){
+        final String USER1_NAME = "ryan";
+        final String USER1_PASS = "password123";
+        final String USER2_NAME = "glorp";
+        final String USER3_NAME = "squeex";
+
+        // ARRANGE: setup library controller
+        Library library = new Library();
+        LibraryInterface ui = new LibraryInterface();
+        StringWriter output = new StringWriter();
+        LibraryController controller = new LibraryController(library, ui, new PrintWriter(output));
+
+        // --- UC-01: system is initialized with 20 books and 3 borrows
+        assertAll("UC-01: system is initialized",
+                () -> assertEquals(20, library.getAllBooks().size()),
+                () -> assertEquals(3, library.getBorrowersSize()),
+                () -> assertEquals(0, library.getBorrowedBooks(USER1_NAME).size()),
+                () -> assertEquals(0, library.getBorrowedBooks(USER2_NAME).size()),
+                () -> assertEquals(0, library.getBorrowedBooks(USER3_NAME).size())
+        );
+        // check all books are seen as Available by all borrowers
+        for (Book b: library.getAllBooks()){
+            assertEquals(AvailabilityEnum.AVAILABLE, b.getAvailabilityStatus(USER1_NAME));
+            assertEquals(AvailabilityEnum.AVAILABLE, b.getAvailabilityStatus(USER2_NAME));
+            assertEquals(AvailabilityEnum.AVAILABLE, b.getAvailabilityStatus(USER3_NAME));
+        }
+
+        // --- UC-01: Login as User 1 (verify credentials prompt and user session) ----
+        controller.promptLogin(new Scanner(USER1_NAME+"\n"+USER1_PASS+"\n"));
+        assertAll("UC-01: check successful login, prompting of credentials, and session was created for user1",
+                () -> assertTrue(output.toString().contains("username:")),
+                () -> assertTrue(output.toString().contains("password:")),
+                () -> assertEquals(USER1_NAME, library.getSessionUsername())
+        );
+
+        // --- UC-01: User 1 doesn't get notification of available books ---
+        controller.notifyHeldBookAvailability(USER1_NAME);
+        assertFalse(output.toString().contains("NOTIFICATION"));
+
+        // --- UC-01: User 1 sees menu options (verify options are displayed) ---
+        MenuEnum menuInput = controller.promptMenu(new Scanner("3\n"));
+        assertAll("UC-02: user sees menu options",
+                () -> assertTrue(output.toString().contains("1) Borrow a book")),
+                () -> assertTrue(output.toString().contains("2) Return a book")),
+                () -> assertTrue(output.toString().contains("3) Logout"))
+        );
+
+        // --- UC-04: User 1 logs out (verify session and logout confirmation message) ----
+        controller.logout(new Scanner("y\n"));
+        assertAll("UC-04: user gets asked if they want to logout and enters 'y' for yes",
+                () -> assertTrue(output.toString().contains("Are you sure you want to log out? (y/n):")),
+                () -> assertNull(library.getSessionUsername())
+        );
+
+        // --- UC-01: User 2 tries to log in and sees an error message
+        controller.promptLogin(new Scanner(USER2_NAME+"\nwrong_password\n"));
+        assertAll("UC-01: check unsuccessful login and that error message was displayed",
+                () -> assertNull(library.getSessionUsername()), // session should still be null
+                () -> assertTrue(output.toString().contains("ERROR: credentials not found"))
+        );
     }
 }
