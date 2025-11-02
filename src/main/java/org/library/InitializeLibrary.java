@@ -33,6 +33,9 @@ public class InitializeLibrary {
         borrowers.addBorrower(new Borrower("ryan", "password123"));
         borrowers.addBorrower(new Borrower("glorp", "alien"));
         borrowers.addBorrower(new Borrower("squeex", "iambald"));
+        borrowers.addBorrower(new Borrower("alice", "pass123"));
+        borrowers.addBorrower(new Borrower("bob", "pass456"));
+        borrowers.addBorrower(new Borrower("charlie", "pass789"));
         return borrowers;
     }
 }
