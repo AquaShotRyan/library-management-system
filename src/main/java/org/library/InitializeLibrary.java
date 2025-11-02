@@ -27,6 +27,7 @@ public class InitializeLibrary {
         catalogue.addBook(new Book("Crime and Punishment", "Fyodor Dostoevsky"));
         catalogue.addBook(new Book("2001: A Space Odyssey", "Arthur C. Clarke"));
 
+        catalogue.addBook(new Book("The Great Gatsby", "F. Scott FitzGerald"));
         catalogue.addBook(new Book("1984", "George Orwell"));
         catalogue.addBook(new Book("Pride and Prejudice", "Jane Austen"));
         catalogue.addBook(new Book("The Hobbit", "J. R. R. Tolkien"));
