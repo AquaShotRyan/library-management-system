@@ -48,12 +48,9 @@ public class InitializeLibrary {
     }
 
     public Borrowers initBorrowers(){
-        borrowers.addBorrower(new Borrower("ryan", "password123"));
-        borrowers.addBorrower(new Borrower("glorp", "alien"));
-        borrowers.addBorrower(new Borrower("squeex", "iambald"));
-        borrowers.addBorrower(new Borrower("alice", "pass123"));
-        borrowers.addBorrower(new Borrower("bob", "pass456"));
-        borrowers.addBorrower(new Borrower("charlie", "pass789"));
+        for (UserCreds user : UserCreds.values()){
+            borrowers.addBorrower(new Borrower(user.getUsername(), user.getPassword()));
+        }
         return borrowers;
     }
 }
