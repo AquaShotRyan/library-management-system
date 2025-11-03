@@ -77,6 +77,10 @@ public class Book {
     public boolean containsHolder(User user){ return holdQueue.contains(user); }
     public boolean hasBorrower(){ return curBorrower != null; }
     public boolean hasHolder(){ return curHolder != null; }
+    public boolean curBorrowerIs(String username){
+        if (!hasBorrower()) return false;
+        return username.equals(curBorrower.getUsername());
+    }
 
     @Override
     public String toString() {
