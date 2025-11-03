@@ -13,5 +13,11 @@ public enum AvailabilityEnum {
 
     public final String getDisplayStr(){ return displayStr; }
 
-    public static String getAvailableStr(){ return AVAILABLE.displayStr; }
+    public static AvailabilityEnum getAvailablilityEnumFromStr(String displayStr){
+        for (AvailabilityEnum availabilityEnum: AvailabilityEnum.values()){
+            if (displayStr.equals(availabilityEnum.getDisplayStr()))
+                return availabilityEnum;
+        }
+        return null;
+    }
 }
