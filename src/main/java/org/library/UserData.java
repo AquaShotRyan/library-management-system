@@ -1,6 +1,6 @@
 package org.library;
 
-public enum UserCreds {
+public enum UserData {
     RYAN("ryan", "password123"),
     GLORP("glorp", "alien"),
     SQUEEX("squeex", "iambald"),
@@ -8,10 +8,10 @@ public enum UserCreds {
     BOB("bob", "pass456"),
     CHARLIE("charlie", "pass789");
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
-    private UserCreds(String username, String password){
+    UserData(String username, String password){
         this.username = username;
         this.password = password;
     }

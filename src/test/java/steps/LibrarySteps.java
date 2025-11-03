@@ -71,7 +71,7 @@ public class LibrarySteps {
 
     @When("I login as {string}")
     public void login_as(String username){
-        for (UserCreds user: UserCreds.values()){
+        for (UserData user: UserData.values()){
             if (username.equals(user.getUsername())) {
                 library.login(username, user.getPassword());
                 curUser = username;
