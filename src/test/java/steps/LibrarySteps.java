@@ -90,7 +90,6 @@ public class LibrarySteps {
         curUser = null;
     }
 
-
     @When("I return {string}")
     public void cur_user_return_book(String bookTitle){
         library.removeBorrower(bookTitle, curUser);
@@ -154,5 +153,48 @@ public class LibrarySteps {
         Book book = library.getBook(bookTitle);
         assertFalse(library.borrowerHasBook(bookTitle, username));
         assertFalse(book.curBorrowerIs(username));
+    }
+
+    /* ========= 2. multiple_holds_queue_processing ========= */
+    @Given("{string} places a hold on {string}")
+    public void user_places_hold_on_book(String username, String bookTitle){
+        library.setHolder(bookTitle, username);
+    }
+
+    @Given("{string} is the current holder of {string}")
+    public void user_is_holder_of_book(String username, String bookTitle){
+        user_places_hold_on_book(username, bookTitle);
+    }
+
+    @When("{string} returns {string}")
+    public void user_returns_book(String username, String bookTitle){
+        library.removeBorrower(bookTitle, username);
+    }
+
+    @When("{string} checks out {string}")
+    public void user_checks_out_book(String username, String bookTitle){
+        check_out_book(username, bookTitle);
+    }
+
+    @Then("{string} should be the current holder of {string}")
+    public void user_should_be_holder_of_book(String username, String bookTitle){
+        Book book = library.getBook(bookTitle);
+        assertEquals(username, book.getCurHolder().getUsername());
+    }
+
+    @Then("{string} should get a notification that their held book is available")
+    public void should_get_available_notification(String username){
+        assertTrue(library.heldBookIsAvailable(username));
+    }
+
+    @Then("{string} should NOT get a notification that their held book is available")
+    public void should_not_get_available_notification(String username){
+        assertFalse(library.heldBookIsAvailable(username));
+    }
+
+    @Then("{string} should be first in the hold queue of {string}")
+    public void should_be_first_in_queue(String username, String bookTitle){
+        Book book = library.getBook(bookTitle);
+        assertEquals(username, book.peekHolderQueue().getUsername());
     }
 }

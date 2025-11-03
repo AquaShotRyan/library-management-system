@@ -45,7 +45,6 @@ Feature: Borrowing, Holding, and Return Operations
     When I check out "The Great Gatsby"
     Then "bob" should NOT be the current borrower of "The Great Gatsby"
 
-
   @a1_scenario
   Scenario: user returns a book
     Given I'm logged in as "alice"
@@ -59,3 +58,46 @@ Feature: Borrowing, Holding, and Return Operations
     Given "alice" borrowed and returned "The Great Gatsby"
     When I login as "bob"
     Then I should see "The Great Gatsby" is "Available"
+
+  @multiple_holds_queue_processing
+  Scenario: user can place a hold on a borrowed/unavailable book
+    Given "charlie" checked out "1984"
+    When "bob" places a hold on "1984"
+    Then "bob" should be the current holder of "1984"
+    And "bob" should NOT be the current borrower of "1984"
+    And "bob" should NOT get a notification that their held book is available
+
+  @multiple_holds_queue_processing
+  Scenario: user is still the current holder after the book was returned and gets a notification
+    Given "alice" checked out "Wuthering Heights"
+    And "charlie" is the current holder of "1984"
+    When "alice" returns "Wuthering Heights"
+    Then "charlie" should be the current holder of "1984"
+    And "charlie" should NOT be the current borrower of "1984"
+    And "charlie" should get a notification that their held book is available
+
+  @multiple_holds_queue_processing
+  Scenario: user is added to the holder queue if they attempt to hold a book that has a current holder
+    Given "alice" is the current holder of "Crime and Punishment"
+    When "bob" places a hold on "Crime and Punishment"
+    Then "bob" should be first in the hold queue of "Crime and Punishment"
+
+  @multiple_holds_queue_processing
+  Scenario: queue advances when the current holder borrows the book
+    Given "charlie" is the current holder of "Hamlet"
+    And "bob" places a hold on "Hamlet"
+    And "alice" places a hold on "Hamlet"
+    When "charlie" checks out "Hamlet"
+    Then "charlie" should be the current borrower of "Hamlet"
+    And "bob" should be the current holder of "Hamlet"
+    And "alice" should be first in the hold queue of "Hamlet"
+    And "alice" should NOT get a notification that their held book is available
+
+  @multiple_holds_queue_processing
+  Scenario: user that isn't the current holder, but is in the queue, cannot borrow the book
+    Given "alice" is the current holder of "The Hobbit"
+    And "charlie" places a hold on "The Hobbit"
+    When "charlie" checks out "The Hobbit"
+    Then "charlie" should NOT be the current borrower of "The Hobbit"
+    And "charlie" should be first in the hold queue of "The Hobbit"
+    And "alice" should get a notification that their held book is available
