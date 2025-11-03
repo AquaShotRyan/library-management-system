@@ -11,7 +11,7 @@ public enum BookData {
     THE_WAY_OF_KINGS("The Ways of Kings", "Brandon Sanderson"),
     A_GAME_OF_THRONES("A Game of Thrones", "George R.R. Martin"),
     THE_HANDMAIDS_TALE("The Handmaid's Tale", "Margaret Atwood"),
-    NINETEEN_EIGHTY_FOUR("Nineteen Eighty-Four", "George Orwell"),
+    NINETEEN_EIGHTY_FOUR("1984", "George Orwell"),
     THE_APOTHECARY_DIARIES_VOL_1("The Apothecary Diaries: Volume 1", "Natsu Hyuga"),
     THE_SCIENCE_OF_BEAUTY("The Science of Beauty", "Michelle Wong"),
     NO_LONGER_HUMAN("No Longer Human", "Osamu Dazai"),
