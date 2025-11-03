@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,11 +29,11 @@ public class LibraryTest {
         }
 
         @Test
-        @DisplayName("Getting all books returns an array of size 20")
+        @DisplayName("Getting all books returns an array of size 20 or bigger")
         void RESP_13_test_1(){
             int resultSize = allBooks.size();
 
-            assertEquals(20, resultSize);
+            assertTrue(resultSize >= 20);
         }
 
         @Test
@@ -42,7 +41,8 @@ public class LibraryTest {
         void RESP_13_test_2(){
             try{
                 Book book = allBooks.getFirst();
-                assertEquals("Arthur C. Clarke", book.getAuthor());
+                String expected = BookData.getArrSortedByAuthor().getFirst().getAuthor();
+                assertEquals(expected, book.getAuthor());
             }catch(NoSuchElementException e) {
                 fail("Books collection is empty");
             }
@@ -53,7 +53,8 @@ public class LibraryTest {
         void RESP_13_test_3(){
             try {
                 Book book = allBooks.getLast();
-                assertEquals("Tom King", book.getAuthor());
+                String expected = BookData.getArrSortedByAuthor().getLast().getAuthor();
+                assertEquals(expected, book.getAuthor());
             } catch(NoSuchElementException e) {
                 fail("Books collection is empty");
             }

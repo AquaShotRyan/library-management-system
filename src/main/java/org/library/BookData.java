@@ -1,5 +1,10 @@
 package org.library;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+
 public enum BookData {
     GREAT_GATSBY("Great Gatsby", "F. Scott FitzGerald"),
     RED_RISING("Red Rising", "Pierce Brown"),
@@ -48,4 +53,15 @@ public enum BookData {
 
     public String getTitle(){ return title; }
     public String getAuthor(){ return author; }
+
+    public static List<BookData> getArrSortedByAuthor(){
+        ArrayList<BookData> result = new ArrayList<>(Arrays.asList(BookData.values()));
+        result.sort(Comparator.comparing(BookData::getAuthor));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s by %s", getTitle(), getAuthor());
+    }
 }
