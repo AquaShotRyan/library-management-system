@@ -32,8 +32,8 @@ public class AuthTest {
         @Test
         @DisplayName("Existing username and password input returns AuthEnum.SUCCESS")
         void RESP_04_test_1(){
-            String username = "squeex";
-            String password = "iambald";
+            String username = UserData.SQUEEX.getUsername();
+            String password = UserData.SQUEEX.getPassword();
 
             AuthEnum result = libraryAuth.authUser(username, password);
             assertEquals(AuthEnum.SUCCESS, result);
@@ -97,8 +97,8 @@ public class AuthTest {
         @Test
         @DisplayName("Retrieve username (session) 'ryan' from library after login")
         void RESP_05_test_1(){
-            String username = "ryan";
-            String password = "password123";
+            String username = UserData.RYAN.getUsername();
+            String password = UserData.RYAN.getPassword();
 
             AuthEnum authResult = library.login(username, password);
 
@@ -108,7 +108,7 @@ public class AuthTest {
         @Test
         @DisplayName("Retrieve null (session) from library after unsuccessful login")
         void RESP_05_test_2(){
-            String username = "ryan";
+            String username = UserData.RYAN.getUsername();
             String password = "wrong_password";
 
             AuthEnum authResult = library.login(username, password);
@@ -124,7 +124,7 @@ public class AuthTest {
         @DisplayName("After logging in and logging out, session should be null")
         void RESP_10_test_1(){
             Library library = new Library();
-            library.login("squeex", "iambald");
+            library.login(UserData.SQUEEX.getUsername(), UserData.SQUEEX.getPassword());
             library.logout();
 
             assertNull(library.getSessionUsername());

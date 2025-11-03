@@ -21,11 +21,11 @@ public class AcceptanceTest {
     @Test
     @DisplayName("A-TEST-01: Multi-User Borrow and Return with Availability Validated")
     void A_TEST_01(){
-        final String USER1_NAME = "ryan";
-        final String USER1_PASS = "password123";
-        final String USER2_NAME = "squeex";
-        final String USER2_PASS = "iambald";
-        final String BOOK1_TITLE = "Great Gatsby";
+        final String USER1_NAME = UserData.RYAN.getUsername();
+        final String USER1_PASS = UserData.RYAN.getPassword();
+        final String USER2_NAME = UserData.SQUEEX.getUsername();
+        final String USER2_PASS = UserData.SQUEEX.getPassword();
+        final String BOOK1_TITLE = BookData.GREAT_GATSBY.getTitle();
 
         LibraryDate dueDate = new LibraryDate(Calendar.getInstance()); // add 14 days from today
         dueDate.addDays(Library.BORROWING_DAY_LENGTH);
@@ -65,7 +65,7 @@ public class AcceptanceTest {
 
         // get index of 'The Great Gatsby'
         List<BookData> orderedBooks = BookData.getArrSortedByAuthor();
-        int gatsbyIndex = IntStream.range(0, orderedBooks.size()).filter(i -> BookData.GREAT_GATSBY.getTitle().equals(orderedBooks.get(i).getTitle())).findFirst().orElse(0);
+        int gatsbyIndex = IntStream.range(0, orderedBooks.size()).filter(i -> greatGatsby.getTitle().equals(orderedBooks.get(i).getTitle())).findFirst().orElse(0);
 
         // --- UC-02: User 1 sees 20 books, including Great Gatsby (verify multiple books are displayed and user is prompted to select a book) ---
         controller.promptBorrowBook(new Scanner("5\n"));
@@ -215,10 +215,10 @@ public class AcceptanceTest {
     @Test
     @DisplayName("A-TEST-02: Initialization and Authentication with Error Handling")
     void A_TEST_02(){
-        final String USER1_NAME = "ryan";
-        final String USER1_PASS = "password123";
-        final String USER2_NAME = "glorp";
-        final String USER3_NAME = "squeex";
+        final String USER1_NAME = UserData.RYAN.getUsername();
+        final String USER1_PASS = UserData.RYAN.getPassword();
+        final String USER2_NAME = UserData.GLORP.getUsername();
+        final String USER3_NAME = UserData.SQUEEX.getUsername();
 
         // ARRANGE: setup library controller
         Library library = new Library();

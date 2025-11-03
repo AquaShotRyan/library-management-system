@@ -23,14 +23,15 @@ public class InitializationTest {
         @Test
         @DisplayName("Check library catalogue for valid book - Great Gatsby.")
         void RESP_01_test_2(){
+            final String bookTitle = BookData.GREAT_GATSBY.getTitle();
 
             InitializeLibrary libraryInit = new InitializeLibrary();
             Catalogue catalogue = libraryInit.initCatalogue();
 
-            Book book = catalogue.getBook("Great Gatsby");
+            Book book = catalogue.getBook(bookTitle);
 
-            String title = book.getTitle();
-            assertEquals("Great Gatsby",title);
+            String result = book.getTitle();
+            assertEquals(bookTitle, result);
         }
     }
 
@@ -56,9 +57,10 @@ public class InitializationTest {
         @Test
         @DisplayName("Check borrowers for valid borrower 'ryan'")
         void RESP_02_test_2(){
-            Borrower ryan = borrowers.getBorrower("ryan");
+            final String username = UserData.RYAN.getUsername();
+            Borrower ryan = borrowers.getBorrower(username);
 
-            assertEquals("ryan", ryan.getUsername());
+            assertEquals(username, ryan.getUsername());
         }
     }
 }

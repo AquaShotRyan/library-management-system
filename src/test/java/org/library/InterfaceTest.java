@@ -54,7 +54,7 @@ public class InterfaceTest {
         @Test
         @DisplayName("Check input 'glorp' was received from the prompt")
         void RESP_03_test_3(){
-            String username = "glorp";
+            String username = UserData.GLORP.getUsername();
             Scanner input = new Scanner(username);
 
             String result = libraryInterface.promptStringInput(input, new PrintWriter(output), "username: ");
@@ -163,7 +163,7 @@ public class InterfaceTest {
         void RESP_06_test_1(){
             output = new StringWriter();
 
-            Book b = library.getBook("No Longer Human");
+            Book b = library.getBook(BookData.NO_LONGER_HUMAN.getTitle());
             libraryInterface.displayAvailableBookNotification(new PrintWriter(output), b);
 
             assertTrue(output.toString().contains("NOTIFICATION: No Longer Human by Osamu Dazai is available!"));
@@ -263,7 +263,7 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-14: display a book")
     public class DisplayBook{
-        private final String BOOK_TITLE = "Great Gatsby";
+        private final String BOOK_TITLE = BookData.GREAT_GATSBY.getTitle();
         private final String TITLE_AUTHOR = "Great Gatsby by F. Scott FitzGerald";
         private final String AVAILABLE = "Available";
         private final String CHECKED_OUT = "Checked Out";
@@ -271,7 +271,7 @@ public class InterfaceTest {
         private final String NO_DUE_DATE = "due: N/A";
         private final LibraryDate START_DATE = new LibraryDate(2025, GregorianCalendar.JUNE, 20);
         private final String DUE_DATE = "due: 2025-07-04";
-        private final String CUR_USER = "squeex";
+        private final String CUR_USER = UserData.SQUEEX.getUsername();
 
         private LibraryInterface libraryInterface;
         private StringWriter output;
@@ -291,7 +291,7 @@ public class InterfaceTest {
         @BeforeEach
         void initLibrary(){
             library = new Library();
-            book = library.getBook("Great Gatsby");
+            book = library.getBook(BOOK_TITLE);
         }
 
         @ParameterizedTest
@@ -421,23 +421,26 @@ public class InterfaceTest {
     @Nested
     @DisplayName("RESP-29: display a book for return")
     public class DisplayBookForReturn{
-        Library library;
+        private final String BOOK1_TITLE = BookData.GREAT_GATSBY.getTitle();
+        private final String BOOK2_TITLE = BookData.THE_HANDMAIDS_TALE.getTitle();
+        private final String USER_NAME = UserData.SQUEEX.getUsername();
+        private Library library;
 
         @BeforeEach
         void initLibrary(){
             library = new Library();
 
-            library.setBorrower("Great Gatsby", "squeex");
-            library.updateDueDateFromDate("Great Gatsby", new LibraryDate(2025, Calendar.OCTOBER, 14));
-            library.setBorrower("The Handmaid's Tale", "squeex");
-            library.updateDueDateFromDate("The Handmaid's Tale", new LibraryDate(2025, Calendar.NOVEMBER, 6));
+            library.setBorrower(BOOK1_TITLE, USER_NAME);
+            library.updateDueDateFromDate(BOOK1_TITLE, new LibraryDate(2025, Calendar.OCTOBER, 14));
+            library.setBorrower(BOOK2_TITLE, USER_NAME);
+            library.updateDueDateFromDate(BOOK2_TITLE, new LibraryDate(2025, Calendar.NOVEMBER, 6));
         }
 
         @ParameterizedTest
         @ValueSource(strings = {"Great Gatsby by F. Scott FitzGerald", "due: 2025-10-28"})
         @DisplayName("Displays title, author, and due date for book 'Great Gatsby'")
         void RESP_29_test_1(String expected){
-            Book book = library.getBook("Great Gatsby");
+            Book book = library.getBook(BOOK1_TITLE);
             libraryInterface.displayReturnBook(new PrintWriter(output), book);
             String result = output.toString();
 
@@ -448,7 +451,7 @@ public class InterfaceTest {
         @ValueSource(strings = {"The Handmaid's Tale by Margaret Atwood", "due: 2025-11-20"})
         @DisplayName("Displays title, author, and due date for book 'The Handmaid's Tale'")
         void RESP_29_test_2(String expected){
-            Book book = library.getBook("The Handmaid's Tale");
+            Book book = library.getBook(BOOK2_TITLE);
             libraryInterface.displayReturnBook(new PrintWriter(output), book);
             String result = output.toString();
 

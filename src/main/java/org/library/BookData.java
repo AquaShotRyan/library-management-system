@@ -61,7 +61,7 @@ public enum BookData {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return String.format("%s by %s", getTitle(), getAuthor());
     }
 }

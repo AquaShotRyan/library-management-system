@@ -7,7 +7,7 @@ public enum AvailabilityEnum {
 
     private final String displayStr;
 
-    private AvailabilityEnum(String displayStr){
+    AvailabilityEnum(String displayStr){
         this.displayStr = displayStr;
     }
 
