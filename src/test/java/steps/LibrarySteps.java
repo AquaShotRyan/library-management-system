@@ -197,4 +197,31 @@ public class LibrarySteps {
         Book book = library.getBook(bookTitle);
         assertEquals(username, book.peekHolderQueue().getUsername());
     }
+
+    @When("I place a hold on {string}")
+    public void I_place_hold_on_book(String bookTitle){
+        user_places_hold_on_book(curUser, bookTitle);
+    }
+
+    @Then("{string} should have {int} books")
+    public void should_have_3_books(String username, int bookCount){
+        int result = library.getBorrowedBooksNum(username);
+        assertEquals(bookCount, result);
+    }
+
+    @Then("I should get offered to place a hold for {string}")
+    public void should_get_offer_to_hold(String bookTitle){
+        TransactionEnum result = library.verifyHolding(bookTitle, curUser);
+        assertNotEquals(TransactionEnum.CAN_BORROW, result);
+        assertNotEquals(TransactionEnum.CHECKED_OUT_BY_USER, result);
+    }
+
+    @Then("I should get {string} that my held book is available")
+    public void I_should_get_notification_held_book_available(String isNotified){
+        boolean result = library.heldBookIsAvailable(curUser);
+        if (isNotified.equals("a notification"))
+            assertTrue(result);
+        else
+            assertFalse(result);
+    }
 }

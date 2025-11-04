@@ -91,6 +91,7 @@ Feature: Borrowing, Holding, and Return Operations
     Then "charlie" should be the current borrower of "Hamlet"
     And "bob" should be the current holder of "Hamlet"
     And "alice" should be first in the hold queue of "Hamlet"
+    And "bob" should NOT get a notification that their held book is available
     And "alice" should NOT get a notification that their held book is available
 
   @multiple_holds_queue_processing
@@ -101,3 +102,50 @@ Feature: Borrowing, Holding, and Return Operations
     Then "charlie" should NOT be the current borrower of "The Hobbit"
     And "charlie" should be first in the hold queue of "The Hobbit"
     And "alice" should get a notification that their held book is available
+
+  @borrowing_limit_and_hold_interactions
+  Scenario: user can't borrow a book if they're at the borrowing limit
+    Given I'm logged in as "bob"
+    And I check out "Lord of the Flies"
+    And I check out "Ulysses"
+    And I check out "The Iliad"
+    When I check out "War and Peace"
+    Then "bob" should NOT be the current borrower of "War and Peace"
+    And "bob" should have 3 books
+    And I should get offered to place a hold for "War and Peace"
+
+  @borrowing_limit_and_hold_interactions
+  Scenario: user can place a hold when they're at the borrowing limit
+    Given I'm logged in as "bob"
+    And I check out "Lord of the Flies"
+    And I check out "Ulysses"
+    And I check out "The Iliad"
+    When I place a hold on "War and Peace"
+    Then "bob" should be the current holder of "War and Peace"
+
+  @borrowing_limit_and_hold_interactions
+  Scenario: user gains borrowing capacity after checking out books and returning one
+    Given I'm logged in as "charlie"
+    And I check out "War and Peace"
+    And I check out "To Kill a Mockingbird"
+    And I check out "Don Quixote"
+    And I return "War and Peace"
+    When I check out "The Great Gatsby"
+    Then "charlie" should be the current borrower of "The Great Gatsby"
+
+  @borrowing_limit_and_hold_interactions
+  Scenario Outline: user gets a notification that their held book is available even though they have 3 books borrowed
+    Given I'm logged in as "alice"
+    And I check out "The Catcher in the Rye"
+    And I check out "Crime and Punishment"
+    And I check out "1984"
+    And "bob" checked out "<returned_book>"
+    And "charlie" checked out "<not_returned_book>"
+    And I place a hold on "<held_book>"
+    When "bob" returns "<returned_book>"
+    Then I should get "<notified>" that my held book is available
+
+    Examples:
+     | returned_book    | not_returned_book | held_book   | notified        |
+     | Animal Farm      | The Odyssey       | Animal Farm | a notification  |
+     | Animal Farm      | The Odyssey       | The Odyssey | no notification |
