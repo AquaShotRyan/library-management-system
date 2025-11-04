@@ -158,7 +158,7 @@ public class LibraryController {
                 }
             }else if(menuInput == MenuEnum.RETURN){
                 // display notification if user has no borrowed books and return to functionality
-                if (library.getSessionBorrowedBooksNum() == 0){
+                if (!library.canReturnBooks(sessionUsername)){
                     notifyNoBorrowedBooks();
                     continue;
                 }

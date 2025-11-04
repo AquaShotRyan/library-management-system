@@ -222,4 +222,8 @@ public class Library {
         Book heldBook = getBook(borrower.getCurHold().getTitle());
         return heldBook.getAvailabilityStatus(username) == AvailabilityEnum.AVAILABLE;
     }
+
+    public boolean canReturnBooks(String username){
+        return getBorrowedBooksNum(username) > 0;
+    }
 }
