@@ -8,15 +8,14 @@ Feature: Borrowing, Holding, and Return Operations
     #TODO: delete 3rd Then
     #TODO: modify 4th Then
     #TODO: delete book_title and book_author columns
-  Scenario Outline: existing user successfully logs in for the firs time and selects to borrow a book
+  Scenario Outline: existing user successfully logs in for the first time and selects to borrow a book
     Given I'm not logged in
     And "<book_title>" has no borrower
     And "<book_title>" has no holders
     When I login as "<username>"
     Then I should be logged in as "<username>"
     And "<username>" should see "<book_title>" is "Available"
-    And "<username>" should see "<book_title>" has author "<book_author>"
-    And "<username>" should see my current book count is 0
+    And "<username>" should see their current book count is 0
     And "<username>" should get no notification about a held being available
 
     Examples:
