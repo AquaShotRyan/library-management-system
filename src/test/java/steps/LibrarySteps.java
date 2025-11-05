@@ -127,6 +127,7 @@ public class LibrarySteps {
         library.setHolder(bookTitle, username);
     }
 
+    @Given("{string} returned {string}")
     @When("{string} returns {string}")
     public void user_returns_book(String username, String bookTitle){
         library.removeBorrower(bookTitle, username);

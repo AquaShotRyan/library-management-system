@@ -54,17 +54,11 @@ Feature: Borrowing, Holding, and Return Operations
     #TODO: delete login
   Scenario: user returns a book
     Given I'm logged in as "alice"
-    And "alice" checks out "The Great Gatsby"
-    When "alice" returns "The Great Gatsby"
+    And "alice" checked out "The Great Gatsby"
+    When "alice" returned "The Great Gatsby"
     Then "alice" should NOT be the current borrower of "The Great Gatsby"
     And "alice" should see "The Great Gatsby" is "Available"
-
-  @a1_scenario
-    #TODO: delete login and "borrowed and returned"
-  Scenario: user2 sees book as 'Available' after user1 returned it
-    Given "alice" borrowed and returned "The Great Gatsby"
-    When I login as "bob"
-    Then "bob" should see "The Great Gatsby" is "Available"
+    And "bob" should see "The Great Gatsby" is "Available"
 
   @multiple_holds_queue_processing
   Scenario: user can place a hold on a borrowed/unavailable book
