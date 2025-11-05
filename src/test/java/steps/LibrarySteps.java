@@ -105,11 +105,13 @@ public class LibrarySteps {
         assertFalse(book.curBorrowerIs(username));
     }
 
-    /* ========= 2. multiple_holds_queue_processing ========= */
     @Given("{string} places a hold on {string}")
     @Given("{string} is the current holder of {string}")
     public void user_places_hold_on_book(String username, String bookTitle){
-        library.setHolder(bookTitle, username);
+        TransactionEnum verifyHolding = library.verifyHolding(bookTitle, username);
+        if (verifyHolding == TransactionEnum.CAN_HOLD){
+            library.setHolder(bookTitle, username);
+        }
     }
 
     @Given("{string} returned {string}")

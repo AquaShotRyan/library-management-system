@@ -64,41 +64,43 @@ Feature: Borrowing, Holding, and Return Operations
   @multiple_holds_queue_processing
   Scenario: user is still the current holder after the book was returned, and gets a notification
     Given "alice" checked out "Wuthering Heights"
-    And "charlie" is the current holder of "1984"
+    And "charlie" is the current holder of "Wuthering Heights"
     When "alice" returns "Wuthering Heights"
-    Then "charlie" should be the current holder of "1984"
-    And "charlie" should NOT be the current borrower of "1984"
+    Then "charlie" should be the current holder of "Wuthering Heights"
+    And "charlie" should NOT be the current borrower of "Wuthering Heights"
     And "charlie" should get a notification that their held book is available
 
   @multiple_holds_queue_processing
   Scenario: user is added to the holder queue if they attempt to hold a book that has a current holder
-    Given "alice" is the current holder of "Crime and Punishment"
+    Given "charlie" checked out "Crime and Punishment"
+    And "alice" is the current holder of "Crime and Punishment"
     When "bob" places a hold on "Crime and Punishment"
     Then "bob" should be first in the hold queue of "Crime and Punishment"
 
   @multiple_holds_queue_processing
   Scenario: queue advances when the current holder borrows the book
-    Given "charlie" is the current holder of "Hamlet"
+    Given "charlie" checked out "Hamlet"
     And "bob" places a hold on "Hamlet"
     And "alice" places a hold on "Hamlet"
-    When "charlie" checks out "Hamlet"
-    Then "charlie" should be the current borrower of "Hamlet"
-    And "bob" should be the current holder of "Hamlet"
-    And "alice" should be first in the hold queue of "Hamlet"
-    And "bob" should NOT get a notification that their held book is available
+    And "charlie" returns "Hamlet"
+    And "charlie" places a hold on "Hamlet"
+    When "bob" checks out "Hamlet"
+    Then "bob" should be the current borrower of "Hamlet"
+    And "alice" should be the current holder of "Hamlet"
+    And "charlie" should be first in the hold queue of "Hamlet"
     And "alice" should NOT get a notification that their held book is available
+    And "charlie" should NOT get a notification that their held book is available
 
   @multiple_holds_queue_processing
   Scenario: user that isn't the current holder, but is in the queue, cannot borrow the book
-    Given "alice" is the current holder of "The Hobbit"
+    Given "bob" checked out "The Hobbit"
+    And "alice" is the current holder of "The Hobbit"
     And "charlie" places a hold on "The Hobbit"
     When "charlie" checks out "The Hobbit"
     Then "charlie" should NOT be the current borrower of "The Hobbit"
     And "charlie" should be first in the hold queue of "The Hobbit"
-    And "alice" should get a notification that their held book is available
 
   @borrowing_limit_and_hold_interactions
-    #TODO: delete login
   Scenario: user can't borrow a book if they're at the borrowing limit
     Given "bob" checked out "Lord of the Flies"
     And "bob" checked out "Ulysses"
@@ -109,16 +111,15 @@ Feature: Borrowing, Holding, and Return Operations
     And "bob" should get offered to place a hold for "War and Peace"
 
   @borrowing_limit_and_hold_interactions
-    #TODO: delete login
   Scenario: user can place a hold when they're at the borrowing limit
-    Given "bob" checked out "Lord of the Flies"
+    Given "charlie" checked out "War and Peace"
+    And "bob" checked out "Lord of the Flies"
     And "bob" checked out "Ulysses"
     And "bob" checked out "The Iliad"
     When "bob" places a hold on "War and Peace"
     Then "bob" should be the current holder of "War and Peace"
 
   @borrowing_limit_and_hold_interactions
-    #TODO: delete login
   Scenario: user gains borrowing capacity after checking out books and returning one
     Given "charlie" checked out "War and Peace"
     And "charlie" checked out "To Kill a Mockingbird"
@@ -128,7 +129,6 @@ Feature: Borrowing, Holding, and Return Operations
     Then "charlie" should be the current borrower of "The Great Gatsby"
 
   @borrowing_limit_and_hold_interactions
-    #TODO: delete login
   Scenario Outline: user gets a notification that their held book is available even though they have 3 books borrowed
     Given "alice" checked out "The Catcher in the Rye"
     And "alice" checked out "Crime and Punishment"
