@@ -7,6 +7,7 @@ public enum TransactionEnum {
     ON_HOLD_BY_USER,
     AT_BORROWING_LIMIT,
     AT_HOLD_LIMIT,
+    BOOK_IS_AVAILABLE,
     CAN_BORROW,
     CAN_HOLD
 }

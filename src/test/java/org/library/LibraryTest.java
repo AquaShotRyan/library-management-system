@@ -1,5 +1,6 @@
 package org.library;
 
+import io.cucumber.java.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -599,6 +600,13 @@ public class LibraryTest {
 
         Book book;
 
+        void setAtBookLimit(String username){
+            LibraryDate today = new LibraryDate(Calendar.getInstance());
+            library.checkoutBook(BookData.WAR_AND_PEACE.getTitle(), username, today);
+            library.checkoutBook(BookData.BERSERK_DELUXE_VOL_1.getTitle(), username, today);
+            library.checkoutBook(BookData.THE_APOTHECARY_DIARIES_VOL_1.getTitle(), username, today);
+        }
+
         @BeforeEach
         void initBook(){
             book = library.getBook(BOOK1_TITLE);
@@ -633,7 +641,7 @@ public class LibraryTest {
         }
 
         @Test
-        @DisplayName("Returns TransactionEnum.CAN_HOLD if the book has a hold, the user has no holds, and the user isn't a holder of the book")
+        @DisplayName("Returns TransactionEnum.CAN_HOLD if the book has a hold and the user has no holds")
         void RESP_16_test_4(){
             library.setHolder(BOOK1_TITLE, USER2_NAME);
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
@@ -642,8 +650,21 @@ public class LibraryTest {
         }
 
         @Test
-        @DisplayName("Returns TransactionEnum.CAN_HOLD if the user has no holds and book has no holds")
+        @DisplayName("Returns TransactionEnum.IS_AVAILABLE if the user is at the 3-book limit and the book is available")
         void RESP_16_test_5(){
+            setAtBookLimit(USER1_NAME);
+
+            TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
+
+            assertEquals(TransactionEnum.BOOK_IS_AVAILABLE, result);
+        }
+
+        @Test
+        @DisplayName("Returns TransactionEnum.CAN_HOLD if the user is at the 3-book limit, the book is being borrowed, and the user has no holds")
+        void RESP_16_test_6(){
+            setAtBookLimit(USER1_NAME);
+            library.setBorrower(BOOK1_TITLE, USER1_NAME);
+
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.CAN_HOLD, result);
