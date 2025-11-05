@@ -10,18 +10,18 @@ Feature: Borrowing, Holding, and Return Operations
     #TODO: delete book_title and book_author columns
   Scenario Outline: existing user successfully logs in for the first time and selects to borrow a book
     Given I'm not logged in
-    And "<book_title>" has no borrower
-    And "<book_title>" has no holders
+    And "The Great Gatsby" has no borrower
+    And "The Great Gatsby" has no holders
     When I login as "<username>"
     Then I should be logged in as "<username>"
-    And "<username>" should see "<book_title>" is "Available"
+    And "<username>" should see "The Great Gatsby" is "Available"
     And "<username>" should see their current book count is 0
     And "<username>" should get no notification about a held being available
 
     Examples:
-      | username | book_title       | book_author         |
-      | alice    | The Great Gatsby | F. Scott FitzGerald |
-      | bob      | The Great Gatsby | F. Scott FitzGerald |
+      | username |
+      | alice    |
+      | bob      |
 
   @a1_scenario
     #TODO: don't login
