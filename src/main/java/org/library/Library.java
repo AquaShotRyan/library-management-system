@@ -1,6 +1,7 @@
 package org.library;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Library {
@@ -225,5 +226,11 @@ public class Library {
 
     public boolean canReturnBooks(String username){
         return getBorrowedBooksNum(username) > 0;
+    }
+
+    public void checkoutBook(String bookTitle, String username, LibraryDate today){
+        setBorrower(bookTitle, username);
+        updateDueDateFromDate(bookTitle, today);
+        addBorrowTransaction(new BorrowTransaction(bookTitle, username, today.toString()));
     }
 }

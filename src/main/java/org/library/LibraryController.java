@@ -141,10 +141,8 @@ public class LibraryController {
                         continue;
 
                     // borrow the book and record the transaction
-                    library.setBorrower(selectedBookTitle, sessionUsername);
                     LibraryDate today = new LibraryDate(Calendar.getInstance());
-                    library.updateDueDateFromDate(selectedBookTitle, today);
-                    library.addBorrowTransaction(new BorrowTransaction(selectedBookTitle, sessionUsername, today.toString()));
+                    library.checkoutBook(selectedBookTitle, sessionUsername, today);
 
                     confirmBookCheckOut(input, selectedBookTitle);
                 }else if(borrowValidation == TransactionEnum.CHECKED_OUT_BY_USER){

@@ -57,9 +57,7 @@ public class LibrarySteps {
     public void check_out_book(String username, String bookTitle){
         TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);
         if (borrowValidation == TransactionEnum.CAN_BORROW){
-            library.setBorrower(bookTitle, username);
-            library.updateDueDateFromDate(bookTitle, today);
-            library.addBorrowTransaction(new BorrowTransaction(bookTitle, username, today.toString()));
+            library.checkoutBook(bookTitle, username, today);
         }
     }
 
