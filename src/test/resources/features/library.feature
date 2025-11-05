@@ -24,9 +24,8 @@ Feature: Borrowing, Holding, and Return Operations
       | bob      |
 
   @a1_scenario
-    #TODO: don't login
+    #TODO: add bob sees book as unavailable
   Scenario: user borrows a book
-    Given I'm logged in as "alice"
     When "alice" checks out "The Great Gatsby"
     Then "alice" should be the current borrower of "The Great Gatsby"
     And "alice" should see "The Great Gatsby" is "Checked Out"
@@ -43,22 +42,25 @@ Feature: Borrowing, Holding, and Return Operations
     And "The Great Gatsby" is due on "2025-10-04"
 
   @a1_scenario
-    #TODO: delete login
   Scenario: book is unavailable to user2 after user1 checked it out
     Given "alice" checked out "The Great Gatsby"
-    And I'm logged in as "bob"
     When "bob" checks out "The Great Gatsby"
     Then "bob" should NOT be the current borrower of "The Great Gatsby"
 
   @a1_scenario
-    #TODO: delete login
+    #TODO: add "then bob should see book as available"
   Scenario: user returns a book
-    Given I'm logged in as "alice"
-    And "alice" checked out "The Great Gatsby"
-    When "alice" returned "The Great Gatsby"
+    Given "alice" checked out "The Great Gatsby"
+    When "alice" returns "The Great Gatsby"
     Then "alice" should NOT be the current borrower of "The Great Gatsby"
     And "alice" should see "The Great Gatsby" is "Available"
-    And "bob" should see "The Great Gatsby" is "Available"
+
+  @a1_scenario
+    #TODO: delete login and "borrowed and returned"
+  Scenario: user2 sees book as 'Available' after user1 returned it
+    Given "alice" borrowed and returned "The Great Gatsby"
+    When I login as "bob"
+    Then "bob" should see "The Great Gatsby" is "Available"
 
   @multiple_holds_queue_processing
   Scenario: user can place a hold on a borrowed/unavailable book
@@ -107,8 +109,7 @@ Feature: Borrowing, Holding, and Return Operations
   @borrowing_limit_and_hold_interactions
     #TODO: delete login
   Scenario: user can't borrow a book if they're at the borrowing limit
-    Given I'm logged in as "bob"
-    And "bob" checked out "Lord of the Flies"
+    Given "bob" checked out "Lord of the Flies"
     And "bob" checked out "Ulysses"
     And "bob" checked out "The Iliad"
     When "bob" checks out "War and Peace"
@@ -119,8 +120,7 @@ Feature: Borrowing, Holding, and Return Operations
   @borrowing_limit_and_hold_interactions
     #TODO: delete login
   Scenario: user can place a hold when they're at the borrowing limit
-    Given I'm logged in as "bob"
-    And "bob" checked out "Lord of the Flies"
+    Given "bob" checked out "Lord of the Flies"
     And "bob" checked out "Ulysses"
     And "bob" checked out "The Iliad"
     When "bob" places a hold on "War and Peace"
@@ -129,8 +129,7 @@ Feature: Borrowing, Holding, and Return Operations
   @borrowing_limit_and_hold_interactions
     #TODO: delete login
   Scenario: user gains borrowing capacity after checking out books and returning one
-    Given I'm logged in as "charlie"
-    And "charlie" checked out "War and Peace"
+    Given "charlie" checked out "War and Peace"
     And "charlie" checked out "To Kill a Mockingbird"
     And "charlie" checked out "Don Quixote"
     And "charlie" returns "War and Peace"
@@ -140,8 +139,7 @@ Feature: Borrowing, Holding, and Return Operations
   @borrowing_limit_and_hold_interactions
     #TODO: delete login
   Scenario Outline: user gets a notification that their held book is available even though they have 3 books borrowed
-    Given I'm logged in as "alice"
-    And "alice" checked out "The Catcher in the Rye"
+    Given "alice" checked out "The Catcher in the Rye"
     And "alice" checked out "Crime and Punishment"
     And "alice" checked out "1984"
     And "bob" checked out "<returned_book>"

@@ -79,7 +79,7 @@ public class LibrarySteps {
     }
 
     @Then("{string} should see {string} is {string}")
-    public void book_is_available(String username, String bookTitle, String availabilityStr){
+    public void see_availability_status(String username, String bookTitle, String availabilityStr){
         AvailabilityEnum expected = AvailabilityEnum.getAvailablilityEnumFromStr(availabilityStr);
         if (expected == null)
             fail(String.format("'%s' is an invalid status", availabilityStr));
