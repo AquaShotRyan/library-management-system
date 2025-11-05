@@ -188,15 +188,17 @@ public class Library {
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
 
+        if (borrower.hasHold() && !borrower.getCurHold().getTitle().equals(book.getTitle())){
+            return TransactionEnum.AT_HOLD_LIMIT;
+        }
         if (book.hasHolder()){
             boolean isCurUser = book.getCurHolder().getUsername().equals(username);
             boolean isInQueue = book.containsHolder(borrower);
             if (isCurUser || isInQueue) return TransactionEnum.ON_HOLD_BY_USER;
         }
-        if (borrower.hasHold()){
-            if (!borrower.getCurHold().getTitle().equals(book.getTitle()))
-                return TransactionEnum.AT_HOLD_LIMIT;
-        }
+        if (!book.hasBorrower() && !book.hasHolder())
+            return TransactionEnum.BOOK_IS_AVAILABLE;
+
         return TransactionEnum.CAN_HOLD;
     }
 
