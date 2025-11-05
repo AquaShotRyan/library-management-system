@@ -1,66 +1,57 @@
 Feature: Borrowing, Holding, and Return Operations
-
+#TODO: reword background given
   Background:
     Given the library is initialized with books and users
     And today is 2025-09-20
 
   @a1_scenario
-    #TODO: delete 3rd Then
-    #TODO: modify 4th Then
-    #TODO: delete book_title and book_author columns
   Scenario Outline: existing user successfully logs in for the first time and selects to borrow a book
     Given I'm not logged in
-    And "The Great Gatsby" has no borrower
-    And "The Great Gatsby" has no holders
-    When I login as "<username>"
-    Then I should be logged in as "<username>"
-    And "<username>" should see "The Great Gatsby" is "Available"
-    And "<username>" should see their current book count is 0
-    And "<username>" should get no notification about a held being available
+
+    When I login as "<username1>" and select to borrow a book
+    Then I should be logged in as "<username1>"
+    And "<username1>" should see "<book_title>" is "Available"
+    And "<username1>" should see their current book count is 0
+    And "<username1>" should get no notification about a held book being available
+
+    When "<username1>" checks out "<book_title>"
+    Then "<username1>" should be the current borrower of "<book_title>"
+    And "<username1>" should see "<book_title>" is "Checked Out"
+    And "<book_title>" is due on "2025-10-04"
+
+    When I log out
+    Then I should be logged out
+    And "<username1>" should be the current borrower of "<book_title>"
+    And "<book_title>" is due on "2025-10-04"
+
+    When I login as "<username2>" and select to borrow a book
+    Then I should be logged in as "<username2>"
+    And "<username2>" should see "<book_title>" is "Checked Out"
+    And "<username2>" should see their current book count is 0
+    And "<username2>" should get no notification about a held book being available
+
+    When I log out
+    Then I should be logged out
+
+    When I login as "<username1>"
+    And "<username1>" returns "<book_title>"
+    Then I should be logged in as "<username1>"
+    And "<username1>" should NOT be the current borrower of "<book_title>"
+    And "<username1>" should see "<book_title>" is "Available"
+
+    When I log out
+    Then I should be logged out
+
+    When I login as "<username2>" and select to borrow a book
+    Then "<username2>" should see "<book_title>" is "Available"
+    And "<username2>" should see their current book count is 0
+
+    When I log out
+    Then I should be logged out
 
     Examples:
-      | username |
-      | alice    |
-      | bob      |
-
-  @a1_scenario
-    #TODO: add bob sees book as unavailable
-  Scenario: user borrows a book
-    When "alice" checks out "The Great Gatsby"
-    Then "alice" should be the current borrower of "The Great Gatsby"
-    And "alice" should see "The Great Gatsby" is "Checked Out"
-    And "The Great Gatsby" is due on "2025-10-04"
-
-  @a1_scenario
-    #TODO: modify to login again and check state
-  Scenario: user logs out after borrowing a book
-    Given I'm logged in as "alice"
-    And "alice" checks out "The Great Gatsby"
-    When I log out
-    Then I am logged out
-    And "alice" should be the current borrower of "The Great Gatsby"
-    And "The Great Gatsby" is due on "2025-10-04"
-
-  @a1_scenario
-  Scenario: book is unavailable to user2 after user1 checked it out
-    Given "alice" checked out "The Great Gatsby"
-    When "bob" checks out "The Great Gatsby"
-    Then "bob" should NOT be the current borrower of "The Great Gatsby"
-
-  @a1_scenario
-    #TODO: add "then bob should see book as available"
-  Scenario: user returns a book
-    Given "alice" checked out "The Great Gatsby"
-    When "alice" returns "The Great Gatsby"
-    Then "alice" should NOT be the current borrower of "The Great Gatsby"
-    And "alice" should see "The Great Gatsby" is "Available"
-
-  @a1_scenario
-    #TODO: delete login and "borrowed and returned"
-  Scenario: user2 sees book as 'Available' after user1 returned it
-    Given "alice" borrowed and returned "The Great Gatsby"
-    When I login as "bob"
-    Then "bob" should see "The Great Gatsby" is "Available"
+      | username1 | username2 | book_title       |
+      | alice     | bob       | The Great Gatsby |
 
   @multiple_holds_queue_processing
   Scenario: user can place a hold on a borrowed/unavailable book
@@ -71,7 +62,7 @@ Feature: Borrowing, Holding, and Return Operations
     And "bob" should NOT get a notification that their held book is available
 
   @multiple_holds_queue_processing
-  Scenario: user is still the current holder after the book was returned and gets a notification
+  Scenario: user is still the current holder after the book was returned, and gets a notification
     Given "alice" checked out "Wuthering Heights"
     And "charlie" is the current holder of "1984"
     When "alice" returns "Wuthering Heights"

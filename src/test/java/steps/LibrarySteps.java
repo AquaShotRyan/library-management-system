@@ -31,22 +31,6 @@ public class LibrarySteps {
         library.logout();
     }
 
-    @Given("{string} has no borrower")
-    public void remove_book_borrower(String bookTitle){
-        Book book = library.getBook(bookTitle);
-        book.removeCurBorrower();
-    }
-
-    @Given("{string} has no holders")
-    public void remove_book_holders(String bookTitle){
-        Book book = library.getBook(bookTitle);
-        book.removeCurHolder();
-        User holderInQueue = book.popHolder();
-        while (holderInQueue != null){
-            holderInQueue = book.popHolder();
-        }
-    }
-
     @Given("{string} checked out {string}")
     @When("{string} checks out {string}")
     public void check_out_book(String username, String bookTitle){
@@ -64,6 +48,7 @@ public class LibrarySteps {
 
     @Given("I'm logged in as {string}")
     @When("I login as {string}")
+    @When("I login as {string} and select to borrow a book")
     public void login_as(String username){
         for (UserData user: UserData.values()){
             if (username.equals(user.getUsername())) {
@@ -90,7 +75,7 @@ public class LibrarySteps {
         assertEquals(expected, result);
     }
 
-    @Then("{string} should get no notification about a held being available")
+    @Then("{string} should get no notification about a held book being available")
     public void no_held_book_notification(String username){
         assertFalse(library.heldBookIsAvailable(username));
     }
@@ -102,7 +87,7 @@ public class LibrarySteps {
         assertTrue(library.borrowerHasBook(bookTitle, username));
     }
 
-    @Then("I am logged out")
+    @Then("I should be logged out")
     public void user_is_logged_out(){
         assertNull(library.getSessionUsername());
     }
