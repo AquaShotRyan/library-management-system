@@ -5,16 +5,19 @@ Feature: Borrowing, Holding, and Return Operations
     And today is 2025-09-20
 
   @a1_scenario
+    #TODO: delete 3rd Then
+    #TODO: modify 4th Then
+    #TODO: delete book_title and book_author columns
   Scenario Outline: existing user successfully logs in for the firs time and selects to borrow a book
     Given I'm not logged in
     And "<book_title>" has no borrower
     And "<book_title>" has no holders
     When I login as "<username>"
     Then I should be logged in as "<username>"
-    And I should see "<book_title>" is "Available"
-    And I should see "<book_title>" has author "<book_author>"
-    And I should see my current book count is 0
-    And I should get no notification about a held being available
+    And "<username>" should see "<book_title>" is "Available"
+    And "<username>" should see "<book_title>" has author "<book_author>"
+    And "<username>" should see my current book count is 0
+    And "<username>" should get no notification about a held being available
 
     Examples:
       | username | book_title       | book_author         |
@@ -22,42 +25,47 @@ Feature: Borrowing, Holding, and Return Operations
       | bob      | The Great Gatsby | F. Scott FitzGerald |
 
   @a1_scenario
+    #TODO: don't login
   Scenario: user borrows a book
     Given I'm logged in as "alice"
-    When I check out "The Great Gatsby"
+    When "alice" checks out "The Great Gatsby"
     Then "alice" should be the current borrower of "The Great Gatsby"
-    And I should see "The Great Gatsby" is "Checked Out"
+    And "alice" should see "The Great Gatsby" is "Checked Out"
     And "The Great Gatsby" is due on "2025-10-04"
 
   @a1_scenario
+    #TODO: modify to login again and check state
   Scenario: user logs out after borrowing a book
     Given I'm logged in as "alice"
-    And I check out "The Great Gatsby"
+    And "alice" checks out "The Great Gatsby"
     When I log out
     Then I am logged out
     And "alice" should be the current borrower of "The Great Gatsby"
     And "The Great Gatsby" is due on "2025-10-04"
 
   @a1_scenario
+    #TODO: delete login
   Scenario: book is unavailable to user2 after user1 checked it out
     Given "alice" checked out "The Great Gatsby"
     And I'm logged in as "bob"
-    When I check out "The Great Gatsby"
+    When "bob" checks out "The Great Gatsby"
     Then "bob" should NOT be the current borrower of "The Great Gatsby"
 
   @a1_scenario
+    #TODO: delete login
   Scenario: user returns a book
     Given I'm logged in as "alice"
-    And I check out "The Great Gatsby"
-    When I return "The Great Gatsby"
+    And "alice" checks out "The Great Gatsby"
+    When "alice" returns "The Great Gatsby"
     Then "alice" should NOT be the current borrower of "The Great Gatsby"
-    And I should see "The Great Gatsby" is "Available"
+    And "alice" should see "The Great Gatsby" is "Available"
 
   @a1_scenario
+    #TODO: delete login and "borrowed and returned"
   Scenario: user2 sees book as 'Available' after user1 returned it
     Given "alice" borrowed and returned "The Great Gatsby"
     When I login as "bob"
-    Then I should see "The Great Gatsby" is "Available"
+    Then "bob" should see "The Great Gatsby" is "Available"
 
   @multiple_holds_queue_processing
   Scenario: user can place a hold on a borrowed/unavailable book
@@ -104,46 +112,50 @@ Feature: Borrowing, Holding, and Return Operations
     And "alice" should get a notification that their held book is available
 
   @borrowing_limit_and_hold_interactions
+    #TODO: delete login
   Scenario: user can't borrow a book if they're at the borrowing limit
     Given I'm logged in as "bob"
-    And I check out "Lord of the Flies"
-    And I check out "Ulysses"
-    And I check out "The Iliad"
-    When I check out "War and Peace"
+    And "bob" checked out "Lord of the Flies"
+    And "bob" checked out "Ulysses"
+    And "bob" checked out "The Iliad"
+    When "bob" checks out "War and Peace"
     Then "bob" should NOT be the current borrower of "War and Peace"
     And "bob" should have 3 books
-    And I should get offered to place a hold for "War and Peace"
+    And "bob" should get offered to place a hold for "War and Peace"
 
   @borrowing_limit_and_hold_interactions
+    #TODO: delete login
   Scenario: user can place a hold when they're at the borrowing limit
     Given I'm logged in as "bob"
-    And I check out "Lord of the Flies"
-    And I check out "Ulysses"
-    And I check out "The Iliad"
-    When I place a hold on "War and Peace"
+    And "bob" checked out "Lord of the Flies"
+    And "bob" checked out "Ulysses"
+    And "bob" checked out "The Iliad"
+    When "bob" places a hold on "War and Peace"
     Then "bob" should be the current holder of "War and Peace"
 
   @borrowing_limit_and_hold_interactions
+    #TODO: delete login
   Scenario: user gains borrowing capacity after checking out books and returning one
     Given I'm logged in as "charlie"
-    And I check out "War and Peace"
-    And I check out "To Kill a Mockingbird"
-    And I check out "Don Quixote"
-    And I return "War and Peace"
-    When I check out "The Great Gatsby"
+    And "charlie" checked out "War and Peace"
+    And "charlie" checked out "To Kill a Mockingbird"
+    And "charlie" checked out "Don Quixote"
+    And "charlie" returns "War and Peace"
+    When "charlie" checks out "The Great Gatsby"
     Then "charlie" should be the current borrower of "The Great Gatsby"
 
   @borrowing_limit_and_hold_interactions
+    #TODO: delete login
   Scenario Outline: user gets a notification that their held book is available even though they have 3 books borrowed
     Given I'm logged in as "alice"
-    And I check out "The Catcher in the Rye"
-    And I check out "Crime and Punishment"
-    And I check out "1984"
+    And "alice" checked out "The Catcher in the Rye"
+    And "alice" checked out "Crime and Punishment"
+    And "alice" checked out "1984"
     And "bob" checked out "<returned_book>"
     And "charlie" checked out "<not_returned_book>"
-    And I place a hold on "<held_book>"
+    And "alice" places a hold on "<held_book>"
     When "bob" returns "<returned_book>"
-    Then I should get "<notified>" that my held book is available
+    Then "alice" should get "<notified>" that my held book is available
 
     Examples:
      | returned_book    | not_returned_book | held_book   | notified        |
