@@ -355,7 +355,7 @@ public class LibraryTest {
         void RESP_22_test_1(){
             library.setBorrower(BOOK_TITLE, USER1_NAME);
 
-            assertEquals("squeex", book.getCurBorrower().getUsername());
+            assertEquals(USER1_NAME, book.getCurBorrower().getUsername());
         }
 
         @Test
@@ -748,7 +748,7 @@ public class LibraryTest {
 
     @Nested
     @DisplayName("RESP-33: check if a user's on-hold book is available")
-    public class NestedTestClass{
+    public class NotifyOnHoldBookIsAvailable{
         private final String USER1_NAME = UserData.RYAN.getUsername();
         private final String BOOK_TITLE = BookData.ERAGON.getTitle();
 
