@@ -23,6 +23,9 @@ public class Library {
         sessionBorrower = null;
     }
 
+    /* ============ Main Methods ============ */
+
+    /* ------- authentication ------- */
     public AuthEnum login(String username, String password){
         AuthEnum authResult = auth.authUser(username, password);
 
@@ -41,88 +44,11 @@ public class Library {
         return sessionBorrower.getUsername();
     }
 
-    public Book getBook(String title){
-        return catalogue.getBook(title);
-    }
-
-    public List<Book> getAllBooks(){
-        List<Book> books = catalogue.getAllBooks();
-        books.sort(new BookAuthorComparator());
-        return books;
-    }
-
-    public void addBookToBorrower(Book book, String username){
-        Borrower borrower = borrowers.getBorrower(username);
-        if (borrower.hasBook(book.getTitle()))
-            throw new IllegalStateException(String.format("%s already has %s checked out", username, book.getTitle()));
-        borrower.addBorrowedBook(book);
-    }
-
-    public BorrowedBooks getBorrowedBooks(String username){
-        Borrower borrower = borrowers.getBorrower(username);
-        return borrower.getBorrowedBooks();
-    }
-
-    public int getBorrowedBooksNum(String username){
-        Borrower borrower = borrowers.getBorrower(username);
-        return borrower.getBorrowedBooksNum();
-    }
-
-    public List<Book> getBorrowedBooksSorted(String username){
-        Borrower borrower = borrowers.getBorrower(username);
-        List<Book> borrowedBooksList = borrower.getBorrowedBooksList();
-        borrowedBooksList.sort(new BookAuthorComparator());
-        return borrowedBooksList;
-    }
-
-    public void setDueDateFromDate(String bookTitle, LibraryDate date){
-        date.addDays(BORROWING_DAY_LENGTH);
-
-        Book book = getBook(bookTitle);
-        book.setDueDate(date);
-    }
-
-    public void removeBookFromBorrower(String bookTitle, String username){
-        Borrower borrower = borrowers.getBorrower(username);
-
-        if (!borrower.hasBook(bookTitle)){
-            throw new UnsupportedOperationException(String.format("Book '%s' is not checked out by %s", bookTitle, username));
-        }
-
-        borrower.removeBorrowedBook(bookTitle);
-    }
-
-    public void addToHoldQueue(String bookTitle, String username){
-        Book book = getBook(bookTitle);
-        User user = borrowers.getBorrower(username);
-        if (book.containsHolder(user)){
-            throw new IllegalStateException(String.format("%s already has a hold or is in the queue of %s", username, bookTitle));
-        }
-        book.addHolder(user);
-    }
-
-    public void placeHold(String bookTitle, String username){
-        Book book = getBook(bookTitle);
-        Borrower borrower = borrowers.getBorrower(username);
-
-        if (book.hasHolder()){
-            book.addHolder(borrower);
-        }else{
-            book.setCurHolder(borrower);
-
-            // delete from queue if user was first in queue
-            User firstInQueue = book.peekHolderQueue();
-            if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
-                book.popHolder();
-            }
-        }
-        borrower.setCurHold(book.getBookDetails());
-    }
-
-    public Book getHeldBook(String username){
-        Borrower borrower = borrowers.getBorrower(username);
-
-        return getBook(borrower.getCurHold().getTitle());
+    /* ------- borrowing ------- */
+    public void checkoutBook(String bookTitle, String username, LibraryDate today){
+        setBorrower(bookTitle, username);
+        setDueDateFromDate(bookTitle, today);
+        addBorrowTransaction(new BorrowTransaction(bookTitle, username, today.toString()));
     }
 
     public void setBorrower(String bookTitle, String username){
@@ -146,19 +72,18 @@ public class Library {
         borrower.addBorrowedBook(book);
     }
 
-    public void removeBorrower(String bookTitle, String username){
-        Book book = getBook(bookTitle);
-        if (!book.hasBorrower())
-            throw new NullPointerException("No borrower to remove");
-        if (!book.getCurBorrower().getUsername().equals(username))
-            throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
-        book.removeCurBorrower();
-        book.setDueDate(null);
-        borrowers.getBorrower(username).removeBorrowedBook(bookTitle);
+    public void addBookToBorrower(Book book, String username){
+        Borrower borrower = borrowers.getBorrower(username);
+        if (borrower.hasBook(book.getTitle()))
+            throw new IllegalStateException(String.format("%s already has %s checked out", username, book.getTitle()));
+        borrower.addBorrowedBook(book);
     }
 
-    public boolean borrowerHasBook(String bookTitle, String username){
-        return borrowers.getBorrower(username).hasBook(bookTitle);
+    public void setDueDateFromDate(String bookTitle, LibraryDate date){
+        date.addDays(BORROWING_DAY_LENGTH);
+
+        Book book = getBook(bookTitle);
+        book.setDueDate(date);
     }
 
     public TransactionEnum verifyBorrowing(String bookTitle, String username){
@@ -179,6 +104,34 @@ public class Library {
         return result;
     }
 
+    /* ------- holding ------- */
+    public void placeHold(String bookTitle, String username){
+        Book book = getBook(bookTitle);
+        Borrower borrower = borrowers.getBorrower(username);
+
+        if (book.hasHolder()){
+            book.addHolder(borrower);
+        }else{
+            book.setCurHolder(borrower);
+
+            // delete from queue if user was first in queue
+            User firstInQueue = book.peekHolderQueue();
+            if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
+                book.popHolder();
+            }
+        }
+        borrower.setCurHold(book.getBookDetails());
+    }
+
+    public void addToHoldQueue(String bookTitle, String username){
+        Book book = getBook(bookTitle);
+        User user = borrowers.getBorrower(username);
+        if (book.containsHolder(user)){
+            throw new IllegalStateException(String.format("%s already has a hold or is in the queue of %s", username, bookTitle));
+        }
+        book.addHolder(user);
+    }
+
     public TransactionEnum verifyHolding(String bookTitle, String username){
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
@@ -197,6 +150,30 @@ public class Library {
         return TransactionEnum.CAN_HOLD;
     }
 
+    /* ------- returning ------- */
+
+    public void removeBorrower(String bookTitle, String username){
+        Book book = getBook(bookTitle);
+        if (!book.hasBorrower())
+            throw new NullPointerException("No borrower to remove");
+        if (!book.getCurBorrower().getUsername().equals(username))
+            throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
+        book.removeCurBorrower();
+        book.setDueDate(null);
+        borrowers.getBorrower(username).removeBorrowedBook(bookTitle);
+    }
+
+    public void removeBookFromBorrower(String bookTitle, String username){
+        Borrower borrower = borrowers.getBorrower(username);
+
+        if (!borrower.hasBook(bookTitle)){
+            throw new UnsupportedOperationException(String.format("Book '%s' is not checked out by %s", bookTitle, username));
+        }
+
+        borrower.removeBorrowedBook(bookTitle);
+    }
+
+    /* ============  Logging Transactions ============  */
     public void addBorrowTransaction(BorrowTransaction b){
         borrowTransactions.add(b);
     }
@@ -209,8 +186,47 @@ public class Library {
         return borrowTransactions.size();
     }
 
+    /* ============  Getters / Setters ============  */
+    public Book getBook(String title){
+        return catalogue.getBook(title);
+    }
+
+    public List<Book> getAllBooks(){
+        List<Book> books = catalogue.getAllBooks();
+        books.sort(new BookAuthorComparator());
+        return books;
+    }
+
+    public BorrowedBooks getBorrowedBooks(String username){
+        Borrower borrower = borrowers.getBorrower(username);
+        return borrower.getBorrowedBooks();
+    }
+
+    public int getBorrowedBooksNum(String username){
+        Borrower borrower = borrowers.getBorrower(username);
+        return borrower.getBorrowedBooksNum();
+    }
+
+    public List<Book> getBorrowedBooksSorted(String username){
+        Borrower borrower = borrowers.getBorrower(username);
+        List<Book> borrowedBooksList = borrower.getBorrowedBooksList();
+        borrowedBooksList.sort(new BookAuthorComparator());
+        return borrowedBooksList;
+    }
+
+    public Book getHeldBook(String username){
+        Borrower borrower = borrowers.getBorrower(username);
+
+        return getBook(borrower.getCurHold().getTitle());
+    }
+
     public int getBorrowersSize(){
         return borrowers.getBorrowersSize();
+    }
+
+    /* ============ Booleans ============ */
+    public boolean borrowerHasBook(String bookTitle, String username){
+        return borrowers.getBorrower(username).hasBook(bookTitle);
     }
 
     public boolean heldBookIsAvailable(String username){
@@ -223,11 +239,5 @@ public class Library {
 
     public boolean canReturnBooks(String username){
         return getBorrowedBooksNum(username) > 0;
-    }
-
-    public void checkoutBook(String bookTitle, String username, LibraryDate today){
-        setBorrower(bookTitle, username);
-        setDueDateFromDate(bookTitle, today);
-        addBorrowTransaction(new BorrowTransaction(bookTitle, username, today.toString()));
     }
 }
