@@ -58,15 +58,11 @@ public class Library {
         // set user as borrower
         book.setCurBorrower(borrower);
 
-        // remove borrower as current holder if he was current holder
+        // remove borrower as current holder if they're the current holder
         if (book.curHolderIs(username)){
-            book.removeCurHolder();
+            book.popHolder();
         }
-        // the first in queue gets popped and set as current holder
-        User nextHolder = book.peekHolderQueue();
-        if (nextHolder != null){
-            placeHold(book.getTitle(), nextHolder.getUsername());
-        }
+
         // add book to Borrower's checked-out books
         addBookToBorrower(book, username);
     }
@@ -108,17 +104,7 @@ public class Library {
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
 
-        if (book.hasHolder()){
-            book.addHolder(borrower);
-        }else{
-            book.setCurHolder(borrower);
-
-            // delete from queue if user was first in queue
-            User firstInQueue = book.peekHolderQueue();
-            if (firstInQueue != null && firstInQueue.getUsername().equals(username)){
-                book.popHolder();
-            }
-        }
+        book.addHolder(borrower);
         borrower.setCurHold(book.getBookDetails());
     }
 
@@ -150,12 +136,11 @@ public class Library {
     }
 
     /* ------- returning ------- */
-
     public void removeBorrower(String bookTitle, String username){
         Book book = getBook(bookTitle);
         if (!book.hasBorrower())
             throw new NullPointerException("No borrower to remove");
-        if (!book.getCurBorrower().getUsername().equals(username))
+        if (!book.getCurBorrower().getUsername().equals(username)) // TODO: replace with curBorrowerIs
             throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
         book.removeCurBorrower();
         book.setDueDate(null);

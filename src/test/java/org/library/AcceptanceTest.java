@@ -93,7 +93,7 @@ public class AcceptanceTest {
                 () -> assertEquals(1, library.getBorrowedBooksNum(library.getSessionUsername())), // borrower has 1 borrowed book
                 () -> assertEquals(USER1_NAME, greatGatsby.getCurBorrower().getUsername()), // current borrower of book is user 1
                 () -> assertNull(greatGatsby.getCurHolder()), // book has no holders
-                () -> assertNull(greatGatsby.peekHolderQueue()),
+                () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertEquals(greatGatsby, library.getBorrowedBooks(USER1_NAME).getBookByTitle(BOOK1_TITLE)), // borrower has Great Gatsby in his borrowed books collection
                 () -> assertEquals(dueDate, greatGatsby.getDueDate()) // due date of Great Gatsby is 14 days from today
         );
@@ -148,7 +148,7 @@ public class AcceptanceTest {
                 () -> assertEquals(1, library.getBorrowedBooksNum(library.getSessionUsername())),
                 () -> assertEquals(USER1_NAME, greatGatsby.getCurBorrower().getUsername()),
                 () -> assertNull(greatGatsby.getCurHolder()),
-                () -> assertNull(greatGatsby.peekHolderQueue()),
+                () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertEquals(greatGatsby, library.getBorrowedBooks(USER1_NAME).getBookByTitle(BOOK1_TITLE)),
                 () -> assertEquals(dueDate, greatGatsby.getDueDate())
         );
@@ -173,7 +173,7 @@ public class AcceptanceTest {
                 () -> assertNull(greatGatsby.getCurBorrower()),
                 () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertNull(greatGatsby.getDueDate()),
-                () -> assertNull(greatGatsby.peekHolderQueue()),
+                () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertNull(library.getBorrowedBooks(USER1_NAME).getBookByTitle(BOOK1_TITLE))
         );
 

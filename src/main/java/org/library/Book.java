@@ -1,5 +1,6 @@
 package org.library;
 
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
 
@@ -7,14 +8,12 @@ public class Book {
     private BookDetails bookDetails;
     private LibraryDate dueDate;
     private Queue<User> holdQueue;
-    private User curHolder;
     private User curBorrower;
 
     Book(String title, String author){
         bookDetails = new BookDetails(title, author);
         dueDate = null;
         holdQueue = new LinkedList<>();
-        curHolder = null;
         curBorrower = null;
     }
 
@@ -26,20 +25,12 @@ public class Book {
         return holdQueue.poll();
     }
 
-    public User removeCurHolder(){
-        User holder = curHolder;
-        curHolder = null;
-        return holder;
-    }
-
     public User removeCurBorrower(){
-        User borrower = curBorrower;
-        curBorrower = null;
-        return borrower;
+        return curBorrower = null;
     }
 
     public AvailabilityEnum getAvailabilityStatus(String username){
-        if (hasHolder() && !hasBorrower() && curHolder.getUsername().equals(username))
+        if (hasHolder() && !hasBorrower() && getCurHolder().getUsername().equals(username))
             return AvailabilityEnum.AVAILABLE;
         if (hasBorrower())
             return AvailabilityEnum.CHECKED_OUT;
@@ -57,10 +48,7 @@ public class Book {
     }
 
     public int getHoldersNum(){ return holdQueue.size(); }
-    public User peekHolderQueue(){
-        return holdQueue.peek();
-    }
-    public User getCurHolder(){ return curHolder; }
+    public User getCurHolder(){ return holdQueue.peek(); }
     public BookDetails getBookDetails(){ return bookDetails; }
     public User getCurBorrower(){ return curBorrower; }
     public String getDueDateStr(){
@@ -70,20 +58,19 @@ public class Book {
 
     // setters
     public void setDueDate(LibraryDate date){ dueDate = date; }
-    public void setCurHolder(User holder){ curHolder = holder; }
     public void setCurBorrower(User borrower){ curBorrower = borrower; }
 
     // booleans
     public boolean containsHolder(User user){ return holdQueue.contains(user); }
     public boolean hasBorrower(){ return curBorrower != null; }
-    public boolean hasHolder(){ return curHolder != null; }
+    public boolean hasHolder(){ return !holdQueue.isEmpty(); }
     public boolean curBorrowerIs(String username){
         if (!hasBorrower()) return false;
         return username.equals(curBorrower.getUsername());
     }
     public boolean curHolderIs(String username){
         if (!hasHolder()) return false;
-        return username.equals(curHolder.getUsername());
+        return username.equals(getCurHolder().getUsername());
     }
 
     @Override
