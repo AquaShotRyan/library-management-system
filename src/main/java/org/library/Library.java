@@ -69,7 +69,7 @@ public class Library {
             placeHold(book.getTitle(), nextHolder.getUsername());
         }
         // add book to Borrower's checked-out books
-        borrower.addBorrowedBook(book);
+        addBookToBorrower(book, username);
     }
 
     public void addBookToBorrower(Book book, String username){
