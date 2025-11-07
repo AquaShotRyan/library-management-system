@@ -75,7 +75,7 @@ public class Library {
         return borrowedBooksList;
     }
 
-    public void updateDueDateFromDate(String bookTitle, LibraryDate date){
+    public void setDueDateFromDate(String bookTitle, LibraryDate date){
         date.addDays(BORROWING_DAY_LENGTH);
 
         Book book = getBook(bookTitle);
@@ -227,7 +227,7 @@ public class Library {
 
     public void checkoutBook(String bookTitle, String username, LibraryDate today){
         setBorrower(bookTitle, username);
-        updateDueDateFromDate(bookTitle, today);
+        setDueDateFromDate(bookTitle, today);
         addBorrowTransaction(new BorrowTransaction(bookTitle, username, today.toString()));
     }
 }

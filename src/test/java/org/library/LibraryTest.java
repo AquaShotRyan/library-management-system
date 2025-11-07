@@ -137,7 +137,7 @@ public class LibraryTest {
             LibraryDate today = new LibraryDate(2025, Calendar.SEPTEMBER, 5);
             LibraryDate expectedDate = new LibraryDate(2025, Calendar.SEPTEMBER, 19);
 
-            library.updateDueDateFromDate(book.getTitle(), today);
+            library.setDueDateFromDate(book.getTitle(), today);
 
             LibraryDate dueDate = book.getDueDate();
 
@@ -150,7 +150,7 @@ public class LibraryTest {
             LibraryDate today = new LibraryDate(2025, Calendar.OCTOBER, 24);
             LibraryDate expectedDate = new LibraryDate(2025, Calendar.NOVEMBER, 7);
 
-            library.updateDueDateFromDate(book.getTitle(), today);
+            library.setDueDateFromDate(book.getTitle(), today);
 
             LibraryDate dueDate = book.getDueDate();
 
@@ -163,7 +163,7 @@ public class LibraryTest {
             LibraryDate  today = new LibraryDate (2025, Calendar.DECEMBER, 29);
             LibraryDate  expectedDate = new LibraryDate(2026, Calendar.JANUARY, 12);
 
-            library.updateDueDateFromDate(book.getTitle(), today);
+            library.setDueDateFromDate(book.getTitle(), today);
 
             LibraryDate  dueDate = book.getDueDate();
 
@@ -414,7 +414,7 @@ public class LibraryTest {
         @DisplayName("Check book's curBorrower is null")
         void RESP_26_test_1(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
-            library.updateDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
+            library.setDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
             library.removeBorrower(BOOK_TITLE, USER_NAME);
 
             assertNull(book.getCurBorrower());
@@ -424,7 +424,7 @@ public class LibraryTest {
         @DisplayName("Check book's dueDate is null")
         void RESP_26_test_2(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
-            library.updateDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
+            library.setDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
             library.removeBorrower(BOOK_TITLE, USER_NAME);
 
             assertNull(book.getDueDate());

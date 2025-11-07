@@ -331,7 +331,7 @@ public class InterfaceTest {
         @DisplayName("Display book where the user is the current borrower")
         void RESP_14_test_4(String expected)    {
             library.setBorrower(BOOK_TITLE, CUR_USER);
-            library.updateDueDateFromDate(BOOK_TITLE, START_DATE);
+            library.setDueDateFromDate(BOOK_TITLE, START_DATE);
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();
@@ -343,7 +343,7 @@ public class InterfaceTest {
         @DisplayName("Display book with a current borrower (not user)")
         void RESP_14_test_5(String expected){
             library.setBorrower(BOOK_TITLE, "ryan");
-            library.updateDueDateFromDate(BOOK_TITLE, START_DATE);
+            library.setDueDateFromDate(BOOK_TITLE, START_DATE);
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();
@@ -431,9 +431,9 @@ public class InterfaceTest {
             library = new Library();
 
             library.setBorrower(BOOK1_TITLE, USER_NAME);
-            library.updateDueDateFromDate(BOOK1_TITLE, new LibraryDate(2025, Calendar.OCTOBER, 14));
+            library.setDueDateFromDate(BOOK1_TITLE, new LibraryDate(2025, Calendar.OCTOBER, 14));
             library.setBorrower(BOOK2_TITLE, USER_NAME);
-            library.updateDueDateFromDate(BOOK2_TITLE, new LibraryDate(2025, Calendar.NOVEMBER, 6));
+            library.setDueDateFromDate(BOOK2_TITLE, new LibraryDate(2025, Calendar.NOVEMBER, 6));
         }
 
         @ParameterizedTest

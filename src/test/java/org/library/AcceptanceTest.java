@@ -87,7 +87,7 @@ public class AcceptanceTest {
         // update system to reflect borrowing Great Gatsby
         library.setBorrower("Great Gatsby", USER1_NAME);
         LibraryDate today = new LibraryDate(Calendar.getInstance());
-        library.updateDueDateFromDate(BOOK1_TITLE, today);
+        library.setDueDateFromDate(BOOK1_TITLE, today);
         library.addBorrowTransaction(new BorrowTransaction(BOOK1_TITLE, USER1_NAME, today.toString()));
         assertAll("UC-02: confirm library state after borrow",
                 () -> assertEquals(1, library.getBorrowedBooksNum(library.getSessionUsername())), // borrower has 1 borrowed book
