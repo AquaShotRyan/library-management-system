@@ -308,7 +308,7 @@ public class InterfaceTest {
         @ValueSource(strings = {TITLE_AUTHOR, AVAILABLE, NO_DUE_DATE})
         @DisplayName("Display book with no borrower, but on hold by user")
         void RESP_14_test_2(String expected){
-            library.setHolder(BOOK_TITLE, CUR_USER);
+            library.placeHold(BOOK_TITLE, CUR_USER);
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();
@@ -319,7 +319,7 @@ public class InterfaceTest {
         @ValueSource(strings = {TITLE_AUTHOR, ON_HOLD, NO_DUE_DATE})
         @DisplayName("Display book with no borrower, but on hold by another borrower")
         void RESP_14_test_3(String expected){
-            library.setHolder(BOOK_TITLE, "ryan");
+            library.placeHold(BOOK_TITLE, "ryan");
             libraryInterface.displayBook(new PrintWriter(output), book, CUR_USER);
 
             String result = output.toString();

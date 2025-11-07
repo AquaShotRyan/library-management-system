@@ -100,7 +100,7 @@ public class LibraryController {
         }else if(holdValidation == TransactionEnum.AT_HOLD_LIMIT){
             ui.displayMsg(output, "You already have another book on hold");
         }else{
-            library.setHolder(bookTitle, username);
+            library.placeHold(bookTitle, username);
             ui.promptAcknowledgement(input, output, "You have placed a hold on "+bookTitle);
         }
     }

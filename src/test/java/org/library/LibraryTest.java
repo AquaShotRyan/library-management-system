@@ -1,6 +1,5 @@
 package org.library;
 
-import io.cucumber.java.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -292,7 +291,7 @@ public class LibraryTest {
         @Test
         @DisplayName("'ryan' is the current holder after placing a hold with no holder nor borrowers in queue")
         void RESP_21_test_1(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             assertEquals(USER1_NAME, book.getCurHolder().getUsername());
         }
@@ -302,7 +301,7 @@ public class LibraryTest {
         void RESP_21_test_2(){
             library.addToHoldQueue(BOOK_TITLE, USER1_NAME);
             library.addToHoldQueue(BOOK_TITLE, USER2_NAME);
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             assertNotEquals(USER1_NAME, book.peekHolderQueue().getUsername());
         }
@@ -312,7 +311,7 @@ public class LibraryTest {
         void RESP_21_test_3(){
             library.addToHoldQueue(BOOK_TITLE, USER1_NAME);
             library.addToHoldQueue(BOOK_TITLE, USER2_NAME);
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             assertEquals(USER1_NAME, book.getCurHolder().getUsername());
         }
@@ -320,7 +319,7 @@ public class LibraryTest {
         @Test
         @DisplayName("'The Handmaid's Tale' is stored in 'ryan' after placing hold")
         void RESP_21_test_4(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             assertEquals(BOOK_TITLE, library.getHeldBook(USER1_NAME).getTitle());
         }
@@ -328,8 +327,8 @@ public class LibraryTest {
         @Test
         @DisplayName("'ryan' should be in the queue if the book already has a current holder")
         void RESP_21_test_5(){
-            library.setHolder(BOOK_TITLE, USER2_NAME);
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER2_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             User result = book.peekHolderQueue();
             if (result == null) fail("No user in queue");
@@ -363,7 +362,7 @@ public class LibraryTest {
         @DisplayName("Check 'glorp' is the current holder after 'squeex' (previous holder) becomes the borrower")
         void RESP_22_test_2(){
             library.addToHoldQueue(BOOK_TITLE, USER2_NAME);
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
             library.setBorrower(BOOK_TITLE, USER1_NAME);
 
             assertEquals(USER2_NAME, book.getCurHolder().getUsername());
@@ -381,7 +380,7 @@ public class LibraryTest {
         @Test
         @DisplayName("If 'squeex' was the only holder, then there should be no current holder after borrowing")
         void RESP_22_test_4(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
             library.setBorrower(BOOK_TITLE, USER1_NAME);
             BorrowedBooks borrowedBooks = library.getBorrowedBooks(USER1_NAME);
 
@@ -391,8 +390,8 @@ public class LibraryTest {
         @Test
         @DisplayName("Check the queue is empty after 'squeex' was the current holder (and became the current borrower) and 'glorp' became the current holder")
         void RESP_22_test_5(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
-            library.setHolder(BOOK_TITLE, USER2_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER2_NAME);
             library.setBorrower(BOOK_TITLE, USER1_NAME);
             assertNull(library.getBook(BOOK_TITLE).peekHolderQueue());
         }
@@ -488,7 +487,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns AvailabilityEnum.ON_HOLD if there's a current holder (not current user) but no current borrower")
         void RESP_11_test_3(){
-            library.setHolder(BOOK_TITLE, USER2_NAME);
+            library.placeHold(BOOK_TITLE, USER2_NAME);
 
             AvailabilityEnum result = book.getAvailabilityStatus(USER1_NAME);
             assertEquals(AvailabilityEnum.ON_HOLD, result);
@@ -497,7 +496,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns AvailabilityEnum.AVAILABLE if there's no current borrower but current holder is current user")
         void RESP_11_test_4(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
 
             AvailabilityEnum result = book.getAvailabilityStatus(USER1_NAME);
             assertEquals(AvailabilityEnum.AVAILABLE, result);
@@ -534,7 +533,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.ON_HOLD_BY_ANOTHER if the book has no borrower, but is on hold by another borrower")
         void RESP_15_test_2(){
-            library.setHolder(BOOK1_TITLE, USER2_NAME);
+            library.placeHold(BOOK1_TITLE, USER2_NAME);
             TransactionEnum result = library.verifyBorrowing(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.ON_HOLD_BY_ANOTHER, result);
@@ -571,7 +570,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.CAN_BORROW if the book has no borrower, the holder is the user, and user is not at the limit")
         void RESP_15_test_6(){
-            library.setHolder(BOOK1_TITLE, USER1_NAME);
+            library.placeHold(BOOK1_TITLE, USER1_NAME);
             TransactionEnum result = library.verifyBorrowing(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.CAN_BORROW, result);
@@ -583,7 +582,7 @@ public class LibraryTest {
             library.setBorrower(BOOK2_TITLE, USER1_NAME);
             library.setBorrower(BOOK3_TITLE, USER1_NAME);
             library.setBorrower(BOOK4_TITLE, USER1_NAME);
-            library.setHolder(BOOK1_TITLE, USER1_NAME);
+            library.placeHold(BOOK1_TITLE, USER1_NAME);
             TransactionEnum result = library.verifyBorrowing(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.AT_BORROWING_LIMIT, result);
@@ -615,7 +614,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.ON_HOLD_BY_USER if the user is the current holder")
         void RESP_16_test_1(){
-            library.setHolder(BOOK1_TITLE, USER1_NAME);
+            library.placeHold(BOOK1_TITLE, USER1_NAME);
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.ON_HOLD_BY_USER, result);
@@ -624,7 +623,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.ON_HOLD_BY_USER if the book has another holder, but user is in the hold queue")
         void RESP_16_test_2(){
-            library.setHolder(BOOK1_TITLE, USER2_NAME);
+            library.placeHold(BOOK1_TITLE, USER2_NAME);
             library.addToHoldQueue(BOOK1_TITLE, USER1_NAME);
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
 
@@ -634,7 +633,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.AT_HOLD_LIMIT if the user is holding another book")
         void RESP_16_test_3(){
-            library.setHolder(BOOK2_TITLE, USER1_NAME);
+            library.placeHold(BOOK2_TITLE, USER1_NAME);
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.AT_HOLD_LIMIT, result);
@@ -643,7 +642,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns TransactionEnum.CAN_HOLD if the book has a hold and the user has no holds")
         void RESP_16_test_4(){
-            library.setHolder(BOOK1_TITLE, USER2_NAME);
+            library.placeHold(BOOK1_TITLE, USER2_NAME);
             TransactionEnum result = library.verifyHolding(BOOK1_TITLE, USER1_NAME);
 
             assertEquals(TransactionEnum.CAN_HOLD, result);
@@ -756,7 +755,7 @@ public class LibraryTest {
         @Test
         @DisplayName("Returns true if user is the current holder of a book and there's no current borrower")
         void RESP_33_test_1(){
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
             assertTrue(library.heldBookIsAvailable(USER1_NAME));
         }
 
@@ -764,7 +763,7 @@ public class LibraryTest {
         @DisplayName("Returns false if the user is the current holder of a book and there's a current borrower")
         void RESP_33_test_2(){
             library.setBorrower(BOOK_TITLE, UserData.SQUEEX.getUsername());
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, USER1_NAME);
             assertFalse(library.heldBookIsAvailable(USER1_NAME));
         }
 
@@ -772,8 +771,8 @@ public class LibraryTest {
         @DisplayName("Returns false if the user isn't the current holder, but is in the queue")
         void RESP_33_test_3(){
             library.setBorrower(BOOK_TITLE, UserData.SQUEEX.getUsername());
-            library.setHolder(BOOK_TITLE, UserData.GLORP.getUsername());
-            library.setHolder(BOOK_TITLE, USER1_NAME);
+            library.placeHold(BOOK_TITLE, UserData.GLORP.getUsername());
+            library.placeHold(BOOK_TITLE, USER1_NAME);
             assertFalse(library.heldBookIsAvailable(USER1_NAME));
         }
 

@@ -1,7 +1,6 @@
 package org.library;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class Library {
@@ -106,7 +105,7 @@ public class Library {
         book.addHolder(user);
     }
 
-    public void setHolder(String bookTitle, String username){
+    public void placeHold(String bookTitle, String username){
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
 
@@ -145,7 +144,7 @@ public class Library {
         // the first in queue gets popped and set as current holder
         User nextHolder = book.peekHolderQueue();
         if (nextHolder != null){
-            setHolder(book.getTitle(), nextHolder.getUsername());
+            placeHold(book.getTitle(), nextHolder.getUsername());
         }
         // add book to Borrower's checked-out books
         borrower.addBorrowedBook(book);

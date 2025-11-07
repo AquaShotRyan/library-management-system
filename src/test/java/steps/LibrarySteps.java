@@ -110,7 +110,7 @@ public class LibrarySteps {
     public void user_places_hold_on_book(String username, String bookTitle){
         TransactionEnum verifyHolding = library.verifyHolding(bookTitle, username);
         if (verifyHolding == TransactionEnum.CAN_HOLD){
-            library.setHolder(bookTitle, username);
+            library.placeHold(bookTitle, username);
         }
     }
 
