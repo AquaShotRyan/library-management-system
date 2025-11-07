@@ -73,13 +73,17 @@ public class Book {
     public void setCurHolder(User holder){ curHolder = holder; }
     public void setCurBorrower(User borrower){ curBorrower = borrower; }
 
-    // simple booleans
+    // booleans
     public boolean containsHolder(User user){ return holdQueue.contains(user); }
     public boolean hasBorrower(){ return curBorrower != null; }
     public boolean hasHolder(){ return curHolder != null; }
     public boolean curBorrowerIs(String username){
         if (!hasBorrower()) return false;
         return username.equals(curBorrower.getUsername());
+    }
+    public boolean curHolderIs(String username){
+        if (!hasHolder()) return false;
+        return username.equals(curHolder.getUsername());
     }
 
     @Override

@@ -58,9 +58,8 @@ public class Library {
         // set user as borrower
         book.setCurBorrower(borrower);
 
-        // update curHolder
         // remove borrower as current holder if he was current holder
-        if (book.hasHolder() && book.getCurHolder().equals(borrower)){
+        if (book.curHolderIs(username)){
             book.removeCurHolder();
         }
         // the first in queue gets popped and set as current holder
