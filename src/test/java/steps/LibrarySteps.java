@@ -136,12 +136,6 @@ public class LibrarySteps {
         assertFalse(library.heldBookIsAvailable(username));
     }
 
-    @Then("{string} should be first in the hold queue of {string}")
-    public void should_be_first_in_queue(String username, String bookTitle){
-        Book book = library.getBook(bookTitle);
-        assertEquals(username, book.peekHolderQueue().getUsername());
-    }
-
     @Then("{string} should have {int} books")
     @Then("{string} should see their current book count is {int}")
     public void check_book_count(String username, int bookCount){
@@ -163,5 +157,11 @@ public class LibrarySteps {
             assertTrue(result);
         else
             assertFalse(result);
+    }
+
+    @Then("there should be no holders for {string}")
+    public void no_holder_for_book(String bookTitle){
+        Book book = library.getBook(bookTitle);
+        assertEquals(0, book.getHoldersNum());
     }
 }
