@@ -39,11 +39,11 @@ public class LibraryController {
     }
 
     public void displayNumberOfBorrowedBooks(){
-        ui.displayNumberOfBorrowedBooks(output, library.getSessionBorrowedBooksNum());
+        ui.displayNumberOfBorrowedBooks(output, library.getBorrowedBooksNum(library.getSessionUsername()));
     }
 
     public void notifyNoBorrowedBooks(){
-        int borrowedBooksNum = library.getSessionBorrowedBooksNum();
+        int borrowedBooksNum = library.getBorrowedBooksNum(library.getSessionUsername());
         if (borrowedBooksNum == 0)
             ui.notifyNoBorrowedBooks(output);
     }

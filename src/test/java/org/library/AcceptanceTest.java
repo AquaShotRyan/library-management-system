@@ -90,7 +90,7 @@ public class AcceptanceTest {
         library.updateDueDateFromDate(BOOK1_TITLE, today);
         library.addBorrowTransaction(new BorrowTransaction(BOOK1_TITLE, USER1_NAME, today.toString()));
         assertAll("UC-02: confirm library state after borrow",
-                () -> assertEquals(1, library.getSessionBorrowedBooksNum()), // borrower has 1 borrowed book
+                () -> assertEquals(1, library.getBorrowedBooksNum(library.getSessionUsername())), // borrower has 1 borrowed book
                 () -> assertEquals(USER1_NAME, greatGatsby.getCurBorrower().getUsername()), // current borrower of book is user 1
                 () -> assertNull(greatGatsby.getCurHolder()), // book has no holders
                 () -> assertNull(greatGatsby.peekHolderQueue()),
@@ -145,7 +145,7 @@ public class AcceptanceTest {
         controller.promptLogin(new Scanner(enterUsernamePassword));
         assertAll("UC-01: check user is in session and library state did not change",
                 () -> assertEquals(USER1_NAME, library.getSessionUsername()),
-                () -> assertEquals(1, library.getSessionBorrowedBooksNum()),
+                () -> assertEquals(1, library.getBorrowedBooksNum(library.getSessionUsername())),
                 () -> assertEquals(USER1_NAME, greatGatsby.getCurBorrower().getUsername()),
                 () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertNull(greatGatsby.peekHolderQueue()),
@@ -169,7 +169,7 @@ public class AcceptanceTest {
         // update system to reflect returning Great Gatsby
         library.removeBorrower(BOOK1_TITLE, USER1_NAME);
         assertAll("UC-03: confirm library state after returning Great Gatsby",
-                () -> assertEquals(0, library.getSessionBorrowedBooksNum()),
+                () -> assertEquals(0, library.getBorrowedBooksNum(library.getSessionUsername())),
                 () -> assertNull(greatGatsby.getCurBorrower()),
                 () -> assertNull(greatGatsby.getCurHolder()),
                 () -> assertNull(greatGatsby.getDueDate()),

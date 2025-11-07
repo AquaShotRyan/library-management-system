@@ -75,10 +75,6 @@ public class Library {
         return borrowedBooksList;
     }
 
-    public int getSessionBorrowedBooksNum(){
-        return getBorrowedBooksNum(getSessionUsername());
-    }
-
     public void updateDueDateFromDate(String bookTitle, LibraryDate date){
         date.addDays(BORROWING_DAY_LENGTH);
 
