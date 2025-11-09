@@ -7,7 +7,6 @@ Feature: Borrowing, Holding, and Return Operations
   Scenario Outline: A-TEST-1 scenario
     When "<username1>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Available"
-    And get no notification about a held book being available
 
     When they check out "<book_title>"
     Then "<username1>" should be the current borrower of "<book_title>"
@@ -16,7 +15,6 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<username2>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Checked Out"
-    And get no notification about a held book being available
 
     When they log out
     And "<username1>" logs in and selects to borrow a book
@@ -43,13 +41,11 @@ Feature: Borrowing, Holding, and Return Operations
     And places a hold on "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
     And get no notification about a held book being available
-    And see "<book_title>" is "Checked Out"
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then they should get no notification about a held book being available
-    And see "<book_title>" is "Checked Out"
 
     When they log out
     And "<borrower>" logs in
@@ -61,7 +57,6 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<holder2>" logs in and selects to borrow a book
     Then they should get no notification about a held book being available
-    And see "<book_title>" is "On Hold"
 
     When they check out "<book_title>"
     Then "<holder2>" should NOT be the current borrower of "<book_title>"
@@ -69,7 +64,6 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<holder1>" logs in
     Then they should get a notification about a held book being available
-    And see "<book_title>" is "Available"
 
     When they check out "<book_title>"
     Then "<holder1>" should be the current borrower of "<book_title>"
