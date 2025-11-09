@@ -40,12 +40,6 @@ public class LibrarySteps {
         }
     }
 
-    @Given("{string} borrowed and returned {string}")
-    public void borrow_and_return_book(String username, String bookTitle){
-        check_out_book(username, bookTitle);
-        library.removeBorrower(bookTitle, username);
-    }
-
     @Given("{string} is logged in")
     @When("{string} logs in( and selects to borrow a book)")
     public void login_as(String username){
@@ -130,11 +124,6 @@ public class LibrarySteps {
         assertTrue(library.heldBookIsAvailable(username));
     }
 
-    @Then("{string} should NOT get a notification that their held book is available")
-    public void should_not_get_available_notification(String username){
-        assertFalse(library.heldBookIsAvailable(username));
-    }
-
     @Then("{string} should have {int} books")
     @Then("{string} should see their current book count is {int}")
     public void check_book_count(String username, int bookCount){
@@ -147,21 +136,6 @@ public class LibrarySteps {
         TransactionEnum result = library.verifyHolding(bookTitle, username);
         assertNotEquals(TransactionEnum.CAN_BORROW, result);
         assertNotEquals(TransactionEnum.CHECKED_OUT_BY_USER, result);
-    }
-
-    @Then("{string} should get {string} that my held book is available")
-    public void I_should_get_notification_held_book_available(String username, String isNotified){
-        boolean result = library.heldBookIsAvailable(username);
-        if (isNotified.equals("a notification"))
-            assertTrue(result);
-        else
-            assertFalse(result);
-    }
-
-    @Then("there should be no holders for {string}")
-    public void no_holder_for_book(String bookTitle){
-        Book book = library.getBook(bookTitle);
-        assertEquals(0, book.getHoldersNum());
     }
 
     @When("they check out {string}")
