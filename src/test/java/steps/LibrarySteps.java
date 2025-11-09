@@ -31,15 +31,6 @@ public class LibrarySteps {
         library.logout();
     }
 
-    @Given("{string} checked out {string}")
-    @When("{string} checks out {string}")
-    public void check_out_book(String username, String bookTitle){
-        TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);
-        if (borrowValidation == TransactionEnum.CAN_BORROW){
-            library.checkoutBook(bookTitle, username, today);
-        }
-    }
-
     @Given("{string} is logged in")
     @When("{string} logs in( and selects to borrow a book)")
     public void login_as(String username){
@@ -54,23 +45,6 @@ public class LibrarySteps {
     public void is_logged_in_as(String username){
         String result = library.getSessionUsername();
         assertEquals(username, result);
-    }
-
-    @Then("{string} should see {string} is {string}")
-    public void see_availability_status(String username, String bookTitle, String availabilityStr){
-        AvailabilityEnum expected = AvailabilityEnum.getAvailablilityEnumFromStr(availabilityStr);
-        if (expected == null)
-            fail(String.format("'%s' is an invalid status", availabilityStr));
-
-        Book book = library.getBook(bookTitle);
-        AvailabilityEnum result = book.getAvailabilityStatus(username);
-
-        assertEquals(expected, result);
-    }
-
-    @Then("{string} should get no notification about a held book being available")
-    public void no_held_book_notification(String username){
-        assertFalse(library.heldBookIsAvailable(username));
     }
 
     @Then("{string} should be the current borrower of {string}")
@@ -98,38 +72,12 @@ public class LibrarySteps {
         assertFalse(book.curBorrowerIs(username));
     }
 
-    @Given("{string} places a hold on {string}")
-    @Given("{string} is the current holder of {string}")
-    public void user_places_hold_on_book(String username, String bookTitle){
-        TransactionEnum verifyHolding = library.verifyHolding(bookTitle, username);
-        if (verifyHolding == TransactionEnum.CAN_HOLD){
-            library.placeHold(bookTitle, username);
-        }
-    }
-
-    @Given("{string} returned {string}")
-    @When("{string} returns {string}")
-    public void user_returns_book(String username, String bookTitle){
-        library.removeBorrower(bookTitle, username);
-    }
-
     @Then("{string} should be the current holder of {string}")
     public void user_should_be_holder_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertEquals(username, book.getCurHolder().getUsername());
     }
 
-    @Then("{string} should get a notification that their held book is available")
-    public void should_get_available_notification(String username){
-        assertTrue(library.heldBookIsAvailable(username));
-    }
-
-    @Then("{string} should have {int} books")
-    @Then("{string} should see their current book count is {int}")
-    public void check_book_count(String username, int bookCount){
-        int result = library.getBorrowedBooksNum(username);
-        assertEquals(bookCount, result);
-    }
 
     @Then("{string} should get offered to place a hold for {string}")
     public void should_get_offer_to_hold(String username, String bookTitle){
@@ -140,36 +88,63 @@ public class LibrarySteps {
 
     @When("they check out {string}")
     public void they_check_out_book(String bookTitle){
-        check_out_book(library.getSessionUsername(), bookTitle);
+        String username = library.getSessionUsername();
+        TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);
+        if (borrowValidation == TransactionEnum.CAN_BORROW){
+            library.checkoutBook(bookTitle, username, today);
+        }
     }
 
     @When("they return {string}")
     public void they_return_book(String bookTitle){
-        user_returns_book(library.getSessionUsername(), bookTitle);
+        String username = library.getSessionUsername();
+        library.removeBorrower(bookTitle, username);
     }
 
     @When("(they )place(s) a hold on {string}")
     public void places_a_hold_on_book(String bookTitle){
-        user_places_hold_on_book(library.getSessionUsername(), bookTitle);
+        String username = library.getSessionUsername();
+        TransactionEnum verifyHolding = library.verifyHolding(bookTitle, username);
+        if (verifyHolding == TransactionEnum.CAN_HOLD){
+            library.placeHold(bookTitle, username);
+        }
     }
 
     @Then("(they )(should )see {string} is {string}")
     public void should_see_book_availability(String bookTitle, String availability){
-        see_availability_status(library.getSessionUsername(), bookTitle, availability);
+        String username = library.getSessionUsername();
+        AvailabilityEnum expected = AvailabilityEnum.getAvailablilityEnumFromStr(availability);
+        if (expected == null)
+            fail(String.format("'%s' is an invalid status", availability));
+
+        Book book = library.getBook(bookTitle);
+        AvailabilityEnum result = book.getAvailabilityStatus(username);
+
+        assertEquals(expected, result);
+    }
+
+    @Then("{string} should have {int} books")
+    public void check_book_count(String username, int bookCount){
+        int result = library.getBorrowedBooksNum(username);
+        assertEquals(bookCount, result);
     }
 
     @Then("(they )(should )see their current book count is {int}")
     public void should_see_book_count(int bookCount){
-        check_book_count(library.getSessionUsername(), bookCount);
+        String username = library.getSessionUsername();
+        int result = library.getBorrowedBooksNum(username);
+        assertEquals(bookCount, result);
     }
 
     @Then("(they )(should )get no notification about a held book being available")
     public void should_get_no_held_book_notification(){
-        no_held_book_notification(library.getSessionUsername());
+        String username = library.getSessionUsername();
+        assertFalse(library.heldBookIsAvailable(username));
     }
 
     @Then("they should get a notification about a held book being available")
     public void should_get_held_book_notification(){
-        should_get_available_notification(library.getSessionUsername());
+        String username = library.getSessionUsername();
+        assertTrue(library.heldBookIsAvailable(username));
     }
 }
