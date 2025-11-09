@@ -8,7 +8,7 @@ Feature: Borrowing, Holding, and Return Operations
     When "<username1>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Available"
 
-    When they check out "<book_title>"
+    When they borrow "<book_title>"
     Then "<username1>" should be borrowing "<book_title>"
     And should see "<book_title>" is "Checked Out"
 
@@ -33,7 +33,7 @@ Feature: Borrowing, Holding, and Return Operations
   @multiple_holds_queue_processing
   Scenario Outline: processing queue of multiple holds
     When "<borrower>" logs in and selects to borrow a book
-    And they check out "<book_title>"
+    And they borrow "<book_title>"
     Then "<borrower>" should be borrowing "<book_title>"
 
     When they log out
@@ -58,14 +58,14 @@ Feature: Borrowing, Holding, and Return Operations
     And "<holder2>" logs in and selects to borrow a book
     Then they should get no notification about a held book being available
 
-    When they check out "<book_title>"
+    When they borrow "<book_title>"
     Then "<holder2>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder1>" logs in
     Then they should get a notification about a held book being available
 
-    When they check out "<book_title>"
+    When they borrow "<book_title>"
     Then "<holder1>" should be borrowing "<book_title>"
     And "<holder2>" should be the current holder of "<book_title>"
 
@@ -76,15 +76,15 @@ Feature: Borrowing, Holding, and Return Operations
   @borrowing_limit_and_hold_interactions
   Scenario Outline: borrowing limit and hold interactions
     When "<user2>" logs in
-    And they check out "<held_book>"
+    And they borrow "<held_book>"
     Then "<user2>" should be borrowing "<held_book>"
 
     When they log out
     And "<user1>" logs in
-    And they check out "Lord of the Flies"
-    And they check out "Ulysses"
-    And they check out "The Iliad"
-    And they check out "<held_book>"
+    And they borrow "Lord of the Flies"
+    And they borrow "Ulysses"
+    And they borrow "The Iliad"
+    And they borrow "<held_book>"
     Then "<user1>" should be borrowing "Lord of the Flies"
     And "<user1>" should be borrowing "Ulysses"
     And "<user1>" should be borrowing "The Iliad"
@@ -108,7 +108,7 @@ Feature: Borrowing, Holding, and Return Operations
     When they return "Lord of the Flies"
     Then "<user1>" should NOT be borrowing "Lord of the Flies"
 
-    When they check out "<held_book>"
+    When they borrow "<held_book>"
     Then "<user1>" should be borrowing "<held_book>"
 
     Examples:
