@@ -34,7 +34,7 @@ public class LibrarySteps {
         }
     }
 
-    @Then("{string} should be the current borrower of {string}")
+    @Then("{string} should be borrowing {string}")
     public void user_is_borrower_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertEquals(username, book.getCurBorrower().getUsername(), "Instead: "+book.getCurBorrower().getUsername());
