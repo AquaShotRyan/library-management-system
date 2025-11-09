@@ -54,24 +54,26 @@ Feature: Borrowing, Holding, and Return Operations
 
   @multiple_holds_queue_processing
   Scenario Outline: processing queue of multiple holds
-    When "<borrower>" logs in
+    When "<borrower>" logs in and selects to borrow a book
     And they check out "<book_title>"
     Then "<borrower>" should be the current borrower of "<book_title>"
 
     When they log out
     Then "<borrower>" should be logged out
 
-    When "<holder1>" logs in
+    When "<holder1>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
-    And should get no notification about a held book being available
+    And get no notification about a held book being available
+    And see "<book_title>" is "Checked Out"
 
     When they log out
     Then "<holder1>" should be logged out
 
-    When "<holder2>" logs in
+    When "<holder2>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then they should get no notification about a held book being available
+    And see "<book_title>" is "Checked Out"
 
     When they log out
     Then "<holder2>" should be logged out
@@ -85,8 +87,9 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     Then "<borrower>" should be logged out
 
-    When "<holder2>" logs in
+    When "<holder2>" logs in and selects to borrow a book
     Then they should get no notification about a held book being available
+    And see "<book_title>" is "On Hold"
 
     When they check out "<book_title>"
     Then "<holder2>" should NOT be the current borrower of "<book_title>"
@@ -96,6 +99,7 @@ Feature: Borrowing, Holding, and Return Operations
 
     When "<holder1>" logs in
     Then they should get a notification about a held book being available
+    And see "<book_title>" is "Available"
 
     When they check out "<book_title>"
     Then "<holder1>" should be the current borrower of "<book_title>"
