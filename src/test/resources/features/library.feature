@@ -110,45 +110,52 @@ Feature: Borrowing, Holding, and Return Operations
       | charlie  | bob     | alice   | Hamlet     |
 
   @borrowing_limit_and_hold_interactions
-  Scenario: user can't borrow a book if they're at the borrowing limit
-    Given "bob" checked out "Lord of the Flies"
-    And "bob" checked out "Ulysses"
-    And "bob" checked out "The Iliad"
-    When "bob" checks out "War and Peace"
-    Then "bob" should NOT be the current borrower of "War and Peace"
-    And "bob" should have 3 books
-    And "bob" should get offered to place a hold for "War and Peace"
+  Scenario Outline: borrowing limit and hold interactions
+    When "<user2>" logs in
+    And they check out "<held_book>"
+    Then "<user2>" should be the current borrower of "<held_book>"
 
-  @borrowing_limit_and_hold_interactions
-  Scenario: user can place a hold when they're at the borrowing limit
-    Given "charlie" checked out "War and Peace"
-    And "bob" checked out "Lord of the Flies"
-    And "bob" checked out "Ulysses"
-    And "bob" checked out "The Iliad"
-    When "bob" places a hold on "War and Peace"
-    Then "bob" should be the current holder of "War and Peace"
+    When they log out
+    Then "<user2>" should be logged out
 
-  @borrowing_limit_and_hold_interactions
-  Scenario: user gains borrowing capacity after checking out books and returning one
-    Given "charlie" checked out "War and Peace"
-    And "charlie" checked out "To Kill a Mockingbird"
-    And "charlie" checked out "Don Quixote"
-    And "charlie" returns "War and Peace"
-    When "charlie" checks out "The Great Gatsby"
-    Then "charlie" should be the current borrower of "The Great Gatsby"
+    When "<user1>" logs in
+    And they check out "Lord of the Flies"
+    And they check out "Ulysses"
+    And they check out "The Iliad"
+    And they check out "<held_book>"
+    Then "<user1>" should be the current borrower of "Lord of the Flies"
+    And "<user1>" should be the current borrower of "Ulysses"
+    And "<user1>" should be the current borrower of "The Iliad"
+    And "<user1>" should NOT be the current borrower of "<held_book>"
+    And "<user1>" should have 3 books
+    And "<user1>" should get offered to place a hold for "<held_book>"
 
-  @borrowing_limit_and_hold_interactions
-  Scenario Outline: user gets a notification that their held book is available even though they have 3 books borrowed
-    Given "alice" checked out "The Catcher in the Rye"
-    And "alice" checked out "Crime and Punishment"
-    And "alice" checked out "1984"
-    And "bob" checked out "<returned_book>"
-    And "charlie" checked out "<not_returned_book>"
-    And "alice" places a hold on "<held_book>"
-    When "bob" returns "<returned_book>"
-    Then "alice" should get "<notified>" that my held book is available
+    When they place a hold on "<held_book>"
+    Then "<user1>" should be the current holder of "<held_book>"
+    And get no notification about a held book being available
+
+    When they log out
+    Then "<user1>" should be logged out
+
+    When "<user2>" logs in
+    And they return "<held_book>"
+    Then "<user2>" should NOT be the current borrower of "<held_book>"
+    And "<user1>" should be the current holder of "<held_book>"
+
+    When they log out
+    Then "<user2>" should be logged out
+
+    When "<user1>" logs in
+    Then they should get a notification about a held book being available
+
+    When they return "Lord of the Flies"
+    Then "<user1>" should NOT be the current borrower of "Lord of the Flies"
+    And "<user1>" should have 2 books
+
+    When they check out "<held_book>"
+    Then "<user1>" should be the current borrower of "<held_book>"
+    And "<user1>" should have 3 books
 
     Examples:
-     | returned_book    | not_returned_book | held_book   | notified        |
-     | Animal Farm      | The Odyssey       | Animal Farm | a notification  |
-     | Animal Farm      | The Odyssey       | The Odyssey | no notification |
+      | user1 | user2   | held_book              |
+      | alice | charlie | The Catcher in the Rye |

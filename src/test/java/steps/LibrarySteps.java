@@ -176,6 +176,7 @@ public class LibrarySteps {
     }
 
     @When("places a hold on {string}")
+    @When("they place a hold on {string}")
     public void places_a_hold_on_book(String bookTitle){
         user_places_hold_on_book(library.getSessionUsername(), bookTitle);
     }
