@@ -20,7 +20,7 @@ Feature: Borrowing, Holding, and Return Operations
     And "<username1>" logs in and selects to borrow a book
     And they return "<book_title>"
     Then they should see "<book_title>" is "Available"
-    And "<username1>" should NOT be the current borrower of "<book_title>"
+    And "<username1>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<username2>" logs in and selects to borrow a book
@@ -51,15 +51,15 @@ Feature: Borrowing, Holding, and Return Operations
     And "<borrower>" logs in
     And they return "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
-    And "<holder1>" should NOT be the current borrower of "<book_title>"
-    And "<borrower>" should NOT be the current borrower of "<book_title>"
+    And "<holder1>" should NOT be borrowing "<book_title>"
+    And "<borrower>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book
     Then they should get no notification about a held book being available
 
     When they check out "<book_title>"
-    Then "<holder2>" should NOT be the current borrower of "<book_title>"
+    Then "<holder2>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder1>" logs in
@@ -88,7 +88,7 @@ Feature: Borrowing, Holding, and Return Operations
     Then "<user1>" should be borrowing "Lord of the Flies"
     And "<user1>" should be borrowing "Ulysses"
     And "<user1>" should be borrowing "The Iliad"
-    And "<user1>" should NOT be the current borrower of "<held_book>"
+    And "<user1>" should NOT be borrowing "<held_book>"
     And "<user1>" should get offered to place a hold for "<held_book>"
 
     When they place a hold on "<held_book>"
@@ -98,7 +98,7 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<user2>" logs in
     And they return "<held_book>"
-    Then "<user2>" should NOT be the current borrower of "<held_book>"
+    Then "<user2>" should NOT be borrowing "<held_book>"
     And "<user1>" should be the current holder of "<held_book>"
 
     When they log out
@@ -106,7 +106,7 @@ Feature: Borrowing, Holding, and Return Operations
     Then they should get a notification about a held book being available
 
     When they return "Lord of the Flies"
-    Then "<user1>" should NOT be the current borrower of "Lord of the Flies"
+    Then "<user1>" should NOT be borrowing "Lord of the Flies"
 
     When they check out "<held_book>"
     Then "<user1>" should be borrowing "<held_book>"
