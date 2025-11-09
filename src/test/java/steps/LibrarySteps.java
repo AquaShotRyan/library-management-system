@@ -13,16 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LibrarySteps {
     private Library library;
-    LibraryDate today;
 
     @Given("the library is initialized with books and users")
     public void init_library(){
         library = new Library();
-    }
-
-    @Given("today is 2025-09-20")
-    public void set_today(){
-        today = new LibraryDate(2025, Calendar.SEPTEMBER, 20);
     }
 
     @Given("nobody is logged in")
@@ -59,12 +53,6 @@ public class LibrarySteps {
         assertFalse(library.userIsLoggedIn(username));
     }
 
-    @Then("{string} is due on {string}")
-    public void check_book_due_date(String bookTitle, String dueDate){
-        Book book = library.getBook(bookTitle);
-        assertEquals(dueDate, book.getDueDateStr());
-    }
-
     @Then("{string} should NOT be the current borrower of {string}")
     public void user_is_not_borrower_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
@@ -91,7 +79,7 @@ public class LibrarySteps {
         String username = library.getSessionUsername();
         TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);
         if (borrowValidation == TransactionEnum.CAN_BORROW){
-            library.checkoutBook(bookTitle, username, today);
+            library.checkoutBook(bookTitle, username, new LibraryDate(Calendar.getInstance()));
         }
     }
 

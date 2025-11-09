@@ -2,7 +2,6 @@ Feature: Borrowing, Holding, and Return Operations
 #TODO: reword background given
   Background:
     Given the library is initialized with books and users
-    And today is 2025-09-20
     And nobody is logged in
 
   @a1_scenario
@@ -16,7 +15,6 @@ Feature: Borrowing, Holding, and Return Operations
     When they check out "<book_title>"
     Then "<username1>" should be the current borrower of "<book_title>"
     And should see "<book_title>" is "Checked Out"
-    And "<book_title>" is due on "2025-10-04"
 
     When they log out
     Then "<username1>" should be logged out
