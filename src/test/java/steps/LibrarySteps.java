@@ -25,9 +25,9 @@ public class LibrarySteps {
         today = new LibraryDate(2025, Calendar.SEPTEMBER, 20);
     }
 
-    @Given("I'm not logged in")
-    @When("I log out")
-    public void not_logged_in(){
+    @Given("nobody is logged in")
+    @When("they log out")
+    public void logout(){
         library.logout();
     }
 
@@ -46,9 +46,9 @@ public class LibrarySteps {
         library.removeBorrower(bookTitle, username);
     }
 
-    @Given("I'm logged in as {string}")
-    @When("I login as {string}")
-    @When("I login as {string} and select to borrow a book")
+    @Given("{string} is logged in")
+    @When("{string} logs in")
+    @When("{string} logs in and selects to borrow a book")
     public void login_as(String username){
         for (UserData user: UserData.values()){
             if (username.equals(user.getUsername())) {
@@ -57,7 +57,7 @@ public class LibrarySteps {
         }
     }
 
-    @Then("I should be logged in as {string}")
+    @Then("{string} should be logged in")
     public void is_logged_in_as(String username){
         String result = library.getSessionUsername();
         assertEquals(username, result);
@@ -87,9 +87,9 @@ public class LibrarySteps {
         assertTrue(library.borrowerHasBook(bookTitle, username));
     }
 
-    @Then("I should be logged out")
-    public void user_is_logged_out(){
-        assertNull(library.getSessionUsername());
+    @Then("{string} should be logged out")
+    public void user_is_logged_out(String username){
+        assertFalse(library.userIsLoggedIn(username));
     }
 
     @Then("{string} is due on {string}")

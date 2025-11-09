@@ -3,13 +3,12 @@ Feature: Borrowing, Holding, and Return Operations
   Background:
     Given the library is initialized with books and users
     And today is 2025-09-20
+    And nobody is logged in
 
   @a1_scenario
   Scenario Outline: existing user successfully logs in for the first time and selects to borrow a book
-    Given I'm not logged in
-
-    When I login as "<username1>" and select to borrow a book
-    Then I should be logged in as "<username1>"
+    When "<username1>" logs in and selects to borrow a book
+    Then "<username1>" should be logged in
     And "<username1>" should see "<book_title>" is "Available"
     And "<username1>" should see their current book count is 0
     And "<username1>" should get no notification about a held book being available
@@ -19,35 +18,35 @@ Feature: Borrowing, Holding, and Return Operations
     And "<username1>" should see "<book_title>" is "Checked Out"
     And "<book_title>" is due on "2025-10-04"
 
-    When I log out
-    Then I should be logged out
+    When they log out
+    Then "<username1>" should be logged out
     And "<username1>" should be the current borrower of "<book_title>"
     And "<book_title>" is due on "2025-10-04"
 
-    When I login as "<username2>" and select to borrow a book
-    Then I should be logged in as "<username2>"
+    When "<username2>" logs in and selects to borrow a book
+    Then "<username2>" should be logged in
     And "<username2>" should see "<book_title>" is "Checked Out"
     And "<username2>" should see their current book count is 0
     And "<username2>" should get no notification about a held book being available
 
-    When I log out
-    Then I should be logged out
+    When they log out
+    Then "<username2>" should be logged out
 
-    When I login as "<username1>"
+    When "<username1>" logs in
     And "<username1>" returns "<book_title>"
-    Then I should be logged in as "<username1>"
+    Then "<username1>" should be logged in
     And "<username1>" should NOT be the current borrower of "<book_title>"
     And "<username1>" should see "<book_title>" is "Available"
 
-    When I log out
-    Then I should be logged out
+    When they log out
+    Then "<username1>" should be logged out
 
-    When I login as "<username2>" and select to borrow a book
+    When "<username2>" logs in and selects to borrow a book
     Then "<username2>" should see "<book_title>" is "Available"
     And "<username2>" should see their current book count is 0
 
-    When I log out
-    Then I should be logged out
+    When they log out
+    Then "<username2>" should be logged out
 
     Examples:
       | username1 | username2 | book_title       |

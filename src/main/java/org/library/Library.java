@@ -224,4 +224,9 @@ public class Library {
     public boolean canReturnBooks(String username){
         return getBorrowedBooksNum(username) > 0;
     }
+
+    public boolean userIsLoggedIn(String username){
+        if (getSessionUsername() == null) return false;
+        return username.equals(sessionBorrower.getUsername());
+    }
 }
