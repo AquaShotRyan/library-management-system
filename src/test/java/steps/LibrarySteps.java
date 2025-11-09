@@ -164,4 +164,36 @@ public class LibrarySteps {
         Book book = library.getBook(bookTitle);
         assertEquals(0, book.getHoldersNum());
     }
+
+    @When("they check out {string}")
+    public void they_check_out_book(String bookTitle){
+        check_out_book(library.getSessionUsername(), bookTitle);
+    }
+
+    @When("they return {string}")
+    public void they_return_book(String bookTitle){
+        user_returns_book(library.getSessionUsername(), bookTitle);
+    }
+
+    @Then("they should see {string} is {string}")
+    @Then("should see {string} is {string}")
+    @Then("see {string} is {string}")
+    public void should_see_book_availability(String bookTitle, String availability){
+        see_availability_status(library.getSessionUsername(), bookTitle, availability);
+    }
+
+    @Then("they should see their current book count is {int}")
+    @Then("should see their current book count is {int}")
+    @Then("see their current book count is {int}")
+    public void should_see_book_count(int bookCount){
+        check_book_count(library.getSessionUsername(), bookCount);
+    }
+
+    @Then("should get no notification about a held book being available")
+    @Then("get no notification about a held book being available")
+    public void should_get_no_held_book_notification(){
+        no_held_book_notification(library.getSessionUsername());
+    }
+
+
 }
