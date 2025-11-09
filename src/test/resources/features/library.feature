@@ -6,7 +6,7 @@ Feature: Borrowing, Holding, and Return Operations
     And nobody is logged in
 
   @a1_scenario
-  Scenario Outline: existing user successfully logs in for the first time and selects to borrow a book
+  Scenario Outline: A-TEST-1 scenario
     When "<username1>" logs in and selects to borrow a book
     Then "<username1>" should be logged in
     And see "<book_title>" is "Available"
