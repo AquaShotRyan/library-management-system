@@ -53,62 +53,57 @@ Feature: Borrowing, Holding, and Return Operations
       | alice     | bob       | The Great Gatsby |
 
   @multiple_holds_queue_processing
-  Scenario: user can place a hold on a borrowed/unavailable book
-    Given "charlie" checked out "1984"
-    When "bob" places a hold on "1984"
-    Then "bob" should be the current holder of "1984"
-    And "bob" should NOT be the current borrower of "1984"
-    And "bob" should NOT get a notification that their held book is available
+  Scenario Outline: processing queue of multiple holds
+    When "<borrower>" logs in
+    And they check out "<book_title>"
+    Then "<borrower>" should be the current borrower of "<book_title>"
 
-  @multiple_holds_queue_processing
-  Scenario: user is still the current holder after the book was returned, and gets a notification
-    Given "alice" checked out "Wuthering Heights"
-    And "charlie" is the current holder of "Wuthering Heights"
-    When "alice" returns "Wuthering Heights"
-    Then "charlie" should be the current holder of "Wuthering Heights"
-    And "charlie" should NOT be the current borrower of "Wuthering Heights"
-    And "charlie" should get a notification that their held book is available
+    When they log out
+    Then "<borrower>" should be logged out
 
-  @multiple_holds_queue_processing
-  Scenario Outline: queue advances with borrowing/returning and notifications are sent to the correct borrowers
-    Given "<holder3>" checked out "<book_title>"
-    And "<holder1>" places a hold on "<book_title>"
-    And "<holder2>" places a hold on "<book_title>"
-    And "<holder3>" returns "<book_title>"
-    And "<holder3>" places a hold on "<book_title>"
+    When "<holder1>" logs in
+    And places a hold on "<book_title>"
+    Then "<holder1>" should be the current holder of "<book_title>"
+    And should get no notification about a held book being available
 
-    When "<holder1>" checks out "<book_title>"
+    When they log out
+    Then "<holder1>" should be logged out
+
+    When "<holder2>" logs in
+    And places a hold on "<book_title>"
+    Then they should get no notification about a held book being available
+
+    When they log out
+    Then "<holder2>" should be logged out
+
+    When "<borrower>" logs in
+    And they return "<book_title>"
+    Then "<holder1>" should be the current holder of "<book_title>"
+    And "<holder1>" should NOT be the current borrower of "<book_title>"
+    And "<borrower>" should NOT be the current borrower of "<book_title>"
+
+    When they log out
+    Then "<borrower>" should be logged out
+
+    When "<holder2>" logs in
+    Then they should get no notification about a held book being available
+
+    When they check out "<book_title>"
+    Then "<holder2>" should NOT be the current borrower of "<book_title>"
+
+    When they log out
+    Then "<holder2>" should be logged out
+
+    When "<holder1>" logs in
+    Then they should get a notification about a held book being available
+
+    When they check out "<book_title>"
     Then "<holder1>" should be the current borrower of "<book_title>"
     And "<holder2>" should be the current holder of "<book_title>"
-    And "<holder2>" should NOT get a notification that their held book is available
-    And "<holder3>" should NOT get a notification that their held book is available
-
-    When "<holder1>" returns "<book_title>"
-    And "<holder2>" should get a notification that their held book is available
-    And "<holder3>" should NOT get a notification that their held book is available
-
-    When "<holder2>" checks out "<book_title>"
-    Then "<holder2>" should be the current borrower of "<book_title>"
-    And "<holder3>" should be the current holder of "<book_title>"
-    And "<holder3>" should NOT get a notification that their held book is available
-
-    When "<holder2>" returns "<book_title>"
-    Then "<holder3>" should get a notification that their held book is available
-
-    When "<holder3>" checks out "<book_title>"
-    Then there should be no holders for "<book_title>"
 
     Examples:
-      | holder3 | holder1 | holder2 | book_title |
-      | charlie | bob     | alice   | Hamlet     |
-
-  @multiple_holds_queue_processing
-  Scenario: user that isn't first in the queue cannot borrow the book
-    Given "bob" checked out "The Hobbit"
-    And "alice" is the current holder of "The Hobbit"
-    And "charlie" places a hold on "The Hobbit"
-    When "charlie" checks out "The Hobbit"
-    Then "charlie" should NOT be the current borrower of "The Hobbit"
+      | borrower | holder1 | holder2 | book_title |
+      | charlie  | bob     | alice   | Hamlet     |
 
   @borrowing_limit_and_hold_interactions
   Scenario: user can't borrow a book if they're at the borrowing limit

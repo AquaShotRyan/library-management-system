@@ -175,6 +175,11 @@ public class LibrarySteps {
         user_returns_book(library.getSessionUsername(), bookTitle);
     }
 
+    @When("places a hold on {string}")
+    public void places_a_hold_on_book(String bookTitle){
+        user_places_hold_on_book(library.getSessionUsername(), bookTitle);
+    }
+
     @Then("they should see {string} is {string}")
     @Then("should see {string} is {string}")
     @Then("see {string} is {string}")
@@ -189,10 +194,16 @@ public class LibrarySteps {
         check_book_count(library.getSessionUsername(), bookCount);
     }
 
+    @Then("they should get no notification about a held book being available")
     @Then("should get no notification about a held book being available")
     @Then("get no notification about a held book being available")
     public void should_get_no_held_book_notification(){
         no_held_book_notification(library.getSessionUsername());
+    }
+
+    @Then("they should get a notification about a held book being available")
+    public void should_get_held_book_notification(){
+        should_get_available_notification(library.getSessionUsername());
     }
 
 
