@@ -120,4 +120,9 @@ public class LibrarySteps {
     public void should_be_in_hold_queue(String username, String bookTitle){
         assertTrue(library.userIsInHoldQueue(bookTitle, username));
     }
+
+    @Then("{string} should have borrowing capacity")
+    public void should_have_capacity(String username){
+        assertFalse(library.isAtBorrowingCapacity(username));
+    }
 }

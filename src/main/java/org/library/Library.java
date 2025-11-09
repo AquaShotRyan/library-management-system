@@ -12,6 +12,7 @@ public class Library {
     private Borrower sessionBorrower;
 
     public static final int BORROWING_DAY_LENGTH = 14;
+    public static final int BORROWING_LIMIT = 3;
 
     public Library(){
         InitializeLibrary initLibrary = new InitializeLibrary();
@@ -83,11 +84,10 @@ public class Library {
 
     public TransactionEnum verifyBorrowing(String bookTitle, String username){
         Book book = getBook(bookTitle);
-        Borrower borrower = borrowers.getBorrower(username);
 
         TransactionEnum result = TransactionEnum.CAN_BORROW;
 
-        if (borrower.getBorrowedBooksNum() >= 3){
+        if (isAtBorrowingCapacity(username)){
             result = TransactionEnum.AT_BORROWING_LIMIT;
         }else if (book.hasBorrower()){
             boolean isCurUser = book.getCurBorrower().getUsername().equals(username);
@@ -140,7 +140,7 @@ public class Library {
         Book book = getBook(bookTitle);
         if (!book.hasBorrower())
             throw new NullPointerException("No borrower to remove");
-        if (!book.getCurBorrower().getUsername().equals(username)) // TODO: replace with curBorrowerIs
+        if (!book.curBorrowerIs(username))
             throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
         book.removeCurBorrower();
         book.setDueDate(null);
@@ -234,5 +234,9 @@ public class Library {
         Book book = getBook(bookTitle);
         User user = borrowers.getBorrower(username);
         return book.containsHolder(user);
+    }
+
+    public boolean isAtBorrowingCapacity(String username){
+        return getBorrowedBooksNum(username) >= 3;
     }
 }

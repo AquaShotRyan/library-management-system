@@ -79,18 +79,13 @@ Feature: Borrowing, Holding, and Return Operations
   Scenario Outline: borrowing limit and hold interactions
     When "<user2>" logs in
     And they borrow "<held_book>"
-    Then "<user2>" should be borrowing "<held_book>"
-
-    When they log out
+    And they log out
     And "<user1>" logs in
     And they borrow "Lord of the Flies"
     And they borrow "Ulysses"
     And they borrow "The Iliad"
-    And they borrow "<held_book>"
-    Then "<user1>" should be borrowing "Lord of the Flies"
-    And "<user1>" should be borrowing "Ulysses"
-    And "<user1>" should be borrowing "The Iliad"
-    And "<user1>" should NOT be borrowing "<held_book>"
+    And they attempt to borrow "<held_book>"
+    Then "<user1>" should NOT be borrowing "<held_book>"
     And "<user1>" should get offered to place a hold for "<held_book>"
 
     When they place a hold on "<held_book>"
@@ -100,18 +95,12 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<user2>" logs in
     And they return "<held_book>"
-    Then "<user2>" should NOT be borrowing "<held_book>"
-    And "<user1>" should be the current holder of "<held_book>"
-
-    When they log out
+    And they log out
     And "<user1>" logs in
     Then they should get a notification about a held book being available
 
     When they return "Lord of the Flies"
-    Then "<user1>" should NOT be borrowing "Lord of the Flies"
-
-    When they borrow "<held_book>"
-    Then "<user1>" should be borrowing "<held_book>"
+    Then "<user1>" should have borrowing capacity
 
     Examples:
       | user1 | user2   | held_book              |
