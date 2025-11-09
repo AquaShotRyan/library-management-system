@@ -19,7 +19,6 @@ public class LibrarySteps {
         library = new Library();
     }
 
-    @Given("nobody is logged in")
     @When("they log out")
     public void logout(){
         library.logout();
