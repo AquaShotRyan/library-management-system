@@ -61,7 +61,7 @@ public class LibrarySteps {
         assertNotEquals(TransactionEnum.CHECKED_OUT_BY_USER, result);
     }
 
-    @When("they borrow {string}")
+    @When("they (attempt to )borrow {string}")
     public void they_check_out_book(String bookTitle){
         String username = library.getSessionUsername();
         TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);

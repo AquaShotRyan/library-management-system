@@ -16,6 +16,9 @@ Feature: Borrowing, Holding, and Return Operations
     And "<username2>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Checked Out"
 
+    When they attempt to borrow "<book_title>"
+    Then "<username2>" should NOT be borrowing "<book_title>"
+
     When they log out
     And "<username1>" logs in and selects to borrow a book
     And they return "<book_title>"
