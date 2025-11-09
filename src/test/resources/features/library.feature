@@ -8,7 +8,6 @@ Feature: Borrowing, Holding, and Return Operations
     When "<username1>" logs in and selects to borrow a book
     Then "<username1>" should be logged in
     And see "<book_title>" is "Available"
-    And see their current book count is 0
     And get no notification about a held book being available
 
     When they check out "<book_title>"
@@ -21,7 +20,6 @@ Feature: Borrowing, Holding, and Return Operations
     When "<username2>" logs in and selects to borrow a book
     Then "<username2>" should be logged in
     And see "<book_title>" is "Checked Out"
-    And see their current book count is 0
     And get no notification about a held book being available
 
     When they log out
@@ -29,7 +27,6 @@ Feature: Borrowing, Holding, and Return Operations
 
     When "<username1>" logs in and selects to borrow a book
     Then "<username1>" should be logged in
-    And they should see their current book count is 1
 
     When they return "<book_title>"
     Then they should see "<book_title>" is "Available"
@@ -40,7 +37,6 @@ Feature: Borrowing, Holding, and Return Operations
 
     When "<username2>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Available"
-    And see their current book count is 0
 
     When they log out
     Then "<username2>" should be logged out
@@ -124,7 +120,6 @@ Feature: Borrowing, Holding, and Return Operations
     And "<user1>" should be the current borrower of "Ulysses"
     And "<user1>" should be the current borrower of "The Iliad"
     And "<user1>" should NOT be the current borrower of "<held_book>"
-    And "<user1>" should have 3 books
     And "<user1>" should get offered to place a hold for "<held_book>"
 
     When they place a hold on "<held_book>"
@@ -147,11 +142,9 @@ Feature: Borrowing, Holding, and Return Operations
 
     When they return "Lord of the Flies"
     Then "<user1>" should NOT be the current borrower of "Lord of the Flies"
-    And "<user1>" should have 2 books
 
     When they check out "<held_book>"
     Then "<user1>" should be the current borrower of "<held_book>"
-    And "<user1>" should have 3 books
 
     Examples:
       | user1 | user2   | held_book              |

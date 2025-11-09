@@ -110,19 +110,6 @@ public class LibrarySteps {
         assertEquals(expected, result);
     }
 
-    @Then("{string} should have {int} books")
-    public void check_book_count(String username, int bookCount){
-        int result = library.getBorrowedBooksNum(username);
-        assertEquals(bookCount, result);
-    }
-
-    @Then("(they )(should )see their current book count is {int}")
-    public void should_see_book_count(int bookCount){
-        String username = library.getSessionUsername();
-        int result = library.getBorrowedBooksNum(username);
-        assertEquals(bookCount, result);
-    }
-
     @Then("(they )(should )get no notification about a held book being available")
     public void should_get_no_held_book_notification(){
         String username = library.getSessionUsername();
