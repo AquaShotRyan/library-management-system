@@ -34,22 +34,11 @@ public class LibrarySteps {
         }
     }
 
-    @Then("{string} should be logged in")
-    public void is_logged_in_as(String username){
-        String result = library.getSessionUsername();
-        assertEquals(username, result);
-    }
-
     @Then("{string} should be the current borrower of {string}")
     public void user_is_borrower_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertEquals(username, book.getCurBorrower().getUsername(), "Instead: "+book.getCurBorrower().getUsername());
         assertTrue(library.borrowerHasBook(bookTitle, username));
-    }
-
-    @Then("{string} should be logged out")
-    public void user_is_logged_out(String username){
-        assertFalse(library.userIsLoggedIn(username));
     }
 
     @Then("{string} should NOT be the current borrower of {string}")
@@ -64,7 +53,6 @@ public class LibrarySteps {
         Book book = library.getBook(bookTitle);
         assertEquals(username, book.getCurHolder().getUsername());
     }
-
 
     @Then("{string} should get offered to place a hold for {string}")
     public void should_get_offer_to_hold(String username, String bookTitle){

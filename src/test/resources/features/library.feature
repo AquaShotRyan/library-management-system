@@ -6,8 +6,7 @@ Feature: Borrowing, Holding, and Return Operations
   @a1_scenario
   Scenario Outline: A-TEST-1 scenario
     When "<username1>" logs in and selects to borrow a book
-    Then "<username1>" should be logged in
-    And see "<book_title>" is "Available"
+    Then they should see "<book_title>" is "Available"
     And get no notification about a held book being available
 
     When they check out "<book_title>"
@@ -15,31 +14,19 @@ Feature: Borrowing, Holding, and Return Operations
     And should see "<book_title>" is "Checked Out"
 
     When they log out
-    Then "<username1>" should be logged out
-
-    When "<username2>" logs in and selects to borrow a book
-    Then "<username2>" should be logged in
-    And see "<book_title>" is "Checked Out"
+    And "<username2>" logs in and selects to borrow a book
+    Then they should see "<book_title>" is "Checked Out"
     And get no notification about a held book being available
 
     When they log out
-    Then "<username2>" should be logged out
-
-    When "<username1>" logs in and selects to borrow a book
-    Then "<username1>" should be logged in
-
-    When they return "<book_title>"
+    And "<username1>" logs in and selects to borrow a book
+    And they return "<book_title>"
     Then they should see "<book_title>" is "Available"
     And "<username1>" should NOT be the current borrower of "<book_title>"
 
     When they log out
-    Then "<username1>" should be logged out
-
-    When "<username2>" logs in and selects to borrow a book
+    And "<username2>" logs in and selects to borrow a book
     Then they should see "<book_title>" is "Available"
-
-    When they log out
-    Then "<username2>" should be logged out
 
     Examples:
       | username1 | username2 | book_title       |
@@ -52,35 +39,27 @@ Feature: Borrowing, Holding, and Return Operations
     Then "<borrower>" should be the current borrower of "<book_title>"
 
     When they log out
-    Then "<borrower>" should be logged out
-
-    When "<holder1>" logs in and selects to borrow a book
+    And "<holder1>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
     And get no notification about a held book being available
     And see "<book_title>" is "Checked Out"
 
     When they log out
-    Then "<holder1>" should be logged out
-
-    When "<holder2>" logs in and selects to borrow a book
+    And "<holder2>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then they should get no notification about a held book being available
     And see "<book_title>" is "Checked Out"
 
     When they log out
-    Then "<holder2>" should be logged out
-
-    When "<borrower>" logs in
+    And "<borrower>" logs in
     And they return "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
     And "<holder1>" should NOT be the current borrower of "<book_title>"
     And "<borrower>" should NOT be the current borrower of "<book_title>"
 
     When they log out
-    Then "<borrower>" should be logged out
-
-    When "<holder2>" logs in and selects to borrow a book
+    And "<holder2>" logs in and selects to borrow a book
     Then they should get no notification about a held book being available
     And see "<book_title>" is "On Hold"
 
@@ -88,9 +67,7 @@ Feature: Borrowing, Holding, and Return Operations
     Then "<holder2>" should NOT be the current borrower of "<book_title>"
 
     When they log out
-    Then "<holder2>" should be logged out
-
-    When "<holder1>" logs in
+    And "<holder1>" logs in
     Then they should get a notification about a held book being available
     And see "<book_title>" is "Available"
 
@@ -109,9 +86,7 @@ Feature: Borrowing, Holding, and Return Operations
     Then "<user2>" should be the current borrower of "<held_book>"
 
     When they log out
-    Then "<user2>" should be logged out
-
-    When "<user1>" logs in
+    And "<user1>" logs in
     And they check out "Lord of the Flies"
     And they check out "Ulysses"
     And they check out "The Iliad"
@@ -127,17 +102,13 @@ Feature: Borrowing, Holding, and Return Operations
     And get no notification about a held book being available
 
     When they log out
-    Then "<user1>" should be logged out
-
-    When "<user2>" logs in
+    And "<user2>" logs in
     And they return "<held_book>"
     Then "<user2>" should NOT be the current borrower of "<held_book>"
     And "<user1>" should be the current holder of "<held_book>"
 
     When they log out
-    Then "<user2>" should be logged out
-
-    When "<user1>" logs in
+    And "<user1>" logs in
     Then they should get a notification about a held book being available
 
     When they return "Lord of the Flies"
