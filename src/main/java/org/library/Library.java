@@ -229,4 +229,10 @@ public class Library {
         if (getSessionUsername() == null) return false;
         return username.equals(sessionBorrower.getUsername());
     }
+
+    public boolean userIsInHoldQueue(String bookTitle, String username){
+        Book book = getBook(bookTitle);
+        User user = borrowers.getBorrower(username);
+        return book.containsHolder(user);
+    }
 }

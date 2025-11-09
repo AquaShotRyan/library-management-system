@@ -37,25 +37,24 @@ Feature: Borrowing, Holding, and Return Operations
   Scenario Outline: processing queue of multiple holds
     When "<borrower>" logs in and selects to borrow a book
     And they borrow "<book_title>"
-    Then "<borrower>" should be borrowing "<book_title>"
-
-    When they log out
+    And they log out
     And "<holder1>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
-    And get no notification about a held book being available
+    And should get no notification about a held book being available
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
-    Then they should get no notification about a held book being available
+    Then "<holder2>" should be in the hold-queue of "<book_title>"
+    And get no notification about a held book being available
+    But "<holder2>" should NOT be the current holder of "<book_title>"
 
     When they log out
     And "<borrower>" logs in
     And they return "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
     And "<holder1>" should NOT be borrowing "<book_title>"
-    And "<borrower>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book

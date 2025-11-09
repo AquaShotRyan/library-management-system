@@ -51,7 +51,13 @@ public class LibrarySteps {
     @Then("{string} should be the current holder of {string}")
     public void user_should_be_holder_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
-        assertEquals(username, book.getCurHolder().getUsername());
+        assertTrue(book.curHolderIs(username));
+    }
+
+    @Then("{string} should NOT be the current holder of {string}")
+    public void user_should_not_be_holder_of_book(String username, String bookTitle){
+        Book book = library.getBook(bookTitle);
+        assertFalse(book.curHolderIs(username));
     }
 
     @Then("{string} should get offered to place a hold for {string}")
@@ -108,5 +114,10 @@ public class LibrarySteps {
     public void should_get_held_book_notification(){
         String username = library.getSessionUsername();
         assertTrue(library.heldBookIsAvailable(username));
+    }
+
+    @Then("{string} should be in the hold-queue of {string}")
+    public void should_be_in_hold_queue(String username, String bookTitle){
+        assertTrue(library.userIsInHoldQueue(bookTitle, username));
     }
 }
