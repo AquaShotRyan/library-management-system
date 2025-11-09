@@ -47,8 +47,7 @@ public class LibrarySteps {
     }
 
     @Given("{string} is logged in")
-    @When("{string} logs in")
-    @When("{string} logs in and selects to borrow a book")
+    @When("{string} logs in( and selects to borrow a book)")
     public void login_as(String username){
         for (UserData user: UserData.values()){
             if (username.equals(user.getUsername())) {
@@ -175,29 +174,22 @@ public class LibrarySteps {
         user_returns_book(library.getSessionUsername(), bookTitle);
     }
 
-    @When("places a hold on {string}")
-    @When("they place a hold on {string}")
+    @When("(they )place(s) a hold on {string}")
     public void places_a_hold_on_book(String bookTitle){
         user_places_hold_on_book(library.getSessionUsername(), bookTitle);
     }
 
-    @Then("they should see {string} is {string}")
-    @Then("should see {string} is {string}")
-    @Then("see {string} is {string}")
+    @Then("(they )(should )see {string} is {string}")
     public void should_see_book_availability(String bookTitle, String availability){
         see_availability_status(library.getSessionUsername(), bookTitle, availability);
     }
 
-    @Then("they should see their current book count is {int}")
-    @Then("should see their current book count is {int}")
-    @Then("see their current book count is {int}")
+    @Then("(they )(should )see their current book count is {int}")
     public void should_see_book_count(int bookCount){
         check_book_count(library.getSessionUsername(), bookCount);
     }
 
-    @Then("they should get no notification about a held book being available")
-    @Then("should get no notification about a held book being available")
-    @Then("get no notification about a held book being available")
+    @Then("(they )(should )get no notification about a held book being available")
     public void should_get_no_held_book_notification(){
         no_held_book_notification(library.getSessionUsername());
     }
@@ -206,6 +198,4 @@ public class LibrarySteps {
     public void should_get_held_book_notification(){
         should_get_available_notification(library.getSessionUsername());
     }
-
-
 }
