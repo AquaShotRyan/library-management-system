@@ -211,6 +211,10 @@ public class Library {
         return borrowers.getBorrower(username).hasBook(bookTitle);
     }
 
+    public boolean borrowerIsHoldingBook(String bookTitle, String username){
+        return borrowers.getBorrower(username).curHoldIs(bookTitle);
+    }
+
     public boolean heldBookIsAvailable(String username){
         Borrower borrower = borrowers.getBorrower(username);
         if (!borrower.hasHold())
@@ -230,6 +234,6 @@ public class Library {
     }
 
     public boolean isAtBorrowingCapacity(String username){
-        return getBorrowedBooksNum(username) >= 3;
+        return getBorrowedBooksNum(username) >= BORROWING_LIMIT;
     }
 }

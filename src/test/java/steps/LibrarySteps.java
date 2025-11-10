@@ -48,6 +48,7 @@ public class LibrarySteps {
     public void user_should_be_holder_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertTrue(book.curHolderIs(username));
+        assertTrue(library.borrowerIsHoldingBook(bookTitle, username));
     }
 
     @Then("{string} should NOT be the current holder of {string}")
@@ -115,6 +116,7 @@ public class LibrarySteps {
     @Then("{string} should be in the hold-queue of {string}")
     public void should_be_in_hold_queue(String username, String bookTitle){
         assertTrue(library.userIsInHoldQueue(bookTitle, username));
+        assertTrue(library.borrowerIsHoldingBook(bookTitle, username));
     }
 
     @Then("{string} should have borrowing capacity")
