@@ -2,6 +2,7 @@ package org.library;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Library {
     private Catalogue catalogue;
@@ -204,6 +205,10 @@ public class Library {
 
     public int getBorrowersSize(){
         return borrowers.getBorrowersSize();
+    }
+
+    public List<Book> getAllBooksWithAvailability(String username, AvailabilityEnum availability){
+        return new ArrayList<>();
     }
 
     /* ============ Booleans ============ */

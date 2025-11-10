@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
     Library library;
+    private final LibraryDate today = new LibraryDate(Calendar.getInstance());
 
     @BeforeEach
     void initLibrary(){
@@ -783,6 +784,40 @@ public class LibraryTest {
         @DisplayName("Returns false if the user has no holds")
         void RESP_33_test_4(){
             assertFalse(library.heldBookIsAvailable(USER1_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("Additional Tests (i.e. not for assignment 1)")
+    public class OtherTests{
+        private final String USER1_NAME = UserData.SQUEEX.getUsername();
+        private final String USER2_NAME = UserData.GLORP.getUsername();
+        private final String BOOK_TITLE = BookData.THE_ODYSSEY.getTitle();
+
+        @Test
+        @DisplayName("When all books are available, size should match number of books in BookData")
+        void getAllBooksWithAvailability_test_1(){
+            int result = library.getAllBooksWithAvailability(USER1_NAME, AvailabilityEnum.AVAILABLE).size();
+            assertEquals(BookData.values().length, result);
+        }
+
+        @Test
+        @DisplayName("When one book is checked out, size should be -1 from number of books in BookData")
+        void getAllBooksWithAvailability_test_2(){
+            library.checkoutBook(BOOK_TITLE, USER1_NAME, today);
+            int result = library.getAllBooksWithAvailability(USER1_NAME, AvailabilityEnum.AVAILABLE).size();
+            assertEquals(BookData.values().length-1, result);
+        }
+
+        @Test
+        @DisplayName("When one book is on hold, size should be -1 from number of books in BookData")
+        void getAllBooksWithAvailability_test_3(){
+            library.checkoutBook(BOOK_TITLE, USER1_NAME, today);
+            library.placeHold(BOOK_TITLE, USER2_NAME);
+            library.removeBorrower(BOOK_TITLE, USER1_NAME);
+
+            int result = library.getAllBooksWithAvailability(USER1_NAME, AvailabilityEnum.AVAILABLE).size();
+            assertEquals(BookData.values().length-1, result);
         }
     }
 }
