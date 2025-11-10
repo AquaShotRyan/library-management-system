@@ -168,7 +168,7 @@ public class LibraryController {
                 String selectedBookTitle = selectedBook.getTitle();
 
                 // return book
-                library.removeBorrowerFromBook(selectedBookTitle, sessionUsername);
+                library.returnBook(selectedBookTitle, sessionUsername);
 
                 // provide return confirmation
                 confirmBookReturn(input, selectedBookTitle);

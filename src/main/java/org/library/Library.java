@@ -134,23 +134,29 @@ public class Library {
     }
 
     /* ------- returning ------- */
+    public void returnBook(String bookTitle, String username){
+        Book book = getBook(bookTitle);
+
+        removeBorrowerFromBook(bookTitle, username);
+        removeBookFromBorrower(bookTitle, username);
+        book.setDueDate(null);
+    }
+
     public void removeBorrowerFromBook(String bookTitle, String username){
         Book book = getBook(bookTitle);
         if (!book.hasBorrower())
             throw new NullPointerException("No borrower to remove");
         if (!book.curBorrowerIs(username))
             throw new IllegalArgumentException(String.format("Username '%s' doesn't match current borrower", username));
+
         book.removeCurBorrower();
-        book.setDueDate(null);
-        borrowers.getBorrower(username).removeBorrowedBook(bookTitle);
     }
 
     public void removeBookFromBorrower(String bookTitle, String username){
         Borrower borrower = borrowers.getBorrower(username);
 
-        if (!borrower.hasBook(bookTitle)){
+        if (!borrower.hasBook(bookTitle))
             throw new UnsupportedOperationException(String.format("Book '%s' is not checked out by %s", bookTitle, username));
-        }
 
         borrower.removeBorrowedBook(bookTitle);
     }
