@@ -13,10 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LibrarySteps {
     private Library library;
+    private boolean canReturnBooks;
 
     @Given("the library is initialized with books and users")
     public void init_library(){
         library = new Library();
+        canReturnBooks = false;
     }
 
     @When("they log out")
@@ -88,6 +90,11 @@ public class LibrarySteps {
         }
     }
 
+    @When("they attempt to return a book")
+    public void attempt_to_return_book(){
+        canReturnBooks = library.canReturnBooks(library.getSessionUsername());
+    }
+
     @Then("(they )(should )see {string} is {string}")
     public void should_see_book_availability(String bookTitle, String availability){
         String username = library.getSessionUsername();
@@ -122,5 +129,16 @@ public class LibrarySteps {
     @Then("{string} should have borrowing capacity")
     public void should_have_capacity(String username){
         assertFalse(library.isAtBorrowingCapacity(username));
+    }
+
+    @Then("they should see all books as Available")
+    public void should_see_all_books_as_available(){
+        int availableBooks = library.getAllBooksWithAvailability(library.getSessionUsername(), AvailabilityEnum.AVAILABLE).size();
+        assertEquals(BookData.values().length, availableBooks);
+    }
+
+    @Then("they are informed they have no books currently borrowed")
+    public void informed_no_borrowed_books(){
+        assertFalse(canReturnBooks);
     }
 }

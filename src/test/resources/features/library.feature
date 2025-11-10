@@ -105,4 +105,16 @@ Feature: Borrowing, Holding, and Return Operations
       | user1 | user2   | held_book              | password1 | password2 |
       | alice | charlie | The Catcher in the Rye | pass123   | pass789   |
 
+  @no_books_borrowed_scenario
   Scenario Outline: Returning when no books are borrowed
+    When "<user>" logs in with password "<password>" and selects to borrow a book
+    Then they should see all books as Available
+
+    When they attempt to return a book
+    Then they are informed they have no books currently borrowed
+
+    Examples:
+      | user    | password |
+      | alice   | pass123  |
+      | bob     | pass456  |
+      | charlie | pass789  |
