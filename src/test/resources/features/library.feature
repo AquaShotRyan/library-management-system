@@ -41,13 +41,13 @@ Feature: Borrowing, Holding, and Return Operations
     And "<holder1>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
     Then "<holder1>" should be the current holder of "<book_title>"
-    And should get no notification about a held book being available
+    And NOT get notified that their held book is available
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book
     And places a hold on "<book_title>"
-    Then "<holder2>" should be in the hold-queue of "<book_title>"
-    And get no notification about a held book being available
+    Then they should NOT get notified that their held book is available
+    And "<holder2>" should be in the hold-queue of "<book_title>"
     But "<holder2>" should NOT be the current holder of "<book_title>"
 
     When they log out
@@ -58,14 +58,14 @@ Feature: Borrowing, Holding, and Return Operations
 
     When they log out
     And "<holder2>" logs in and selects to borrow a book
-    Then they should get no notification about a held book being available
+    Then they should NOT get notified that their held book is available
 
     When they borrow "<book_title>"
     Then "<holder2>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder1>" logs in
-    Then they should get a notification about a held book being available
+    Then they should get notified that their held book is available
 
     When they borrow "<book_title>"
     Then "<holder1>" should be borrowing "<book_title>"
@@ -90,14 +90,14 @@ Feature: Borrowing, Holding, and Return Operations
 
     When they place a hold on "<held_book>"
     Then "<user1>" should be the current holder of "<held_book>"
-    And get no notification about a held book being available
+    And NOT get notified that their held book is available
 
     When they log out
     And "<user2>" logs in
     And they return "<held_book>"
     And they log out
     And "<user1>" logs in
-    Then they should get a notification about a held book being available
+    Then they should get notified that their held book is available
 
     When they return "Lord of the Flies"
     Then "<user1>" should have borrowing capacity

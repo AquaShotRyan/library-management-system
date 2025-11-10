@@ -104,13 +104,13 @@ public class LibrarySteps {
         assertEquals(expected, result);
     }
 
-    @Then("(they )(should )get no notification about a held book being available")
+    @Then("(they )(should )NOT get notified that their held book is available")
     public void should_get_no_held_book_notification(){
         String username = library.getSessionUsername();
         assertFalse(library.heldBookIsAvailable(username));
     }
 
-    @Then("they should get a notification about a held book being available")
+    @Then("(they )(should )get notified that their held book is available")
     public void should_get_held_book_notification(){
         String username = library.getSessionUsername();
         assertTrue(library.heldBookIsAvailable(username));
