@@ -25,13 +25,9 @@ public class LibrarySteps {
     }
 
     @Given("{string} is logged in")
-    @When("{string} logs in( and selects to borrow a book)")
-    public void login_as(String username){
-        for (UserData user: UserData.values()){
-            if (username.equals(user.getUsername())) {
-                library.login(username, user.getPassword());
-            }
-        }
+    @When("{string} logs in with password {string}( and selects to borrow a book)")
+    public void login_as(String username, String password){
+        library.login(username, password);
     }
 
     @Then("{string} should be borrowing {string}")
