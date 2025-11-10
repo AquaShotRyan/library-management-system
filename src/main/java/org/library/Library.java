@@ -225,11 +225,6 @@ public class Library {
         return getBorrowedBooksNum(username) > 0;
     }
 
-    public boolean userIsLoggedIn(String username){
-        if (getSessionUsername() == null) return false;
-        return username.equals(sessionBorrower.getUsername());
-    }
-
     public boolean userIsInHoldQueue(String bookTitle, String username){
         Book book = getBook(bookTitle);
         User user = borrowers.getBorrower(username);

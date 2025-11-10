@@ -1,5 +1,4 @@
 Feature: Borrowing, Holding, and Return Operations
-#TODO: reword background given
   Background:
     Given the library is initialized with books and users
 
