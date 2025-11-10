@@ -76,7 +76,7 @@ public class LibrarySteps {
     @When("they return {string}")
     public void they_return_book(String bookTitle){
         String username = library.getSessionUsername();
-        library.removeBorrower(bookTitle, username);
+        library.removeBorrowerFromBook(bookTitle, username);
     }
 
     @When("(they )place(s) a hold on {string}")

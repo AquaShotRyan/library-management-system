@@ -167,7 +167,7 @@ public class AcceptanceTest {
         );
 
         // update system to reflect returning Great Gatsby
-        library.removeBorrower(BOOK1_TITLE, USER1_NAME);
+        library.removeBorrowerFromBook(BOOK1_TITLE, USER1_NAME);
         assertAll("UC-03: confirm library state after returning Great Gatsby",
                 () -> assertEquals(0, library.getBorrowedBooksNum(library.getSessionUsername())),
                 () -> assertNull(greatGatsby.getCurBorrower()),

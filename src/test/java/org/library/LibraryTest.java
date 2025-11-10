@@ -419,7 +419,7 @@ public class LibraryTest {
         void RESP_26_test_1(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
             library.setDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
-            library.removeBorrower(BOOK_TITLE, USER_NAME);
+            library.removeBorrowerFromBook(BOOK_TITLE, USER_NAME);
 
             assertNull(book.getCurBorrower());
         }
@@ -429,7 +429,7 @@ public class LibraryTest {
         void RESP_26_test_2(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
             library.setDueDateFromDate(BOOK_TITLE, new LibraryDate(2025, 10, 10));
-            library.removeBorrower(BOOK_TITLE, USER_NAME);
+            library.removeBorrowerFromBook(BOOK_TITLE, USER_NAME);
 
             assertNull(book.getDueDate());
         }
@@ -439,20 +439,20 @@ public class LibraryTest {
         void RESP_26_test_3(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
 
-            assertThrows(IllegalArgumentException.class, () -> library.removeBorrower(BOOK_TITLE, "squeex"));
+            assertThrows(IllegalArgumentException.class, () -> library.removeBorrowerFromBook(BOOK_TITLE, "squeex"));
         }
 
         @Test
         @DisplayName("Removing a book with no borrower throws NullPointerException")
         void RESP_26_test_4(){
-            assertThrows(NullPointerException.class, () -> library.removeBorrower(BOOK_TITLE, "ryan"));
+            assertThrows(NullPointerException.class, () -> library.removeBorrowerFromBook(BOOK_TITLE, "ryan"));
         }
 
         @Test
         @DisplayName("Check book is absent from borrower's checked-out books")
         void RESP_26_test_5(){
             library.setBorrower(BOOK_TITLE, USER_NAME);
-            library.removeBorrower(BOOK_TITLE, USER_NAME);
+            library.removeBorrowerFromBook(BOOK_TITLE, USER_NAME);
 
             assertFalse(library.borrowerHasBook(BOOK_TITLE, USER_NAME));
         }
@@ -814,7 +814,7 @@ public class LibraryTest {
         void getAllBooksWithAvailability_test_3(){
             library.checkoutBook(BOOK_TITLE, USER1_NAME, today);
             library.placeHold(BOOK_TITLE, USER2_NAME);
-            library.removeBorrower(BOOK_TITLE, USER1_NAME);
+            library.removeBorrowerFromBook(BOOK_TITLE, USER1_NAME);
 
             int result = library.getAllBooksWithAvailability(USER1_NAME, AvailabilityEnum.AVAILABLE).size();
             assertEquals(BookData.values().length-1, result);

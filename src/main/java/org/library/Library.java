@@ -2,7 +2,6 @@ package org.library;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Library {
     private Catalogue catalogue;
@@ -135,7 +134,7 @@ public class Library {
     }
 
     /* ------- returning ------- */
-    public void removeBorrower(String bookTitle, String username){
+    public void removeBorrowerFromBook(String bookTitle, String username){
         Book book = getBook(bookTitle);
         if (!book.hasBorrower())
             throw new NullPointerException("No borrower to remove");
