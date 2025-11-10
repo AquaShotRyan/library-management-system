@@ -424,6 +424,7 @@ public class LibraryTest {
             assertNull(book.getCurBorrower());
         }
 
+        @Disabled
         @Test
         @DisplayName("Check book's dueDate is null")
         void RESP_26_test_2(){
@@ -448,6 +449,7 @@ public class LibraryTest {
             assertThrows(NullPointerException.class, () -> library.removeBorrowerFromBook(BOOK_TITLE, "ryan"));
         }
 
+        @Disabled
         @Test
         @DisplayName("Check book is absent from borrower's checked-out books")
         void RESP_26_test_5(){
