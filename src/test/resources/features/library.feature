@@ -33,7 +33,7 @@ Feature: Borrowing, Holding, and Return Operations
       | alice     | bob       | The Great Gatsby | pass123   | pass456   |
 
   @multiple_holds_queue_processing
-  Scenario Outline: processing queue of multiple holds
+  Scenario Outline: Processing queue of multiple holds
     When "<borrower>" logs in with password "<password1>"
     And they borrow "<book_title>"
     And they log out
@@ -75,7 +75,7 @@ Feature: Borrowing, Holding, and Return Operations
       | charlie  | bob     | alice   | Hamlet     | pass789   | pass456   | pass123   |
 
   @borrowing_limit_and_hold_interactions
-  Scenario Outline: borrowing limit and hold interactions
+  Scenario Outline: Borrowing limit and hold interactions
     When "<user2>" logs in with password "<password2>"
     And they borrow "<held_book>"
     And they log out
@@ -104,3 +104,5 @@ Feature: Borrowing, Holding, and Return Operations
     Examples:
       | user1 | user2   | held_book              | password1 | password2 |
       | alice | charlie | The Catcher in the Rye | pass123   | pass789   |
+
+  Scenario Outline: Returning when no books are borrowed

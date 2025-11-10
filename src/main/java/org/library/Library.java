@@ -90,10 +90,10 @@ public class Library {
         if (isAtBorrowingCapacity(username)){
             result = TransactionEnum.AT_BORROWING_LIMIT;
         }else if (book.hasBorrower()){
-            boolean isCurUser = book.getCurBorrower().getUsername().equals(username);
+            boolean isCurUser = book.curBorrowerIs(username);
             result = isCurUser ? TransactionEnum.CHECKED_OUT_BY_USER : TransactionEnum.CHECKED_OUT_BY_ANOTHER;
         }else if (book.hasHolder()) {
-            boolean isCurUser = book.getCurHolder().getUsername().equals(username);
+            boolean isCurUser = book.curHolderIs(username);
             result = isCurUser ? result : TransactionEnum.ON_HOLD_BY_ANOTHER;
         }
         return result;
@@ -121,17 +121,15 @@ public class Library {
         Book book = getBook(bookTitle);
         Borrower borrower = borrowers.getBorrower(username);
 
-        if (borrower.hasHold() && !borrower.getCurHold().getTitle().equals(book.getTitle())){
+        if (borrower.hasHold() && !borrower.curHoldIs(bookTitle)){
             return TransactionEnum.AT_HOLD_LIMIT;
         }
-        if (book.hasHolder()){
-            boolean isCurUser = book.getCurHolder().getUsername().equals(username);
-            boolean isInQueue = book.containsHolder(borrower);
-            if (isCurUser || isInQueue) return TransactionEnum.ON_HOLD_BY_USER;
+        if (book.curHolderIs(username) || book.containsHolder(borrower)){
+            return TransactionEnum.ON_HOLD_BY_USER;
         }
-        if (!book.hasBorrower() && !book.hasHolder())
+        if (!book.hasBorrower() && !book.hasHolder()) {
             return TransactionEnum.BOOK_IS_AVAILABLE;
-
+        }
         return TransactionEnum.CAN_HOLD;
     }
 

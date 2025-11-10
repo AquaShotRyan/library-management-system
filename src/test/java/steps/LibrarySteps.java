@@ -33,15 +33,15 @@ public class LibrarySteps {
     @Then("{string} should be borrowing {string}")
     public void user_is_borrower_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
-        assertEquals(username, book.getCurBorrower().getUsername(), "Instead: "+book.getCurBorrower().getUsername());
+        assertTrue(book.curBorrowerIs(username));
         assertTrue(library.borrowerHasBook(bookTitle, username));
     }
 
     @Then("{string} should NOT be borrowing {string}")
     public void user_is_not_borrower_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
-        assertFalse(library.borrowerHasBook(bookTitle, username));
         assertFalse(book.curBorrowerIs(username));
+        assertFalse(library.borrowerHasBook(bookTitle, username));
     }
 
     @Then("{string} should be the current holder of {string}")

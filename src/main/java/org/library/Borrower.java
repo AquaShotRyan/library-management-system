@@ -25,6 +25,10 @@ public class Borrower extends User{
         return borrowedBooks.getBookByTitle(bookTitle) != null;
     }
     public boolean hasHold(){ return curHold != null; }
+    public boolean curHoldIs(String bookTitle){
+        if (!hasHold()) return false;
+        return curHold.getTitle().equals(bookTitle);
+    }
 
     public void addBorrowedBook(Book b){
         borrowedBooks.addBook(b);
