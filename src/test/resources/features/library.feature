@@ -1,36 +1,36 @@
 Feature: Borrowing, Holding, and Return Operations
   Background:
-    Given the library is initialized with books and users
+    Given the library is reset and initialized with books and users
 
   @a1_scenario
   Scenario Outline: A-TEST-1 scenario
-    When "<username1>" logs in with password "<password1>" and selects to borrow a book
+    When "<user1>" logs in with password "<pass1>" and selects to borrow a book
     Then they should see "<book_title>" is "Available"
 
     When they borrow "<book_title>"
-    Then "<username1>" should be borrowing "<book_title>"
+    Then "<user1>" should be borrowing "<book_title>"
     And should see "<book_title>" is "Checked Out"
 
     When they log out
-    And "<username2>" logs in with password "<password2>" and selects to borrow a book
+    And "<user2>" logs in with password "<pass2>" and selects to borrow a book
     Then they should see "<book_title>" is "Checked Out"
 
     When they attempt to borrow "<book_title>"
-    Then "<username2>" should NOT be borrowing "<book_title>"
+    Then "<user2>" should NOT be borrowing "<book_title>"
 
     When they log out
-    And "<username1>" logs in with password "<password1>" and selects to borrow a book
+    And "<user1>" logs in with password "<pass1>"
     And they return "<book_title>"
     Then they should see "<book_title>" is "Available"
-    And "<username1>" should NOT be borrowing "<book_title>"
+    And "<user1>" should NOT be borrowing "<book_title>"
 
     When they log out
-    And "<username2>" logs in with password "<password2>" and selects to borrow a book
+    And "<user2>" logs in with password "<pass2>" and selects to borrow a book
     Then they should see "<book_title>" is "Available"
 
     Examples:
-      | username1 | username2 | book_title       | password1 | password2 |
-      | alice     | bob       | The Great Gatsby | pass123   | pass456   |
+      | user1 | user2 | book_title       | pass1   | pass2     |
+      | alice | bob   | The Great Gatsby | pass123 | pass456   |
 
   @multiple_holds_queue_processing
   Scenario Outline: Processing queue of multiple holds
@@ -52,14 +52,14 @@ Feature: Borrowing, Holding, and Return Operations
     When they log out
     And "<borrower>" logs in with password "<password1>"
     And they return "<book_title>"
-    Then "<holder1>" should be the current holder of "<book_title>"
-    But "<holder1>" should NOT be borrowing "<book_title>"
+    Then "<holder1>" should still be the current holder of "<book_title>"
+    And "<holder1>" should NOT be borrowing "<book_title>"
 
     When they log out
     And "<holder2>" logs in with password "<password3>"
     Then they should NOT get notified that their held book is available
 
-    When they borrow "<book_title>"
+    When they attempt to borrow "<book_title>"
     Then "<holder2>" should NOT be borrowing "<book_title>"
 
     When they log out

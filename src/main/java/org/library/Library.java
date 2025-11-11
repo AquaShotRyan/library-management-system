@@ -215,7 +215,6 @@ public class Library {
     public List<Book> getAllBooksWithAvailability(String username, AvailabilityEnum availability){
         List<Book> allBooks = getAllBooks();
         List<Book> filteredBooks = allBooks.stream().filter(book -> book.getAvailabilityStatus(username) == availability).toList();
-        System.out.println(filteredBooks);
         return filteredBooks;
     }
 

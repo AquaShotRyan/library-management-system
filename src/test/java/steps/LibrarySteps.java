@@ -15,7 +15,7 @@ public class LibrarySteps {
     private Library library;
     private boolean canReturnBooks;
 
-    @Given("the library is initialized with books and users")
+    @Given("the library is reset and initialized with books and users")
     public void init_library(){
         library = new Library();
         canReturnBooks = false;
@@ -26,7 +26,6 @@ public class LibrarySteps {
         library.logout();
     }
 
-    @Given("{string} is logged in")
     @When("{string} logs in with password {string}( and selects to borrow a book)")
     public void login_as(String username, String password){
         library.login(username, password);
@@ -46,15 +45,15 @@ public class LibrarySteps {
         assertFalse(library.borrowerHasBook(bookTitle, username));
     }
 
-    @Then("{string} should be the current holder of {string}")
-    public void user_should_be_holder_of_book(String username, String bookTitle){
+    @Then("{string} should (still )be the current holder of {string}")
+    public void user_is_holder_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertTrue(book.curHolderIs(username));
         assertTrue(library.borrowerIsHoldingBook(bookTitle, username));
     }
 
     @Then("{string} should NOT be the current holder of {string}")
-    public void user_should_not_be_holder_of_book(String username, String bookTitle){
+    public void user_is_not_holder_of_book(String username, String bookTitle){
         Book book = library.getBook(bookTitle);
         assertFalse(book.curHolderIs(username));
     }
@@ -67,7 +66,7 @@ public class LibrarySteps {
     }
 
     @When("they (attempt to )borrow {string}")
-    public void they_check_out_book(String bookTitle){
+    public void borrow_book(String bookTitle){
         String username = library.getSessionUsername();
         TransactionEnum borrowValidation = library.verifyBorrowing(bookTitle, username);
         if (borrowValidation == TransactionEnum.CAN_BORROW){
@@ -76,13 +75,13 @@ public class LibrarySteps {
     }
 
     @When("they return {string}")
-    public void they_return_book(String bookTitle){
+    public void return_book(String bookTitle){
         String username = library.getSessionUsername();
         library.returnBook(bookTitle, username);
     }
 
     @When("(they )place(s) a hold on {string}")
-    public void places_a_hold_on_book(String bookTitle){
+    public void hold_book(String bookTitle){
         String username = library.getSessionUsername();
         TransactionEnum verifyHolding = library.verifyHolding(bookTitle, username);
         if (verifyHolding == TransactionEnum.CAN_HOLD){
@@ -109,13 +108,13 @@ public class LibrarySteps {
     }
 
     @Then("(they )(should )NOT get notified that their held book is available")
-    public void should_get_no_held_book_notification(){
+    public void get_no_held_book_notification(){
         String username = library.getSessionUsername();
         assertFalse(library.heldBookIsAvailable(username));
     }
 
     @Then("(they )(should )get notified that their held book is available")
-    public void should_get_held_book_notification(){
+    public void get_held_book_notification(){
         String username = library.getSessionUsername();
         assertTrue(library.heldBookIsAvailable(username));
     }
