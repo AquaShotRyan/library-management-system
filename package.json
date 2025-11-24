@@ -1,0 +1,23 @@
+{
+  "name": "a1-tran-ryan-101236202",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AquaShotRyan/A1-Tran-Ryan-101236202#readme",
+  "bugs": {
+    "url": "https://github.com/AquaShotRyan/A1-Tran-Ryan-101236202/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AquaShotRyan/A1-Tran-Ryan-101236202.git"
+  },
+  "license": "ISC",
+  "author": "Ryan Tran",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "cypress": "^15.7.0"
+  }
+}
