@@ -38,10 +38,9 @@ app.use((req, res, next) => {
 });
 
 /* ============= Library API ============= */
-app.use("/api", apiRouter);
 
-/* ============= For UI Testing ============= */
-app.delete("/test/reset", (req, res) => {
+// Only for testing
+app.delete("/api/reset", (req, res) => {
   try {
     library = new Library();
     res.json({ ok: true });
@@ -49,6 +48,9 @@ app.delete("/test/reset", (req, res) => {
     res.status(500).json({ error: String(e) });
   }
 });
+
+// Library API routes
+app.use("/api", apiRouter);
 
 /* ============= Pages ============= */
 

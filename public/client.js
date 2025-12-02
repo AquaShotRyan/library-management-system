@@ -109,7 +109,7 @@ async function handleResetBtn() {
 
   if (!wantsToReset) return;
 
-  const response = await fetch("/test/reset", {
+  const response = await fetch("/api/reset", {
     method: "DELETE",
   });
   if (response.ok) {
