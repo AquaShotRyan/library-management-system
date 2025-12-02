@@ -12,10 +12,11 @@
   },
   "license": "ISC",
   "author": "Ryan Tran",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "devDependencies": {
     "cypress": "^15.7.0"
