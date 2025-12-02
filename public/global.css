@@ -1,0 +1,208 @@
+:root {
+  --primary-color: rgb(98, 98, 255);
+  --secondary-color: rgb(150, 150, 253);
+  --red-btn-color: #f4f4f4;
+  --dark-txt-color: #000000;
+  --light-txt-color: #ffffff;
+  --red-txt-color: #ff0000;
+  --available-color: #4caf50;
+  --checked-out-color: #f44336;
+  --on-hold-color: #ff9800;
+
+  --title-font-size: 48px;
+  --reg-font-size: 18px;
+  --small-font-size: 12px;
+  --btn-font-size: 16px;
+  --big-btn-font-size: 22px;
+  --small-btn-font-size: 12px;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html,
+body {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+#page-contents {
+  width: 100%;
+}
+
+#page-title {
+  font-size: var(--title-font-size);
+  margin-top: 5%;
+  margin-right: auto;
+  margin-left: auto;
+  width: fit-content;
+}
+
+/* ============= Menu Page ============= */
+#menu-btns {
+  display: grid;
+  grid-template-columns: auto;
+  gap: 15px;
+  width: fit-content;
+  margin: 2rem auto 0px auto;
+}
+
+#welcome-msg {
+  width: fit-content;
+  margin: auto;
+  font-size: x-large;
+}
+
+.login-container label {
+  display: block;
+  font-size: var(--reg-font-size);
+  margin-bottom: 3px;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  max-width: 300px;
+}
+
+.login-container input {
+  border: solid 2px var(--secondary-color);
+  border-radius: 25px;
+  margin-bottom: 1rem;
+  height: 35px;
+  padding: 3px 12px;
+  font-size: 14px;
+}
+
+#btn-login {
+  align-self: flex-end;
+}
+
+#notification-msg {
+  width: fit-content;
+  margin: auto;
+  font-size: large;
+  margin-top:8px;
+}
+
+/* ============= Borrow a Book Page ============= */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+  width: 180px;
+  padding: 12px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+}
+
+.availability-status {
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
+#borrow-books-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  max-width: 1100px;
+  gap: 1rem;
+  justify-content: center;
+  padding: 5px;
+  margin: auto;
+}
+
+#borrowed-books-num {
+  margin: auto;
+  width: fit-content;
+}
+
+/* ============= Confirmation Pages ============= */
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  margin: auto;
+}
+
+.yes-no-btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  min-width: 180px;
+}
+
+.yes-no-btns button {
+  width: 60px;
+}
+
+#yes-btn {
+  font-weight: 600;
+}
+
+#borrowed-books-num {
+  margin: 4px auto;
+  padding: 8px 0px;
+  border-bottom: solid 1px lightgrey;
+}
+
+/* ============= Return a Book Page ============= */
+#return-books-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  gap: 1rem;
+  justify-content: center;
+  max-width: 700px;
+  margin: auto;
+}
+
+/* ============= Components ============= */
+
+#page-contents button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+#page-contents button:enabled:hover {
+  background-color: var(--secondary-color);
+  transition: background 0.4s ease-in-out;
+}
+
+#page-contents button:disabled {
+  opacity: 0.5;
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.btn-regular {
+  font-size: var(--reg-font-size);
+  border-radius: 20px;
+  padding: 6px 10px;
+}
+
+.book-card .btn-small {
+  align-self: flex-end;
+  margin-top: 8px;
+  border-radius: 14px;
+  padding: 5px 8px;
+}
+
+.btn-big {
+  font-size: var(--big-btn-font-size);
+  border-radius: 40px;
+  padding: 8px 12px;
+}
+
+.reset-btn {
+  background-color: palevioletred;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  display: block;
+  padding: 2px 5px;
+  margin: 6px 6px 0px auto;
+}
