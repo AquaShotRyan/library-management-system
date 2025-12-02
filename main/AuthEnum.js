@@ -1,0 +1,5 @@
+export const AuthEnum = Object.freeze({
+    SUCCESS: "SUCCESS",
+    INVALID_CREDENTIALS: "INVALID_CREDENTIALS",
+    INVALID_INPUT: "INVALID_INPUT"
+});
