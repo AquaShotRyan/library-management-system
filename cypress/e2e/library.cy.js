@@ -10,7 +10,7 @@ const dueDate = "2025-12-09"; // today is set to 2025-11-25 api-router.js
 describe("Library Book Management", () => {
   beforeEach(() => {
     // Reset the library
-    cy.request("DELETE", URL+"/api/reset");
+    cy.request("DELETE", URL + "/api/reset");
     cy.visit(URL);
   });
 
@@ -19,7 +19,7 @@ describe("Library Book Management", () => {
     // Login as 'alice'
     cy.login(ALICE, pass1);
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     // Assert user sees they are currently borrowing 0 books
@@ -41,14 +41,14 @@ describe("Library Book Management", () => {
       cy.assert_availability("Available");
     });
 
-    // Click 'Checkout' button for book: 'The Great Gatsby'
+    // Click 'Checkout' button for 'The Great Gatsby'
     cy.click_check_out_of("the-great-gatsby");
 
     // Click 'Yes' button to confirm borrowing
     // Will be redirected to the menu
     cy.click_borrow_yes();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     // Assert user sees they are currently borrowing 1 books
@@ -67,7 +67,7 @@ describe("Library Book Management", () => {
       cy.assert_availability("Checked Out");
     });
 
-    // Go back to menu and click "Logout"
+    // Go back to menu and click 'Logout' button
     cy.go("back");
     cy.logout();
 
@@ -75,7 +75,7 @@ describe("Library Book Management", () => {
     // Login as 'bob'
     cy.login(BOB, pass2);
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     cy.get("@the_great_gatsby").within(($bookcard) => {
@@ -101,15 +101,19 @@ describe("Library Book Management", () => {
       the system offers a hold if the book is
       unavailable
     */
-    cy.get("#place-hold-msg").should("contain.text", "The Great Gatsby is currently unavailable, would you like to place a hold?");
+    cy.get("#place-hold-msg").should(
+      "contain.text",
+      "The Great Gatsby is currently unavailable, would you like to place a hold?"
+    );
 
-    // User denies hold and gets redirected to the menu
+    // User clicks 'No' to deny hold
+    // Gets redirected to the menu
     cy.click_no();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert bob is borrowing 0 books
+    // Assert 'bob' sees they are currently borrowing 0 books
     /* 
       Relevant to checking borrow fails if book is unavailable
     */
@@ -118,33 +122,35 @@ describe("Library Book Management", () => {
     // Go back to menu
     cy.go("back");
 
-    // Assert bob is prevented from returning books (because he has none)
+    // Assert 'Return a book' button is disabled (as 'bob' has no books to return)
     /* 
       Relevant to checking borrow failed by being prevented to return
       books (since 'bob' has none)
     */
     cy.assert_return_disabled();
 
+    // Logout
     cy.logout();
 
-    /* ========= alice returns 'The Great Gatsby' ========= */
+    /* ========= 'alice' returns 'The Great Gatsby' ========= */
     // Login as 'alice'
     cy.login(ALICE, pass1);
 
-    // Navigate to 'Return a book' page
+    // Click 'Return a book' button
     cy.select_return();
 
-    // Assert "The Great Gatsby" is displayed as a book to return
+    // Assert "The Great Gatsby" is displayed (as one of the books to return)
     /* 
       Relevant to verifying alice's earlier borrow of an 'Available'
       book was successful
     */
     cy.get("@the_great_gatsby").should("exist");
 
-    // Click 'Return' on 'The Great Gatsby'
+    // Click 'Return' button in 'The Great Gatsby'
+    // Will be redirected to the menu
     cy.get("@the_great_gatsby").contains("Return").click();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     cy.get("@the_great_gatsby").within(($bookcard) => {
@@ -164,7 +170,7 @@ describe("Library Book Management", () => {
     // Login as 'bob'
     cy.login(BOB, pass2);
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     cy.get("@the_great_gatsby").within(($bookcard) => {
@@ -178,7 +184,6 @@ describe("Library Book Management", () => {
   });
 
   it("multiple_holds_queue_processing", () => {
-    
     /* ========= Setup: 'charlie' borrows '1984' ========= */
     // Login as 'charlie'
     cy.login(CHARLIE, pass3);
@@ -186,7 +191,7 @@ describe("Library Book Management", () => {
     // 'charlie' borrows '1984'
     cy.borrow_book("1984");
 
-    /* ========== Setup: 'bob' and 'alice' join the hold-queue for '1984' ======== */ 
+    /* ========== Setup: 'bob' and 'alice' join the hold-queue for '1984' ======== */
     // Logout and login as 'bob'
     cy.logout();
     cy.login(BOB, pass2);
@@ -206,10 +211,10 @@ describe("Library Book Management", () => {
     cy.logout();
     cy.login(CHARLIE, pass3);
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert queue order of '1984' is '[bob,alice]' (bob first, then alice second)
+    // Assert '1984' displays its holder queue as 'Holders: [bob,alice]' (bob first, alice second)
     /* 
       Relevant for verifying that queue is FIFO
     */
@@ -225,7 +230,7 @@ describe("Library Book Management", () => {
 
     // Logout and login as 'alice'
     cy.logout();
-    cy.login(ALICE, pass1)
+    cy.login(ALICE, pass1);
 
     // Assert alice doesn't get a notification
     /*
@@ -234,32 +239,37 @@ describe("Library Book Management", () => {
     */
     cy.get("#notification-msg").should("have.text", "Notification: N/A");
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
     // Attempt to borrow '1984'
+    // Click 'Check Out' button
     cy.click_check_out_of("1984");
+    // Click 'Yes' button to confirm borrow
+    // Will get offered to place a hold since '1984' is unavailable
     cy.click_borrow_yes();
-    cy.click_hold_yes(); // Gets offer to place hold and clicks yes, but gets denied because alice is already a holder
+    // Click 'Yes' to confirm hold
+    // Will get denied the hold (since 'alice' is already a holder)
+    cy.click_hold_yes();
 
-    // Assert they are unable to navigate to Return page due to alice having no books
+    // Assert the return button is disabled (since 'alice' shouldn't have succeeded in borrowing '1984')
     /* 
       Shows that a holder that doesn't get a notification cannot
       borrow the book
     */
     cy.assert_return_disabled();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert alice has 0 books
+    // Assert 'alice' sees they are currently borrowing 0 books
     /* 
       Again, asserting that the borrow wasn't successful to show
       that an unnotfied holder cannot borrow the book
     */
     cy.assert_books_num(0);
 
-    // Assert alice is stil in the hold queue
+    // Assert alice is stil in the hold queue (i.e. hold queue remained as [bob,alice])
     /*
       Again, asserting that the borrow wasn't successful
       since they're still holding the book
@@ -270,17 +280,22 @@ describe("Library Book Management", () => {
     cy.go("back");
     cy.logout();
 
+    /* ========= 'bob' gets notification and manually borrows '1984' ======== */
+
     // Login as 'bob'
     cy.login(BOB, pass2);
 
-    // Assert notification that 1984 is available (after logging in)
+    // Assert 'bob' sees notification that '1984' is available to borrow
     /* 
       Relevant to showing the notification is sent to the correct user 
       (the first in queue)
     */
-    cy.get("#notification-msg").should("have.text", "Notification: 1984 is now available!");
+    cy.get("#notification-msg").should(
+      "have.text",
+      "Notification: 1984 is now available!"
+    );
 
-    // Assert bob is not borrowing any books
+    // Assert return button is disabled (because 'bob' shouldn't have automatically borrowed '1984' after it was returned)
     /*
       Relevant to queue advancement after a return, as
       bob should have to explcitily borrow the book
@@ -292,17 +307,17 @@ describe("Library Book Management", () => {
 
     /* ========= Assert 'bob' (notified) is the borrower of '1984' ========= */
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert bob is borrowing 1 book
+    // Assert bob sees they are currently borrowing 1 book
     /*
       Relevant to verifying that the borrow was successful
       for the notified holder
     */
     cy.assert_books_num(1);
 
-    // Assert hold queue only has alice
+    // Assert hold queue of '1984' is '[alice]' (i.e. alice is the only holder)
     /* 
       Relevant to verifying that the queue advances
       properly after bob (first in queue) borrowed the book
@@ -312,10 +327,10 @@ describe("Library Book Management", () => {
     // Go back to menu
     cy.go("back");
 
-    // Navigate to Return page
+    // Click 'Return a book' button
     cy.select_return();
 
-    // Assert '1984' appears in Return page
+    // Assert '1984' appears in 'Return a book' page
     /*
       Relevant for verifying success of borrow
       for the notified holder (bob)
@@ -324,8 +339,11 @@ describe("Library Book Management", () => {
   });
 
   it("borrowing_limit_and_hold_interactions", () => {
-    // Login as 'bob' and borrow 'To Kill a Mockingbird'
+    /* ========= Setup: 'bob' borrows a book and 'alice' borrows 3 other books ======== */
+    // Login as 'bob'
     cy.login(BOB, pass2);
+
+    // Borrow 'To Kill a Mockingbird'
     cy.borrow_book("to-kill-a-mockingbird");
 
     // Logout
@@ -339,33 +357,42 @@ describe("Library Book Management", () => {
     cy.borrow_book("pride-and-prejudice");
     cy.borrow_book("the-catcher-in-the-rye");
 
-    // Assert 'alice' is at the limit (3 books)
+    /* ========= 'alice' is able to place a hold on 'To Kill a Mockingbird' (despite being at the 3-book limit) ======== */
+    // Click 'Borrow a book' button
+    cy.select_borrow();
+
+    // Assert 'alice' sees they have 3 books (limit)
     /* 
       Relevant to when it's later verified that
       'alice' doesn't exceed the limit when they
       attempt to borrow a 4th book
     */
-    cy.select_borrow();
     cy.assert_books_num(3);
 
     // Attempt to borrow a 4th book: 'To Kill a Mockingbird'
+    // Click 'Check Out' button of 'To Kill a Mockingbird'
     cy.click_check_out_of("to-kill-a-mockingbird");
-    cy.click_borrow_yes(); // Redirects to hold confirmation page
+    // Click 'Yes' to confirm borrow
+    // Since 'To Kill a Mockingbird' is unavailable, 'alice' is redirected to the hold confirmation page
+    cy.click_borrow_yes();
 
-    // Assert borrow limit message
+    // Assert borrow limit message (in hold confirmation page)
     /*
       Relevant to verifying that the system prevents
       borrowing beyond the limit
     */
-    cy.get("#place-hold-msg").should("have.text", "You are at the 3-book limit, would you like to place a hold on To Kill a Mockingbird?");
+    cy.get("#place-hold-msg").should(
+      "have.text",
+      "You are at the 3-book limit, would you like to place a hold on To Kill a Mockingbird?"
+    );
 
-    // Place a hold on 'To Kill a Mockingbird'
+    // Click 'Yes' to confirm hold
     cy.click_hold_yes();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert alice is in the hold queue
+    // Assert hold queue of '1984' is '[alice]' (i.e. alice is in the hold queue)
     /*
       Relevant for verifying that a user at the limit
       can still place a hold
@@ -385,6 +412,7 @@ describe("Library Book Management", () => {
     // Logout
     cy.logout();
 
+    /* ========= 'bob' returns 'To Kill a Mockingbird' ======== */
     // Login as 'bob'
     cy.login(BOB, pass2);
 
@@ -394,6 +422,7 @@ describe("Library Book Management", () => {
     // Logout
     cy.logout();
 
+    /* ========= 'alice' gets notified and attempts to borrows 'To Kill a Mockingbird' ======== */
     // Login as 'alice'
     cy.login(ALICE, pass1);
 
@@ -403,18 +432,26 @@ describe("Library Book Management", () => {
       3-book limit can still get notified about
       their hold
     */
-    cy.get("#notification-msg").should("have.text", "Notification: To Kill a Mockingbird is now available!");
+    cy.get("#notification-msg").should(
+      "have.text",
+      "Notification: To Kill a Mockingbird is now available!"
+    );
 
     // Attempt to borrow 'To Kill a Mockingbird'
+    // Click 'Borrow a book' button
     cy.select_borrow();
+    // Click 'Check Out' button of 'To Kill a Mockingbird'
     cy.click_check_out_of("to-kill-a-mockingbird");
+    // Click 'Yes' to confirm the borrow
     cy.click_borrow_yes();
+    // Get denied the borrow, click yes to confirm hold
+    // Will get denied the hold (since 'alice' is already a holder) and redirected to the menu
     cy.click_hold_yes(); // Will offer a hold, but will get denied since alice is already a holder
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert that 'alice' is still borrowing 3 books
+    // Assert that 'alice' sees they are currently borrowing 3 books
     /*
       Relevant to verifying 3-book limit is enforced, even
       if she was notified
@@ -424,23 +461,25 @@ describe("Library Book Management", () => {
     // Go back to menu
     cy.go("back");
 
-    // Navigate to Return page
+    /* ========= 'alice' gains borrowing capacity by returning a book ======== */
+    // Click 'Return a book' button
     cy.select_return();
 
     // Assert 'To Kill a Mockingbird' is not in return list
     /*
       Relevant to verifying 3-book limit is enforced, even
-      if she was notified
+      if she was notified. She must gain borrowing capacity
+      to be able to borrow.
     */
     cy.get('[test-id="to-kill-a-mockingbird"]').should("not.exist");
 
-    // Return one book to gain capacity
+    // Click 'Return' button of 'The Hobbit'
     cy.get('[test-id="the-hobbit"]').contains("Return").click();
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert 'alice' has 2 books (gained borrowing capacity)
+    // Assert 'alice' is currently borrowing 2 books (gained borrowing capacity)
     /*
       Relevant to verifying gained capacity, she should be able
       to borrow a book because she has < 3 books
@@ -448,28 +487,31 @@ describe("Library Book Management", () => {
     cy.assert_books_num(2);
 
     // Attempt to borrow 'To Kill a Mockingbird'
+    // Click 'Check Out' button for 'To Kill a Mockingbird'
     cy.click_check_out_of("to-kill-a-mockingbird");
+    // Click 'Yes' button to confirm borrowing
     cy.click_borrow_yes();
 
-    // Assert 'alice' is now borrowing 'To Kill a Mockingbird'
+    // Select 'Return a book' button
+    cy.select_return();
+
+    // Assert 'To Kill a Mockingbird' appears in 'alice's return page
     /*
       Relevant to verifying gained capacity after returning
       a book, as she succeded to borrowing 'To Kill a Mockingbird'
     */
-    cy.select_return();
     cy.get('[test-id="to-kill-a-mockingbird"]').should("exist");
 
     // Go back to menu
     cy.go("back");
 
-    // Navigate to Borrow page
+    // Click 'Borrow a book' button
     cy.select_borrow();
 
-    // Assert 'alice' is borrowing 3 books
+    // Assert 'alice' sees they are currently borrowing 3 books
     /*
-      Relevant to verifying that alice was
-      able to borrow a book after gaining
-      capacity
+      Relevant to verifying that alice was able to borrow 
+      'To Kill a Mockingbird' after gaining capacity
     */
     cy.assert_books_num(3);
   });
